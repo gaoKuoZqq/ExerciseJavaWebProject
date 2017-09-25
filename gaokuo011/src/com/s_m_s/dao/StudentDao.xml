@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.s_m_s.dao.StudentDao">
+	
+    <update id="addStudent" parameterType="Student" >
+    	INSERT INTO student(NAME,age,gender,birthday,banji_id) VALUES(
+    	'${student_name}',${student_age},'${student_gender}','${student_birthday}',${student_banji.banji_id}
+    	);
+    </update>
+    
+    <delete id="deleteStudent" parameterType="integer" >
+    	DELETE FROM student WHERE id=#{id};
+    </delete>
+    
+    <update id="modifyStudent" parameterType="Student">
+    	UPDATE student
+    	<set>
+    		<if test="student_name!=null and !&quot;&quot;.equals(student_name.trim())">
+    		NAME='${student_name}',
+    		</if>
+    		<if test="student_age!=null and  student_age!=0">
+    		age='${student_age}',
+    		</if>
+    		<if test="student_gender!=null and !&quot;&quot;.equals(student_gender.trim())">
+    		gender='${student_gender}',
+    		</if>
+    		banji_id=${student_banji.banji_id}
+    	</set>
+    	where student.id=${student_id};
+    </update>
+    
+    <resultMap type="Student" id="students">
+    	<id property="student_id" column="student_id"/>
+    	<result property="student_name" column="student_name"/>
+    	<result property="student_age" column="student_age"/>
+    	<result property="student_gender" column="student_gender"/>
+    	<result property="student_birthday" column="student_birthday"/>
+    	<association property="student_banji" javaType="Banji">
+    		<id property="banji_id" column="banji_id"/>
+    		<result property="banji_name" column="banji_name"/>
+    	</association>
+    </resultMap>
+    <select id="findStudents" parameterType="PageBean" resultMap="students">
+    	SELECT s.id AS student_id,s.name AS student_name,s.age AS student_age,
+		s.gender AS student_gender,s.birthday AS student_birthday,s.banji_id ,
+		b.name AS banji_name 
+		FROM student AS s LEFT JOIN banji AS b
+		ON s.banji_id=b.id
+    	<where>
+	    	<if test="student!=null">
+	    		<if test="student.student_id!=null and student.student_id>0">
+	    			and s.id=${student.student_id}
+	    		</if>
+	    		<if test="student.student_name!=null and !&quot;&quot;.equals(student.student_name.trim())">
+	    		and s.name LIKE '%${student.student_name}%'
+	    		</if>
+	    		<if test="student.student_age!=null and  student.student_age!=0">
+	    		and s.age='${student.student_age}'
+	    		</if>
+	    		<if test="student.student_gender!=null and !&quot;&quot;.equals(student.student_gender.trim())">
+	    		and s.gender='${student.student_gender}'
+	    		</if>
+	    		<if test="student.student_banji!=null and student.student_banji.banji_id!=null">
+	    		and s.banji_id=${student.student_banji.banji_id}
+	    		</if>
+    		</if>
+    	</where>
+    	limit ${limitStar},${limitEnd}
+    </select>
+    
+    <select id="totalStudents" parameterType="PageBean" resultType="integer">
+    	select count(*) from student as s
+    	<where>
+	    	<if test="student!=null">
+	    		<if test="student.student_id!=null and student.student_id>0">
+	    			and s.id=${student.student_id}
+	    		</if>
+	    		<if test="student.student_name!=null and !&quot;&quot;.equals(student.student_name.trim())">
+	    		and s.name LIKE '%${student.student_name}%'
+	    		</if>
+	    		<if test="student.student_age!=null and  student.student_age!=0">
+	    		and s.age=${student.student_age}
+	    		</if>
+	    		<if test="student.student_gender!=null and !&quot;&quot;.equals(student.student_gender.trim())">
+	    		and s.gender='${student.student_gender}'
+	    		</if>
+	    		<if test="student.student_banji!=null and student.student_banji.banji_id!=null">
+	    		and s.banji_id=${student.student_banji.banji_id}
+	    		</if>
+    		</if>
+    	</where>
+    </select>
+</mapper>

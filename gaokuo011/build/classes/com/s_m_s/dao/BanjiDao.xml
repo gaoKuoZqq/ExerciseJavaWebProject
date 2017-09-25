@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.s_m_s.dao.BanjiDao">
+	
+ 	<select id="findAllBanjis" resultType="Banji">
+ 		select banji.id as banji_id, banji.name as banji_name from banji;
+ 	</select>
+ 	
+ 	<resultMap type="Banji" id="BanjisCourses">
+ 		<id property="banji_id" column="banji_id"/>
+ 		<result property="banji_name" column="banji_name"/>
+ 		<collection property="banji_courseList" ofType="Course">
+ 			<result property="course_id" column="course_id"/>
+ 			<result property="course_name" column="course_name"/>
+ 			<result property="course_credit" column="course_credit"/>
+ 		</collection>
+ 	</resultMap>
+ 	<select id="findAllBanjisCourses" resultMap="BanjisCourses">
+ 		SELECT b.id AS banji_id,b.name AS banji_name,c.id AS course_id, c.name AS course_name, c.credit AS course_credit
+		FROM banji AS b INNER JOIN banji_course AS bc
+		ON b.id=bc.banji_id INNER JOIN course AS c
+		ON bc.course_id=c.id
+ 	</select>
+ 	
+ 	<select id="findBanji_idByBanji_name" parameterType="string" resultType="integer">
+ 		select banji.id from banji where banji.name=#{banji_name};
+ 	</select>
+ 	
+ 	<insert id="addBanji" parameterType="Banji" >
+ 		insert into banji(name) values(#{banji_name});
+ 	</insert>
+ 	
+ 	<insert id="elective" >
+ 		insert into banji_course(banji_id,course_id) values(#{banji_id},#{course_id})
+ 	</insert>
+ 	
+ 	<select id="checkBanjiName" parameterType="string" resultType="integer">
+ 		select count(*) from banji where banji.name=#{banji_name};
+ 	</select>
+ 	
+ 	<delete id="deleteElective" >
+ 		delete from banji_course where banji_course.banji_id=#{banji_id} and banji_course.course_id=#{course_id};
+ 	</delete>
+ 	
+ 	<select id="checkBanji_Course" resultType="integer">
+ 		select count(*) from banji_course where banji_id=#{banji_id} and course_id=#{course_id}
+ 	</select>
+</mapper>

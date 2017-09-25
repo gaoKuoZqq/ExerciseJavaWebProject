@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.s_m_s.dao.CourseDao">
+
+	<select id="findAllCourses" resultType="Course">
+		select course.id as course_id, course.name as course_name, course.credit as course_credit
+		from course;
+	</select>
+	
+	<select id="findCourses" parameterType="PageBean" resultType="Course">
+		select course.id as course_id, course.name as course_name, course.credit as course_credit
+		from course limit ${limitStar},${limitEnd}
+	</select>
+	
+	<insert id="addCourse" parameterType="Course">
+		insert into course(name,credit) values('${course_name}',${course_credit});
+	</insert>
+	
+	<select id="checkCourseName" parameterType="string" resultType="integer">
+		select count(*) from course where course.name=#{course_name};
+	</select>
+	
+	<select id="findCoursesByBanjiId" parameterType="integer" resultType="Course">
+		 SELECT course.id AS course_id, course.name AS course_name, course.credit AS course_credit 
+		 FROM banji LEFT JOIN banji_course 
+		 ON banji_course.banji_id=banji.id LEFT JOIN course 
+		 ON banji_course.course_id=course.id 
+		 WHERE banji.id=#{banji_id};
+	</select>
+</mapper>
