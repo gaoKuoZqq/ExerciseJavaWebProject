@@ -13,24 +13,19 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
 	<!-- 配置Controller扫描 -->
 	<context:component-scan base-package="com.mall.controller.back" />
+	<context:component-scan base-package="com.mall.controller.front" />
     <!-- 配置注解驱动 -->
     <mvc:annotation-driven />
-   <!--  <bean name="StudentService" class="com.s_m_s.StudentService" />
-    <bean name="StudentDao" class="com.s_m_s.StudentDao" /> -->
     <!-- 配置视图解析器 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
        <!-- 前缀 -->
-       <property name="prefix" value="/WEB-INF/jsp/" />
+       <property name="prefix" value="/WEB-INF/" />
        <!-- 后缀 -->
        <property name="suffix" value=".jsp" />
     </bean>
     
-    <context:component-scan base-package="com.mall.controller"/>
-        <!-- 上传图片的配置实现类 -->
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	    <!-- 上传图片的大小 B   5M= 5*1024*1024-->
-	    <property name="maxUploadSize" value="5000000"></property>
-	</bean>
+    <context:component-scan base-package="com.mall.controller.back"/>
+    <context:component-scan base-package="com.mall.controller.front"/>
 </beans>
 
 
