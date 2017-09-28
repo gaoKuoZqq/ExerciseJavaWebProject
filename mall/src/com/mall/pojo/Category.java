@@ -8,6 +8,26 @@ public class Category {
 	public String name;
 	public Integer status;//类别状态1-正常,2-已废弃
 	public Integer sort_order;//排序编号,同类展示顺序,数值相等则自然排序
+	public Category(Integer parent_id, String name, Integer status, Integer sort_order) {
+		super();
+		this.parent_id = parent_id;
+		this.name = name;
+		this.status = status;
+		this.sort_order = sort_order;
+	}
+	public Category(Date create_time, Date update_time) {
+		super();
+		this.create_time = create_time;
+		this.update_time = update_time;
+	}
+	public Category(Integer id, Integer parent_id, String name, Integer status, Integer sort_order) {
+		super();
+		this.id = id;
+		this.parent_id = parent_id;
+		this.name = name;
+		this.status = status;
+		this.sort_order = sort_order;
+	}
 	//这里我直接使用了java.sql的Date,构造方法有改动,添加了俩set
 	public Date create_time;
 	public Date update_time;
