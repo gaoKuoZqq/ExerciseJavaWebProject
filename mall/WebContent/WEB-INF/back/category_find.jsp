@@ -166,6 +166,7 @@
 			<div class="row">
 				<div class="col-sm-2">
 					<div class="list-group">
+					<a href="${ctx}/category/find.action" class="list-group-item" style="color: green">全部分类</a>
 					<c:forEach items="${rootCategoriesList}" var="category">
 						<c:if test="${pageBean.category.parent_id == category.id}">
 							<a href="javascript:findSunCategory(${category.id })" class="list-group-item active">${category.name }</a>
@@ -241,6 +242,7 @@
 								&nbsp;name : <input type="text" value="${category.name }" id="modifyName${category.id }"/><br/>
 								&nbsp;parent_name : <select id="modifyParent_id${category.id }">
 								<c:forEach items="${rootCategoriesList}" var="rootCategory">
+									<option value="0">无父类</option>
 									<c:if test="${rootCategory.id==category.parent_id }">
 									<option selected="selected" value="${rootCategory.id }">${rootCategory.name }</option>
 									</c:if>

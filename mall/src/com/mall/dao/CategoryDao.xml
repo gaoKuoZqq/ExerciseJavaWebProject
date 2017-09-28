@@ -39,7 +39,7 @@
 			</if>
 		</if>
 		</where>
-		order by sort_order limit ${limitStart},${pageSize};
+		 ORDER BY parent_id , sort_order DESC limit ${limitStart},${pageSize};
 	</select>
 	
 	<select id="findRootCategory" resultMap="category">
@@ -69,7 +69,7 @@
 	</select>
 	
 	<delete id="deleteCategory" parameterType="integer">
-		delete from category where id=#{category_id}
+		delete from category where parent_id=#{category_id} or id=#{category_id}
 	</delete>
 	
 	<update id="modifyCategory" parameterType="Category">

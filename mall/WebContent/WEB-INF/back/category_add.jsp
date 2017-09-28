@@ -46,8 +46,8 @@
 		             },
 		             function(data) { //callback
 		                if(data) {
-		                	layer.msg('添加成功');
-		                	$("#addForm")[0].reset();
+		                	alert("添加成功");
+		                	location.href="${ctx}/category/goadd.action"
 		                }else{
 		                	layer.msg('添加失败');
 		                  }
@@ -125,22 +125,11 @@
         -->
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-2">
-					<div class="list-group">
-						<a href="${pageContext.request.contextPath}/banji/find.action" class="list-group-item">班级列表</a>
-						<a href="${pageContext.request.contextPath}/banji/goadd.action" class="list-group-item active">
-							添加班级
-						</a>
-						<a href="${pageContext.request.contextPath}/banji/goelective.action" class="list-group-item active">
-							班级选课
-						</a>
-					</div>
-				</div>
 				<!--
 	        	描述：左侧竖向列表结束
 	        	右侧功能区占10格,开始
 	        -->
-				<div class="col-sm-10">
+				<div class="col-sm-12">
 					<!--
                     	描述：功能区上部小导航,开始
                     -->
@@ -158,7 +147,7 @@
                     -->
 					<form id="addForm">
 						<div class="form-group" style="margin-top:10px;">
-							<label for="exampleInputEmail1">分类名称</label>
+							分类名称
 							<input id="name" class="form-control" id="exampleInputEmail1" placeholder="例 : 战斗机">
 							父类:<select id="parent_id" class="form-control"style="margin-bottom:10px;" >
 								<option value="0">无父类</option>
