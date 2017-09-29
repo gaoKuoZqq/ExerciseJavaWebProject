@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.mall.dao.ProductDao">
+
+	<sql id="product">
+	id,category_id,category_name,name,subtitle,main_image,sub_images,detail,price,stock,status,create_time,update_time
+	</sql>
+	
+	<resultMap type="Product" id="product">
+		<id property="id" column="id"/>
+		<result property="category_id" column="category_id"/>
+		<result property="category_name" column="category_name"/>
+		<result property="name" column="name"/>
+		<result property="subtitle" column="subtitle"/>
+		<result property="main_image" column="main_image"/>
+		<result property="sub_images" column="sub_images"/>
+		<result property="detail" column="detail"/>
+		<result property="price" column="price"/>
+		<result property="stock" column="stock"/>
+		<result property="status" column="status"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_time" column="update_time"/>
+	</resultMap>
+	
+	<select id="findProduct" parameterType="PageBean" resultMap="product">
+		select 
+		<include refid="product"></include> 
+		from product 
+		<where>
+		<if test="product!=null">
+			<if test="product.id!=null">
+				and id=${category.id} 
+			</if>
+			<if test="product.category_id!=null">
+				and category_id=${product.category_id} 
+			</if>
+			<if test="puduct.name!=null">
+				and name='${product.name}' 
+			</if>
+			<if test="product.status!=null">
+				and status=${product.status} 
+			</if>
+		</if>
+		</where>
+		 limit ${limitStart},${pageSize};
+	</select>
+	
+	<select id="totalProduct" resultType="integer">
+		select count(*) from product 
+		<where>
+		<if test="product!=null">
+			<if test="product.id!=null">
+				and id=${category.id} 
+			</if>
+			<if test="product.category_id!=null">
+				and category_id=${product.category_id} 
+			</if>
+			<if test="puduct.name!=null">
+				and name='${product.name}' 
+			</if>
+			<if test="product.status!=null">
+				and status=${product.status} 
+			</if>
+		</if>
+		</where>
+	</select>
+	
+	<delete id="deleteProduct" parameterType="integer">
+		delete from product where id=#{product_id}
+	</delete>
+	
+	<update id="modifyProduct" parameterType="Product">
+		UPDATE product
+    	<set>
+    		<if test="name!=null and !&quot;&quot;.equals(name.trim())">
+    		NAME='${name}',
+    		</if>
+    		<if test="subtitle!=null and !&quot;&quot;.equals(subtitle.trim())">
+    		subtitle=${subtitle},
+    		</if>
+    		<if test="main_image!=null and !&quot;&quot;.equals(main_image.trim())">
+    		main_image=${main_image},
+    		</if>
+    		<if test="sub_images!=null and !&quot;&quot;.equals(sub_images.trim())">
+    		sub_images=${sub_images},
+    		</if>
+    		<if test="detail!=null and !&quot;&quot;.equals(detail.trim())">
+    		detail=${detail},
+    		</if>
+    		category_id=${category_id},
+    		price=${price},
+    		stock=${stock},
+    		status=${status},
+    		create_time=now(),
+    		update_time=now(),
+    	</set>
+    	where id=${id};
+	</update>
+	
+	<insert id="addProduct" parameterType="Product">
+		<trim  suffix=")" suffixOverrides=",">
+		insert into product (name,category_id,main_image,price,stock,status
+			<if test="subtitle!=null and !&quot;&quot;.equals(subtitle.trim())">
+				subtitle
+			</if>
+			<if test="sub_images!=null and !&quot;&quot;.equals(sub_images.trim())">
+				sub_images
+			</if>
+			<if test="detail!=null and !&quot;&quot;.equals(detail.trim())">
+				detail
+			</if>
+		</trim>
+		<trim suffix=")" suffixOverrides="," >
+		values('${name}',${category_id},'${main_image}',${price},${stock},${status}
+			<if test="subtitle!=null and !&quot;&quot;.equals(subtitle.trim())">
+				'${subtitle}'
+			</if>
+			<if test="sub_images!=null and !&quot;&quot;.equals(sub_images.trim())">
+				'${sub_images}'
+			</if>
+			<if test="detail!=null and !&quot;&quot;.equals(detail.trim())">
+				'${detail}'
+			</if>
+		</trim>
+		
+	</insert>
+</mapper>

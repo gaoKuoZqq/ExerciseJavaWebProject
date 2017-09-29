@@ -64,10 +64,10 @@ public class CategoryController {
 	@RequestMapping("/add")
 	@ResponseBody
 	public boolean addCategory(Category category) {
-		if (category.getName() == null && 
-				(category.getName() != null && category.getName().length() > 6) || 
-				category.getSort_order() != null && 
-				category.getSort_order()>999) {
+		if (category.getName() == null || 
+				category.getName().trim().equals("") ||
+				category.getName().trim().length() > 6 || 
+				(category.getSort_order() != null && category.getSort_order()>999)) {
 			return false;
 		}
 		return categoryService.addCategory(category);

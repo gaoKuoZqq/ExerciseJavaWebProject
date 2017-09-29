@@ -3,6 +3,8 @@ package com.mall.dto;
 import java.util.List;
 
 import com.mall.pojo.Category;
+import com.mall.pojo.Product;
+import com.oracle.jrockit.jfr.Producer;
 
 public class PageBean {
 	Integer pageIndex;
@@ -12,6 +14,25 @@ public class PageBean {
 	Integer totalPage;
 	List<?> objList;
 	Category category;
+	Product product;
+	public PageBean(Integer pageIndex, Integer limitStart, Integer pageSize, Integer totalObj, Integer totalPage,
+			List<?> objList, Category category, Product product) {
+		super();
+		this.pageIndex = pageIndex;
+		this.limitStart = limitStart;
+		this.pageSize = pageSize;
+		this.totalObj = totalObj;
+		this.totalPage = totalPage;
+		this.objList = objList;
+		this.category = category;
+		this.product = product;
+	}
+	public Product getProduct() {
+		return product;
+	}
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 	public Category getCategory() {
 		return category;
 	}

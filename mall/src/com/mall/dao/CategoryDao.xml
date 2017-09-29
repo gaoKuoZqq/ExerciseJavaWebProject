@@ -6,7 +6,7 @@
 <mapper namespace="com.mall.dao.CategoryDao">
 
 	<sql id="category">
-	id,parent_id,name,status,sort_order,create_time,update_time
+	id,parent_id,name,subtitle,main_image,detail,price,stock,status,create_time,update_time
 	</sql>
 	
 	<resultMap type="Category" id="category">
@@ -48,7 +48,7 @@
 		from category where parent_id=0
 	</select>
 	
-	<select id="totalCategories" resultType="integer">
+	<select id="totalCategories" parameterType="PageBean" resultType="integer">
 		select count(*) from category 
 		<where>
 		<if test="category!=null">

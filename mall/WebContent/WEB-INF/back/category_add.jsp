@@ -77,10 +77,10 @@
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav">
 							<li class="active">
-								<a href="${ctx}/student/find.action"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;分类管理 <span class="sr-only">(current)</span></a>
+								<a href="${ctx}/category/find.action"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;分类管理 <span class="sr-only">(current)</span></a>
 							</li>
 							<li>
-								<a href="${ctx}/banji/find.action"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;班级管理 <span class="sr-only">(current)</span></a>
+								<a href="${ctx}/product/find.action"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;商品管理 <span class="sr-only">(current)</span></a>
 							</li>
 							<li>
 								<a href="${ctx}/course/find.action"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;课程管理 <span class="sr-only">(current)</span></a>
@@ -161,8 +161,8 @@
 							</select>
 							<input id="sort_order" class="form-control" id="exampleInputEmail1" placeholder="例 : 1">
 						</div>
-						<input type="reset" value="重置" class="btn btn-danger"/>
-						<input type="button" value="添加" class="btn btn-success" onclick="addCategory()"/>
+						<input type="reset" value="重置" class="btn btn-danger btn-sm btn-block"/>
+						<input type="button" value="添加" class="btn btn-success btn-sm btn-block" onclick="addCategory()"/>
 					<!-- 功能区,结束 -->
 					</form>
 				</div>

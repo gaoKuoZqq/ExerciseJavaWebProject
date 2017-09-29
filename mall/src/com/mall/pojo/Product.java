@@ -5,6 +5,10 @@ import java.sql.Date;
 public class Product {
 	Integer id;
 	Integer category_id;//分类id,对应category的id
+	//-------------------------------------------
+	//由于展示需要,我在下面写了category的get和set方法,尽管数据库没有这条
+	String category_name;
+	//--------------------------------------------
 	String name;//商品名称
 	String subtitle;//商品副标题
 	String main_image;//产品主图,url相对地址
@@ -16,6 +20,18 @@ public class Product {
 	//这里我直接使用了java.sql的Date,构造方法有改动,添加了java.util.Date的set
 	Date create_time;
 	Date update_time;
+	//-------------------------------------
+	//数据库该表中没有的属性
+	public String getCategory_name() {
+		return category_name;
+	}
+	public void setCategory_name(String category_name) {
+		this.category_name = category_name;
+	}
+	//-----------------------------------
+	
+	
+	
 	public Product(Integer id, Integer category_id, String name, String subtitle, String main_image, String sub_images,
 			String detail, double price, Integer stock, Integer status, java.util.Date create_time, java.util.Date update_time) {
 		super();
@@ -31,6 +47,10 @@ public class Product {
 		this.status = status;
 		this.create_time = new Date(create_time.getTime());
 		this.update_time = new Date(update_time.getTime());
+	}
+	public Product(String category_name) {
+		super();
+		this.category_name = category_name;
 	}
 	public Product() {
 		super();
