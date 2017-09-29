@@ -108,7 +108,7 @@ public class PageBean {
 	public String toString() {
 		return "PageBean [pageIndex=" + pageIndex + ", limitStart=" + limitStart + ", pageSize=" + pageSize
 				+ ", totalObj=" + totalObj + ", totalPage=" + totalPage + ", objList=" + objList + ", category="
-				+ category + "]";
+				+ category + ", product=" + product + "]";
 	}
 	
 }

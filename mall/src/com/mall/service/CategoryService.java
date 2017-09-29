@@ -15,4 +15,6 @@ public interface CategoryService {
 	public boolean modifyCategory(Category category);
 	
 	public boolean addCategory(Category category);
+	
+	public List<Category> findCategoryByParent_id (Integer parent_id);
 }

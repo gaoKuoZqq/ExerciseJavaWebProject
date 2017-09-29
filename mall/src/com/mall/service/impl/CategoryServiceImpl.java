@@ -48,4 +48,8 @@ public class CategoryServiceImpl implements CategoryService{
 	public boolean addCategory(Category category) {
 		return categoryDao.addCategory(category) > 0;
 	}
+	@Override
+	public List<Category> findCategoryByParent_id(Integer parent_id) {
+		return categoryDao.findCategoryByParent_id(parent_id);
+	}
 }

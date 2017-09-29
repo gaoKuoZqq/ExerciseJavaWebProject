@@ -17,16 +17,14 @@ public class ProductServiceImpl implements ProductService{
 	ProductDao productDao;
 	@Override
 	public PageBean findProduct(PageBean pageBean) {
-		
 		Integer totalProduct = productDao.totalProduct(pageBean);
 		Integer totalPage = (int) Math.ceil(1.0*totalProduct/pageBean.getPageSize());
 		//避免出现页码超范围
 		if (totalPage < pageBean.getPageIndex()) {
 			pageBean.setPageIndex(totalPage);
-			pageBean.setLimitStart((totalPage - 1) * pageBean.getPageSize());
+			pageBean.setLimitStart((totalPage - 1) * pageBean.getPageSize() >= 0 ? (totalPage - 1) * pageBean.getPageSize() : 0);
 		}
 		List<Product> productsList = productDao.findProduct(pageBean);
-		
 		pageBean.setObjList(productsList);
 		pageBean.setTotalObj(totalProduct);
 		pageBean.setTotalPage(totalPage);

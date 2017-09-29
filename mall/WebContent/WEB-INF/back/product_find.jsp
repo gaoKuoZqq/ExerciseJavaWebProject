@@ -29,28 +29,55 @@
 	</style>
 	<script type="text/javascript">
 		function findSunCategory(id){
-			$("#rootId").val(id);
-			$("#rootIdForm").submit();
+			$.post(
+		             "${ctx}/category/findCategoryByParent_id.action", //url
+		             {"parent_id" : id},
+		             function(data) {
+		            	 var category_id = '${pageBean.product.category_id}';
+		            	 $("option#temporary").remove();
+		            	 $("a").removeClass('active');
+		            	 $("#rootCategory"+id).addClass('active');
+		            	 $("#parent_idInp").val(id);
+		            	 for(var a in data){
+		            		 if(data[a].id == category_id){
+		            			 $("#categorySel").after("<option selected='selected' id='temporary' value='"+data[a].id+"'>"+data[a].name+"</option>")
+		            		 }else{
+		            			 $("#categorySel").after("<option id='temporary' value='"+data[a].id+"'>"+data[a].name+"</option>")
+		            		 }
+		            		
+		            	 }
+		             },
+		             "json" //type
+		      ); 
 		}
+		
+		function findProduct(){
+			var category_id = $("#findProductSel").val();
+			$("#category_idInp").val(category_id);
+			$("#category_idForm").submit();
+		}
+		
+		$(document).ready(function(){
+			$("#rootCategory${pageBean.category.parent_id}").addClass('active');
+			findSunCategory('${pageBean.category.parent_id}');
+		})
 		
 		function goPage(pageIndex){
-			$("#pageIndex").val(pageIndex);
-			$("#rootId").val('${pageBean.category.parent_id}');
-			$("#rootIdForm").submit();
+			$("#pageIndexInp").val(pageIndex);
+			findProduct();
 		}
 		
-		function deleteCategory(id){
+		function deleteProduct(id){
 		      var isDel = confirm("您确认要删除吗？");
 		      if (isDel) {
-		          //要删除
 		    	  $.post(
-			             "${ctx}/category/del.action", //url
+			             "${ctx}/product/del.action",
 			             {"id" : id},
 			             function(data) { //callback
 			                if(data) {
-			                	alert("成功");
+			                	alert("删除成功");
 			                }else{
-			                	  alert("失败");
+			                	  alert("删除失败");
 			                  }
 			             goPage($("#thisPageIndex").val());
 			             },
@@ -165,20 +192,15 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-2">
-					<div class="list-group">
-					<a href="${ctx}/category/find.action" class="list-group-item" style="color: green">全部分类</a>
+					<div id="rootCategoryDiv" class="list-group">
 					<c:forEach items="${rootCategoriesList}" var="category">
 						<c:if test="${pageBean.category.parent_id == category.id}">
-							<a href="javascript:findSunCategory(${category.id })" class="list-group-item active">${category.name }</a>
+							<a id="rootCategory${category.id}" href="javascript:findSunCategory(${category.id })" class="list-group-item active">${category.name }</a>
 						</c:if>
 						<c:if test="${pageBean.category.parent_id != category.id}">
-							<a href="javascript:findSunCategory(${category.id })" class="list-group-item">${category.name }</a>
+							<a id="rootCategory${category.id}" href="javascript:findSunCategory(${category.id })" class="list-group-item">${category.name }</a>
 						</c:if>
 					</c:forEach>
-					<form action="${ctx }/category/find.action" id="rootIdForm" method="post">
-						<input id="pageIndex" type="hidden" name="pageIndex"/>
-						<input type="hidden" id="rootId" name="category.parent_id"/>
-					</form>
 					</div>
 				</div>
 				<!--
@@ -191,79 +213,78 @@
                     -->
 					<ul class="nav nav-tabs">
 						<li role="presentation" class="active">
-							<a href="${ctx}/student/find.action">分类列表</a>
+							<a href="${ctx}/student/find.action">商品列表</a>
 						</li>
 						<li role="presentation">
-							<a href="${ctx}/category/goadd.action">添加分类</a>
+							<a href="${ctx}/category/goadd.action">添加商品</a>
 						</li>
 					</ul>
 					<!--
                     	描述：功能区上部小导航,结束
                     -->
+                    <select id="findProductSel" class="form-control"style="margin-bottom:10px;" onchange="findProduct()">
+                    	<option id="categorySel" selected="selected" value="0">未选择</option>
+                    </select>
+                    <form id="category_idForm" action="${ctx }/product/find.action" method="post">
+                    	<input type="hidden" id="pageIndexInp" name="pageIndex" value="1"/>
+                    	<input type="hidden" id="category_idInp" name="product.category_id"/>
+                    	<input type="hidden" id="parent_idInp" name="category.parent_id"/>
+                    </form>
 					<!-- 展示列表,开始 -->
 					<table class="table">
 						<tr>
 							<td>id</td>
 							<td>name</td>
+							<td>main_image</td>
+							<td>subtitle</td>
+							<!-- <td>detail</td> -->
+							<td>price</td>
+							<td>stock</td>
 							<td>status</td>
-							<td>sort_order</td>
 							<td>update_time</td>
 							<td>modify</td>
 							<td>delete</td>
 						</tr>
-						<c:forEach items="${pageBean.objList}" var="category">
+						<c:forEach items="${pageBean.objList}" var="product">
 							<tr>
-								<td>${category.id }</td>
-								<td>${category.name }</td>
-								<c:if test="${category.status==1 }">
-									<td>可用</td>
-								</c:if>
-								<c:if test="${category.status!=1 }">
-									<td>不可用</td>
-								</c:if>
-								<c:if test="${not empty category.sort_order}">
-									<td>${category.sort_order }</td>
-								</c:if>
-								<c:if test="${empty category.sort_order}">
-									<td>未设置</td>
-								</c:if>
-								<td>${category.update_time }</td>
+								<td>${product.id }</td>
+								<td style="width:140px;">${product.name }</td>
 								<td>
-									<a href="javascript:modifyCategory(${category.id })">modify</a>
+									<img src="/pic/${product.main_image}" style="width:80px;height:80px;"/>
+								</td>
+								<c:if test="${not empty product.subtitle }">
+									<td style="width:80px">${product.subtitle}</td>
+								</c:if>
+								<c:if test="${empty product.subtitle }">
+									<td style="width:80px">未添加副标题</td>
+								</c:if>
+								<!-- <c:if test="${not empty product.detail }">
+									<td>${product.detail}</td>
+								</c:if>
+								<c:if test="${empty product.detail }">
+									<td>未添加详情</td>
+								</c:if> -->
+								<td>${product.price }</td>
+								<td>${product.stock }</td>
+								<c:if test="${product.status==1 }">
+									<td>在售</td>
+								</c:if>
+								<c:if test="${product.status==2 }">
+									<td>下架</td>
+								</c:if>
+								<c:if test="${product.status==3 }">
+									<td>删除</td>
+								</c:if>
+								<td>${product.update_time }</td>
+								<td>
+									<a href="javascript:modifyProduct(${product.id })">modify</a>
 								</td>
 								<td>
-									<a href="javascript:deleteCategory(${category.id })">delete</a>
+									<a href="javascript:deleteProduct(${product.id })">delete</a>
 								</td>
 							</tr>
 							<!-- 用于弹出更改分类信息的div -->
-							<div id="modifyDiv${category.id }" style="display: none;">
-								&nbsp;id : <a>${category.id }</a><br/>
-								<input type="hidden" value="${category.id }" id="modifyId${category.id }"/>
-								&nbsp;name : <input type="text" value="${category.name }" id="modifyName${category.id }"/><br/>
-								&nbsp;parent_name : <select id="modifyParent_id${category.id }">
-								<c:forEach items="${rootCategoriesList}" var="rootCategory">
-									<option value="0">无父类</option>
-									<c:if test="${rootCategory.id==category.parent_id }">
-									<option selected="selected" value="${rootCategory.id }">${rootCategory.name }</option>
-									</c:if>
-									<c:if test="${rootCategory.id!=category.parent_id }">
-									<option value="${rootCategory.id }">${rootCategory.name }</option>
-									</c:if>
-								</c:forEach>
-								</select><br/>
-								&nbsp;status : <select id="modifyStatus${category.id }">
-									<c:if test="${category.status==1 }">
-										<option value="1" selected="selected">可用</option>
-										<option value="2">不可用</option>
-									</c:if>
-									<c:if test="${category.status!=1 }">
-										<option value="1">可用</option>
-										<option value="2" selected="selected">不可用</option>
-									</c:if>
-								</select><br/>
-								&nbsp;sort_order : <input type="text" value="${category.sort_order }" id="modifySort_order${category.id }"/><br/>
-								&nbsp;<input type="button" value="提交" onclick="updateCategory(${category.id })"/>
-							</div>
+							
 					</c:forEach>
 					</table>
 					<!-- 展示列表,结束 -->

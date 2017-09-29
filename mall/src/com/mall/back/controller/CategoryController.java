@@ -49,7 +49,7 @@ public class CategoryController {
 		modelAndView.setViewName("category_find");
 		return modelAndView;
 	}*/
-	@RequestMapping("del")
+	@RequestMapping("/del")
 	@ResponseBody
 	public boolean deleteCategory(Integer id) {
 		return categoryService.deleteCategory(id);
@@ -79,5 +79,10 @@ public class CategoryController {
 		modelAndView.addObject("rootCategoriesList", rootCategoriesList);
 		modelAndView.setViewName("category_add");
 		return modelAndView;
+	}
+	@RequestMapping("/findCategoryByParent_id")
+	@ResponseBody
+	public List<Category> findCategoryByParent_id (Integer parent_id) {
+		return categoryService.findCategoryByParent_id(parent_id);
 	}
 }

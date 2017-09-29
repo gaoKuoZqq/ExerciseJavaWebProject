@@ -5,10 +5,6 @@
   
 <mapper namespace="com.mall.dao.ProductDao">
 
-	<sql id="product">
-	id,category_id,category_name,name,subtitle,main_image,sub_images,detail,price,stock,status,create_time,update_time
-	</sql>
-	
 	<resultMap type="Product" id="product">
 		<id property="id" column="id"/>
 		<result property="category_id" column="category_id"/>
@@ -26,43 +22,43 @@
 	</resultMap>
 	
 	<select id="findProduct" parameterType="PageBean" resultMap="product">
-		select 
-		<include refid="product"></include> 
-		from product 
+	SELECT p.id,p.category_id,c.name ascategory_name,p.name,p.subtitle,p.main_image,
+	p.sub_images,p.detail,p.price,p.stock,p.status,p.create_time,p.update_time  
+	FROM product AS p LEFT JOIN category AS c ON p.category_id=c.id
 		<where>
 		<if test="product!=null">
 			<if test="product.id!=null">
-				and id=${category.id} 
+				and p.id=${category.id} 
 			</if>
 			<if test="product.category_id!=null">
-				and category_id=${product.category_id} 
+				and p.category_id=${product.category_id} 
 			</if>
-			<if test="puduct.name!=null">
-				and name='${product.name}' 
+			<if test="product.name!=null">
+				and p.name='${product.name}' 
 			</if>
 			<if test="product.status!=null">
-				and status=${product.status} 
+				and p.status=${product.status} 
 			</if>
 		</if>
 		</where>
 		 limit ${limitStart},${pageSize};
 	</select>
 	
-	<select id="totalProduct" resultType="integer">
-		select count(*) from product 
+	<select id="totalProduct" parameterType="PageBean" resultType="integer">
+		select count(*) from product as p
 		<where>
 		<if test="product!=null">
 			<if test="product.id!=null">
-				and id=${category.id} 
+				and p.id=${category.id} 
 			</if>
 			<if test="product.category_id!=null">
-				and category_id=${product.category_id} 
+				and p.category_id=${product.category_id} 
 			</if>
-			<if test="puduct.name!=null">
-				and name='${product.name}' 
+			<if test="product.name!=null">
+				and p.name='${product.name}' 
 			</if>
 			<if test="product.status!=null">
-				and status=${product.status} 
+				and p.status=${product.status} 
 			</if>
 		</if>
 		</where>
@@ -125,6 +121,6 @@
 				'${detail}'
 			</if>
 		</trim>
-		
 	</insert>
+	
 </mapper>

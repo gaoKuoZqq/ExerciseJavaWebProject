@@ -6,7 +6,7 @@
 <mapper namespace="com.mall.dao.CategoryDao">
 
 	<sql id="category">
-	id,parent_id,name,subtitle,main_image,detail,price,stock,status,create_time,update_time
+	id,parent_id,name,sort_order,status,create_time,update_time
 	</sql>
 	
 	<resultMap type="Category" id="category">
@@ -99,4 +99,13 @@
 		values(${parent_id},'${name}',${status},now(),now())
 		</if>
 	</insert>
+	
+	<resultMap type="Category" id="Category_id_name">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="parent_id" column="parent_id"/>
+	</resultMap>
+	<select id="findCategoryByParent_id" parameterType="integer" resultMap="Category_id_name">
+		select category.id,category.name,category.parent_id from category where parent_id=#{parent_id}
+	</select>
 </mapper>

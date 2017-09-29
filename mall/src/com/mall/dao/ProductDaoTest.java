@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.mall.dto.PageBean;
+import com.mall.pojo.Category;
 import com.mall.pojo.Product;
 
 public class ProductDaoTest {
@@ -17,7 +18,10 @@ public class ProductDaoTest {
 		PageBean pageBean = new PageBean();
 		pageBean.setPageSize(3);
 		pageBean.setLimitStart(0);
-		//System.out.println(productDao.findProduct(pageBean));
+		Product product = new Product();
+		product.setCategory_id(100002);
+		pageBean.setProduct(product);
+		System.out.println(productDao.findProduct(pageBean));
 		System.out.println(productDao.totalProduct(pageBean));
 	}
 	@Test
