@@ -3,12 +3,14 @@
 <%@ page import="com.s_m_s.*" %>
 <%@page import="java.util.*"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Insert title here</title>
 	<script src="${pageContext.request.contextPath}/jsp/lib/jquery/jquery-3.2.1.min.js"></script>
+	<script src="${pageContext.request.contextPath}/jsp/lib/jquery/jquery-form.js"></script>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/lib/css/bootstrap.css" />
 	<script src="${pageContext.request.contextPath}/jsp/lib/js/bootstrap.js"></script>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/lib/my.css">
@@ -59,6 +61,20 @@
 	           );
 	       });
 	    }); */
+	    function uploadPic() {
+	        //定义参数
+	        var options = {
+	            url:"${ctx}/upload/uploadPic.action",
+	            dataType:"json",
+	            type:"post",
+	            success: function(data) {
+	                $("#imgId").attr("src","/pic/" + data.fileName);
+	                $("#mainImage").val(data.fileName);
+	            }
+	        };
+	         $("#addStudentForm").ajaxSubmit(options);
+	     }
+
 	</script>
 </head>
 <body>
@@ -156,14 +172,30 @@
                     	描述：功能区上部小导航,结束
                     -->
 					<form id="addStudentForm" class="form_border" method="post">
-						<div class="form-group" style="margin-top:10px;">
-							<label for="exampleInputEmail1">学生姓名</label><span id="exit" style="color:red"></span>
-							<input id="studentName" class="form-control"  placeholder="输入学生姓名,例: 大黄">
-						</div>
-						<div class="form-group">
-							<label for="exampleInputPassword1">学生年龄</label>
-							<input id="studentAge" class="form-control" id="exampleInputPassword1" placeholder="输入二位数的年龄">
-						</div>
+					
+					<div class="row">
+							<div  class="col-sm-9">
+								<div class="form-group" style="margin-top:10px;">
+									<label for="exampleInputEmail1">学生姓名</label><span id="exit" style="color:red"></span>
+									<input id="studentName" class="form-control"  placeholder="输入学生姓名,例: 大黄">
+								</div>
+								<div class="form-group">
+									<label for="exampleInputPassword1">学生年龄</label>
+									<input id="studentAge" class="form-control" id="exampleInputPassword1" placeholder="输入二位数的年龄">
+								</div>
+							</div>
+							<!-- 上传头像 -->
+							<div  class="col-sm-3">
+							      <div>
+							     		<div style="width:100px; height:120px">
+								       		<img alt="" id="imgId" src="" style="width:100px; height:120px">
+								         </div>
+								         <input type="hidden" name="mainImage" id="mainImage"/>
+								         <input type="file" name="pictureFile" onchange="uploadPic();" />
+								     </div>
+							</div>
+					</div>
+						
 						<label for="exampleInputPassword1">学生性别</label>
 						<select  id="studentGender" class="form-control" style="margin-bottom:10px;">
 							<option value="男">男</option>
@@ -186,6 +218,7 @@
 	        	描述：右侧功能区,结束
 	        -->
 			</div>
+			
 		</div>
 	</body>
 </html>

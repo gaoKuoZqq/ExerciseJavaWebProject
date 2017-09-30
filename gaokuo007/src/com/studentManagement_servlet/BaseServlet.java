@@ -1,0 +1,48 @@
+package com.studentManagement_servlet;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+
+public class BaseServlet extends HttpServlet{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4460743482466601718L;
+
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		/*resp.setContentType("text/html;charset=utf-8");
+		req.setCharacterEncoding("utf-8");*/
+		//1.获取请求的方法名
+		String methodName = req.getParameter("method");
+		//2.获取当前对象的字节码
+		Class clazz = this.getClass();
+		//3.获取请求的方法
+		try {
+			Method method = clazz.getDeclaredMethod(methodName, HttpServletRequest.class,HttpServletResponse.class);
+			//4.调用该方法
+			method.setAccessible(true);//可以访问私有方法
+			method.invoke(this, req,resp);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}

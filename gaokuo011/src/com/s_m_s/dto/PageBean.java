@@ -11,13 +11,14 @@ public class PageBean {
 	private Integer totalObj;
 	private Integer totalPage;
 	private List objList;
+	private Student student;
 	public Integer getPageIndex() {
 		return pageIndex;
 	}
 	public void setPageIndex(Integer pageIndex) {
 		this.pageIndex = pageIndex;
 	}
-	private Student student;
+	
 	public PageBean(Student student) {
 		super();
 		this.student = student;
