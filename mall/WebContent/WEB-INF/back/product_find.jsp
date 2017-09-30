@@ -216,7 +216,10 @@
 							<a href="${ctx}/student/find.action">商品列表</a>
 						</li>
 						<li role="presentation">
-							<a href="${ctx}/category/goadd.action">添加商品</a>
+							<a href="${ctx}/product/goadd.action">添加商品</a>
+						</li>
+						<li role="presentation">
+							<a href="${ctx}/product/gomodify.action">修改商品</a>
 						</li>
 					</ul>
 					<!--

@@ -16,4 +16,6 @@ public interface ProductDao {
 	Integer modifyProduct(Product product);
 	
 	Integer addProduct(Product product);
+	
+	Product findProductById(Integer product_id);
 }

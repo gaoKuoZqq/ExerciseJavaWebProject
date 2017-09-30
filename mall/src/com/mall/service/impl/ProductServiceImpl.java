@@ -43,6 +43,7 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public boolean addProduct(Product product) {
+		System.out.println(product);
 		return productDao.addProduct(product) > 0;
 	}
 

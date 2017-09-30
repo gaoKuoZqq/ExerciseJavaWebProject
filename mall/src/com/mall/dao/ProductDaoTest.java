@@ -46,12 +46,15 @@ public class ProductDaoTest {
 		// 从容器中获取bean
 		ProductDao productDao = (ProductDao) applicationContext.getBean("productDao");
 		Product product = new Product();
-		product.setCategory_id(100002);
-		product.setName("1");
+		product.setCategory_id(100025);
+		product.setName("苹果");
 		product.setPrice(1);
 		product.setMain_image("00ee5c77e37747c68e218bc35d6bfe71");
 		product.setStock(1);
 		product.setStatus(1);
+		product.setSubtitle("抽象派哦苹果");
+		//product.setSub_images("8c727ba7092043239ed0de8ed9728fc2");
+		//product.setDetail("dsadsa");
 		System.out.println(productDao.addProduct(product));
 	}
 }

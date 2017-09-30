@@ -32,7 +32,9 @@ public class ProductController {
 		if (pageBean.getPageSize() == null || pageBean.getPageSize() == 0) {
 			pageBean.setPageSize(3);
 		}
-		
+		if (pageBean.getProduct() != null && pageBean.getProduct().getCategory_id() == 0) {
+			pageBean.getProduct().setCategory_id(null);
+		}
 		Integer pageIndex = pageBean.getPageIndex();
 		Integer pageSize  = pageBean.getPageSize();
 		pageBean.setLimitStart((pageIndex - 1) * pageSize);
@@ -47,7 +49,8 @@ public class ProductController {
 	
 	@RequestMapping("/add")
 	@ResponseBody
-	public boolean addCategory(Product product) {
+	public boolean addProduct(Product product) {
+		System.out.println(product);
 		if ((product.getName() == null || "".equals(product.getName().trim()) || product.getName().length()>40) || 
 				(product.getPrice() <= 0)) {
 			return false;
@@ -55,11 +58,11 @@ public class ProductController {
 		return productService.addProduct(product);
 	}
 	@RequestMapping("/goadd")
-	public ModelAndView goAddCategory() {
+	public ModelAndView goAddProduct() {
 		ModelAndView modelAndView = new ModelAndView();
-		//List<Category> rootCategoriesList = productService.findRootCategory();
-		//modelAndView.addObject("rootCategoriesList", rootCategoriesList);
-		//modelAndView.setViewName("category_add");
+		List<Category> rootCategoriesList = categoryService.findRootCategory();
+		modelAndView.addObject("rootCategoriesList", rootCategoriesList);
+		modelAndView.setViewName("product_add");
 		return modelAndView;
 	}
 	
@@ -67,5 +70,19 @@ public class ProductController {
 	@ResponseBody
 	public boolean deleteProduct(Integer id) {
 		return productService.deleteProduct(id);
+	}
+	
+	@RequestMapping("/modify")
+	@ResponseBody
+	public boolean modifyProduct(Product product) {
+		return productService.modifyProduct(product);
+	}
+	@RequestMapping("/gomodify")
+	public ModelAndView goModifyProduct(Product product) {
+		ModelAndView modelAndView = new ModelAndView();
+		List<Category> rootCategoriesList = categoryService.findRootCategory();
+		modelAndView.addObject("rootCategoriesList", rootCategoriesList);
+		modelAndView.setViewName("product_add");
+		return modelAndView;
 	}
 }

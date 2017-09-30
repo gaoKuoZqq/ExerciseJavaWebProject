@@ -15,47 +15,109 @@
 <script type="text/javascript" src="${ctx}/resources/thirdlib/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="${ctx}/resources/thirdlib/jquery-form.js"></script>
 <script type="text/javascript" src="${ctx}/resources/thirdlib/layer-v3.1.0/layer/layer.js"></script>
+<script type="text/javascript" src="${ctx}/resources/thirdlib/layer-v3.1.0/layer/layer.js"></script>
+<script charset="utf-8" src="${ctx}/resources/thirdlib/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="${ctx}/resources/thirdlib/kindeditor/lang/zh_CN.js"></script>
+<!-- <script>
+        KindEditor.ready(function(K) {
+        	KindEditor.options.filterMode = false;
+                window.editor = K.create('#editor_id');
+                
+                var options = {
+    			        cssPath : '/css/index.css',
+    			        filterMode : true
+    			};
+    			var editor = K.create('textarea[name="content"]', options);
+    			// 取得HTML内容
+    			html = editor.html();
+
+    			// 同步数据后可以直接取得textarea的value
+    			editor.sync();
+    			html = document.getElementById('editor_id').value; // 原生API
+    			html = K('#editor_id').val(); // KindEditor Node API
+    			html = $('#editor_id').val(); // jQuery
+    			console.log(html);
+        });
+        
+</script> -->
+
+
 	<script type="text/javascript">
-		function addCategory(){
-			 //定义参数
-	        /* var options = {
-	            url:"${ctx}/category/add.action",
-	            dataType:"json",
-	            type:"post",
-	            success: function(data) {
-	                if(data){
-	                	layer.msg('添加成功');
-	                	//$("#addForm")[0].reset();
-	                }else{
-	                	layer.msg('添加失败');
-	                }
-	            }
-	        };
-	         $("#addForm").ajaxSubmit(options); */
-	         var name = $("#name").val();
-	         var parent_id = $("#parent_id").val();
-	         var status = $("#status").val();
-	         var sort_order = $("#sort_order").val();
+		function addProduct(){
+			var name = $("#name").val();
+			var subtitle = $("#subtitle").val();
+			var stock = $("#stock").val();
+			var price = $("#price").val();
+			var status = $("#status").val();
+			var main_image = $("#main_image").val();
+			var sub_images = $("#sub_images").val();
+			var detail = $("#detail").val();
+			var category_id = $("#category_id").val();
+			console.log(name);
+			console.log(subtitle);
+			console.log(stock);
+			console.log(price);
+			console.log(status);
+			console.log(main_image);
+			console.log(sub_images);
+			console.log(detail);
+			console.log(category_id);
+			
 			$.post(
-		             "${ctx}/category/add.action", //url
+		             "${ctx}/product/add.action", //url
 		             {
 		            	 "name" : name,
-		            	 "parent_id" : parent_id,
+		            	 "subtitle" : subtitle,
+		            	 "stock" : stock,
+		            	 "price" : price,
 		            	 "status" : status,
-		            	 "sort_order" : sort_order
+		            	 "main_image" : main_image,
+		            	 "sub_images" : sub_images,
+		            	 "detail" : detail,
+		            	 "category_id" : category_id,
 		             },
-		             function(data) { //callback
-		                if(data) {
-		                	alert("添加成功");
-		                	location.href="${ctx}/category/goadd.action"
-		                }else{
-		                	layer.msg('添加失败');
-		                  }
-		             goPage($("#thisPageIndex").val());
+		             function(data) {
+		            	 if(data){
+		            		 layer.msg('添加成功');
+		            	 }else{
+		            		 layer.msg('添加失败');
+		            	 }
 		             },
 		             "json" //type
 		      ); 
 		}
+		
+		function uploadPic(){
+			//定义参数
+	        var options = {
+	            url:"${ctx}/upload/uploadPic.action",
+	            dataType:"json",
+	            type:"post",
+	            success: function(data) {
+	                $("#imgId").attr("src","/pic/" + data.fileName);
+	                $("#main_image").val(data.fileName);
+	            }
+	        };
+	         $("#addForm").ajaxSubmit(options);
+		}
+		
+		function findCategory(){
+			var id = $("#rootCategory").val();
+			$.post(
+		             "${ctx}/category/findCategoryByParent_id.action", //url
+		             {"parent_id" : id},
+		             function(data) {
+		            	 $("option#temporary").remove();
+		            	 for(var a in data){
+		            		 $("#beforeOption").after("<option id='temporary' value='"+data[a].id+"'>"+data[a].name+"</option>")
+		            	 }
+		             },
+		             "json" //type
+		      ); 
+		}
+		$(document).ready(function(){
+			findCategory()
+		})
 	</script>
 </head>
 <body>
@@ -145,24 +207,51 @@
                     	描述：功能区上部小导航,结束
                     	功能区,开始
                     -->
-					<form id="addForm">
-						<div class="form-group" style="margin-top:10px;">
-							分类名称
-							<input id="name" class="form-control" id="exampleInputEmail1" placeholder="例 : 战斗机">
-							父类:<select id="parent_id" class="form-control"style="margin-bottom:10px;" >
-								<option value="0">无父类</option>
-								<c:forEach items="${rootCategoriesList}" var="rootCategory">
-								<option value="${rootCategory.id }">${rootCategory.name }</option>
+					<form id="addForm" action="${ctx }/product/add.action" method="post" enctype="multipart/form-data">
+						<div class="form-group" style="margin-top:10px;"/>
+							商品名称
+							<input id="name" id="name" class="form-control" placeholder="例 : 波音404"/>
+							根分类: <select id="rootCategory" onchange="findCategory()">
+								<c:forEach items="${rootCategoriesList}" var="category">
+									<option value="${category.id}">${category.name}</option>
 								</c:forEach>
 							</select>
-							&nbsp;status : <select id="status" class="form-control"style="margin-bottom:10px;" >
-										<option value="1">可用</option>
-										<option value="2">不可用</option>
+							二级分类:<select id="category_id">
+								<option id="beforeOption" value="nothing">请选择</option>
+							</select><br/>
+							商品副标题
+							<input id="subtitle" class="form-control"/>
+							库存数量
+							<input id="stock" class="form-control"/>
+							价格
+							<input id="price" class="form-control"/>
+							状态
+							<select id="status" class="form-control"style="margin-bottom:10px;">
+								<option value="1">在售</option>
+								<option value="2">下架</option>
 							</select>
-							<input id="sort_order" class="form-control" id="exampleInputEmail1" placeholder="例 : 1">
+							<!-- kindEditor -->
+							 <div  class="form-group">
+						  	 <label >产品主图</label>
+						  	 <div>
+					           <img alt="" id="imgId" src="" width=100 height=100>
+					           <input type="hidden" name="main_image" id="main_image"/>
+					           <input type="file" name="pictureFile" onchange="uploadPic();"/>
+			      			 </div>
+							 </div>
+							 <div class="form-group">
+							  	<label>商品图片</label>
+							  	 <a href="javascript:void(0)" class="picFileUpload" id="picFileUpload">上传图片</a>
+				                 <input type="hidden" name="sub_images" id="sub_images"/>
+				                 <div id="J_imageView"></div>
+							 </div>
+							 <div class="form-group">
+							  	<label>商品描述</label>
+							  	 <textarea style="width:900px;height:300px;visibility:hidden;" name="detail" id="detail"></textarea>
+							 </div>
 						</div>
 						<input type="reset" value="重置" class="btn btn-danger btn-sm btn-block"/>
-						<input type="button" value="添加" class="btn btn-success btn-sm btn-block" onclick="addCategory()"/>
+						<input type="button" value="添加" class="btn btn-success btn-sm btn-block" onclick="addProduct()"/>
 					<!-- 功能区,结束 -->
 					</form>
 				</div>
@@ -173,3 +262,40 @@
 		</div>
 	</body>
 </html>
+<script type="text/javascript">
+var myKindEditor ;
+KindEditor.ready(function(K) {
+	var kingEditorParams = {
+			//指定上传文件参数名称
+			filePostName  : "pictureFile",
+			//指定上传文件请求的url。
+			uploadJson : '${ctx}/upload/pic.action',
+			//上传类型，分别为image、flash、media、file
+			dir : "image",
+			afterBlur:function(){this.sync();}
+	}
+	var editor = K.editor(kingEditorParams);
+	//多图片上传
+	K('#picFileUpload').click(function() {
+		editor.loadPlugin('multiimage', function() {
+			editor.plugin.multiImageDialog({
+				clickFn : function(urlList) {
+					console.log(urlList);
+					var div = K('#J_imageView');
+					var imgArray = [];
+					div.html('');
+					K.each(urlList, function(i, data) {
+						imgArray.push(data.url);
+						div.append('<img src="' + data.url + '" width="80" height="50">');
+					});
+					$("#sub_images").val(imgArray.join(","));
+					editor.hideDialog();
+				}
+			});
+		});
+	});
+	
+	//富文本编辑器
+	myKindEditor = KindEditor.create('#addForm[name=detail]', kingEditorParams);
+});
+</script>
