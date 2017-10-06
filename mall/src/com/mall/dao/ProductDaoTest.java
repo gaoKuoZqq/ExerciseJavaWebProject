@@ -1,5 +1,7 @@
 package com.mall.dao;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -56,5 +58,35 @@ public class ProductDaoTest {
 		//product.setSub_images("8c727ba7092043239ed0de8ed9728fc2");
 		//product.setDetail("dsadsa");
 		System.out.println(productDao.addProduct(product));
+	}
+	
+	@Test
+	public void findProductByCategoryIdTest() {
+		ClassPathXmlApplicationContext applicationContext =
+		        new ClassPathXmlApplicationContext("applicationContext.xml");
+		// 从容器中获取bean
+		ProductDao productDao = (ProductDao) applicationContext.getBean("productDao");
+		System.out.println(productDao.findProductByCategoryId(100002));
+	}
+	
+	@Test
+	public void findProductByIdTest() {
+		ClassPathXmlApplicationContext applicationContext =
+		        new ClassPathXmlApplicationContext("applicationContext.xml");
+		// 从容器中获取bean
+		ProductDao productDao = (ProductDao) applicationContext.getBean("productDao");
+		System.out.println(productDao.findProductById(25876587));
+	}
+	
+	@Test
+	public void findProductByCategoryIdAndNameTest(){
+		ClassPathXmlApplicationContext applicationContext =
+		        new ClassPathXmlApplicationContext("applicationContext.xml");
+		// 从容器中获取bean
+		ProductDao productDao = (ProductDao) applicationContext.getBean("productDao");
+		Product product = new Product();
+		PageBean pageBean = new PageBean();
+		pageBean.setProduct(product);
+		System.out.println(productDao.findProductByCategoryIdAndName(pageBean));
 	}
 }

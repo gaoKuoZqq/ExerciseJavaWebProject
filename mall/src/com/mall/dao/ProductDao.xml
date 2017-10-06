@@ -149,5 +149,42 @@
     	where id=${id};
 	</update>
 	
-	<insert id="findProductById"></insert>
+	<select id="findProductById" resultMap="product">
+		select * from product where id=#{product_id}
+	</select>
+	
+	<resultMap type="Product" id="product_serchDisplay">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="main_image" column="main_image"/>
+		<result property="price" column="price"/>
+	</resultMap>
+	<select id="findProductByCategoryId" resultMap="product_serchDisplay" parameterType="integer">
+		select product.id,product.name,product.main_image,product.price from product where category_id=#{category_id}
+	</select>
+	
+	<select id="findProductByCategoryIdAndName" parameterType="pageBean" resultType="Product">
+		select p.id,p.name,p.main_image,p.price from product as p
+		<where>
+			<if test="product.category_id!=null">
+				p.category_id=${product.category_id}
+			</if>
+			<if test="product.name!=null and !&quot;&quot;.equals(product.name.trim())" >
+				p.name like '%${product.name}%'
+			</if>
+		</where>
+		limit ${limitStart},${pageSize};
+	</select>
+	
+	<select id="totalProductByCategoryIdAndName" parameterType="pageBean" resultType="integer">
+		select count(*) from product as p
+		<where>
+			<if test="product.category_id!=null">
+				p.category_id=${product.category_id}
+			</if>
+			<if test="product.name!=null and !&quot;&quot;.equals(product.name.trim())" >
+				p.name like '${product.name}'
+			</if>
+		</where>
+	</select>
 </mapper>

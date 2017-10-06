@@ -18,4 +18,10 @@ public interface ProductDao {
 	Integer addProduct(Product product);
 	
 	Product findProductById(Integer product_id);
+	
+	List<Product> findProductByCategoryId(Integer category_id);
+	
+	List<Product> findProductByCategoryIdAndName(PageBean pageBean);
+	
+	Integer totalProductByCategoryIdAndName(PageBean pageBean);
 }

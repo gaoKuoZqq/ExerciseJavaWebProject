@@ -197,10 +197,10 @@
                     -->
 					<ul class="nav nav-tabs">
 						<li role="presentation">
-							<a href="${ctx}/category/find.action">分类列表</a>
+							<a href="${ctx}/carousel/find.action">分类列表</a>
 						</li>
 						<li role="presentation" class="active">
-							<a href="${ctx}/category/goadd.action">添加分类</a>
+							<a href="${ctx}/carousel/goadd.action">添加分类</a>
 						</li>
 					</ul>
 					<!--
