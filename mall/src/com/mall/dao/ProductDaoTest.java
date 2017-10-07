@@ -89,4 +89,13 @@ public class ProductDaoTest {
 		pageBean.setProduct(product);
 		System.out.println(productDao.findProductByCategoryIdAndName(pageBean));
 	}
+	
+	@Test
+	public void suiyiTest(){
+		ClassPathXmlApplicationContext applicationContext =
+		        new ClassPathXmlApplicationContext("applicationContext.xml");
+		// 从容器中获取bean
+		UserDao userDao = (UserDao) applicationContext.getBean("userDao");
+		System.out.println(userDao.queryUser_idByUsername("admin"));
+	}
 }

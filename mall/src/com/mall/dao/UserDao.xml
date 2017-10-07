@@ -54,4 +54,8 @@
 	<select id="checkRole" parameterType="string" resultType="integer">
 		select role from user where username=#{username}
 	</select>
+	
+	<select id="queryUser_idByUsername" parameterType="string" resultType="integer">
+		select id from user where username=#{username}
+	</select>
 </mapper>

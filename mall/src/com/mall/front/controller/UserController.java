@@ -1,12 +1,16 @@
 package com.mall.front.controller;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.mall.pojo.User;
+import com.mall.service.CartService;
 import com.mall.service.UserService;
 
 @Controller
@@ -14,7 +18,14 @@ import com.mall.service.UserService;
 public class UserController {
 	@Resource(name="userService")
 	UserService userService;
-	
+	@Resource(name="cartService")
+	CartService cartService;
+	@RequestMapping("gologin")
+	public ModelAndView goLogin(){
+		ModelAndView modelAndView = new ModelAndView("login");
+		return modelAndView;
+	}
+	                            
 	@RequestMapping("adduser")
 	@ResponseBody
 	public Boolean addUser(User user) {
@@ -43,8 +54,25 @@ public class UserController {
 		return userService.checkName(username);
 	}
 	
-	public Boolean checkLogin(User user) {
-		return userService.checkLogin(user);
+	@RequestMapping("login")
+	@ResponseBody
+	public Boolean checkLogin(User user,HttpServletRequest request) {
+		Boolean isSuccess = userService.checkLogin(user);
+		if(isSuccess){
+			HttpSession session = request.getSession(true);
+			session.setAttribute("username", user.getUsername());
+		}
+		return isSuccess;
+	}
+	
+	@RequestMapping("logout")
+	@ResponseBody
+	public Boolean logout(String username,HttpServletRequest request){
+		HttpSession session = request.getSession(true);
+		session.setAttribute("username", null);
+		Integer user_id = userService.queryUser_idByUsername(username);
+		cartService.modifyCartChecked(user_id);
+		return true;
 	}
 	
 	public Boolean checkRole(String username) {

@@ -22,6 +22,7 @@
 		<script type="text/javascript" src="${ctx }/resources/introduction/js/jquery.imagezoom.min.js"></script>
 		<script type="text/javascript" src="${ctx }/resources/introduction/js/jquery.flexslider.js"></script>
 		<script type="text/javascript" src="${ctx }/resources/introduction/js/list.js"></script>
+		<script type="text/javascript" src="${ctx}/resources/thirdlib/layer-v3.1.0/layer/layer.js"></script>
 		<script type="text/javascript">
 			function addNumber(){
 				var stock = ${product.stock};
@@ -38,10 +39,106 @@
 					$("#number").val(number);
 				}
 			}
+			
+			function addCart(){
+				var product_id = ${product.id};
+				var username = $("#username").val();
+				if(username != null && username != ""){
+					var quantity = $("#number").val();
+					$.post(
+						"${ctx}/cart/add.shtml",
+						{
+							"product_id" : product_id,
+							"username" : username,
+							"quantity" : quantity
+						},
+						function(data){
+							if(data){
+								layer.msg('添加成功');
+							}else{
+								alert("添加失败");
+							}
+						},
+						"json"
+					)
+				}else{
+					layer.open(
+							{
+								title: '登录',
+							    type: 1,
+							    content: $('#loginDiv') ,//这里content是一个DOM，这个元素要放在body根节点下
+							}
+					);
+				}
+			}
+			
+			function buy(){
+				var product_id = ${product.id};
+				var username = $("#username").val();
+				if(username != null && username != ""){
+					var quantity = $("#number").val();
+					$.post(
+						"${ctx}/cart/add.shtml",
+						{
+							"product_id" : product_id,
+							"username" : username,
+							"quantity" : quantity
+						},
+						function(data){
+							if(data){
+								window.location.href="${ctx}/cart/gocart.shtml?username="+username+"";
+							}else{
+								alert("操作失败");
+							}
+						},
+						"json"
+					)
+				}else{
+					layer.open(
+							{
+								title: '登录',
+							    type: 1,
+							    content: $('#loginDiv') ,//这里content是一个DOM，这个元素要放在body根节点下
+							}
+					);
+				}
+			}
+			
+			function login(){
+				var username = $("#usernameLogin").val();
+				var password = $("#passwordLogin").val();
+				$.post(
+					"${ctx}/user/login.shtml",
+					{
+						"username" : username,
+						"password" : password
+					},
+					function(data){
+						if(data){
+							layer.closeAll('page');
+							layer.msg('登录成功');
+							$("#username").val(username);
+						}else{
+							alert("账号或密码错误");
+						}
+					},
+					"json"
+				)
+			}
+			
 		</script>
 </head>
 	<body>
-
+	<input id="username" type="hidden" value="${username}"/>
+		<!-- 这是一个用于弹出登录的表单 -->
+		<div id="loginDiv" style="display: none;">
+			<p>用户名:</p>
+			<input type='text' id="usernameLogin"/><br/>
+			<p>密码:</p>
+			<input type='text' id="passwordLogin"/><br/>
+			<input onclick="login()" type="button" value="登录"/>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" value="注册"/>
+		</div>
 
 		<!--顶部导航条 -->
 		<div class="am-container header">
@@ -263,12 +360,12 @@
 							</div>
 							<li>
 								<div class="clearfix tb-btn tb-btn-buy theme-login">
-									<a id="LikBuy" title="点此按钮到下一步确认购买信息" href="#">立即购买</a>
+									<a href="javaScript:buy()">立即购买</a>
 								</div>
 							</li>
 							<li>
 								<div class="clearfix tb-btn tb-btn-basket theme-login">
-									<a id="LikBasket" title="加入购物车" href="#"><i></i>加入购物车</a>
+									<a href="javaScript:addCart()"><i></i>加入购物车</a>
 								</div>
 							</li>
 						</div>

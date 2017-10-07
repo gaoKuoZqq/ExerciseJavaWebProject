@@ -1,7 +1,11 @@
 package com.mall.pojo;
 
 import java.sql.Date;
-
+/**本类与数据库并非对应关系,因为展示需要,添加了product对象
+ * 
+ * @author 6
+ *
+ */
 public class Cart {
 	public Integer id;
 	public Integer user_id;
@@ -11,6 +15,13 @@ public class Cart {
 	//这里我直接使用了java.sql的Date,构造方法有改动,添加了俩set
 	public Date create_time;
 	public Date update_time;
+	public Product product;
+	public Product getProduct() {
+		return product;
+	}
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 	public Cart() {
 		super();
 	}

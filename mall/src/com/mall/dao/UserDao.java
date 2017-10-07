@@ -20,4 +20,6 @@ public interface UserDao {
 	
 	//使用后台功能时验证权限
 	Integer checkRole(String username);
+	
+	Integer queryUser_idByUsername(String username);
 }

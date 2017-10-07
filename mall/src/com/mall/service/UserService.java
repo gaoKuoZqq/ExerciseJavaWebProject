@@ -16,4 +16,6 @@ public interface UserService {
 		
 	//使用后台功能时验证权限
 	boolean checkRole(String username);
+	
+	Integer queryUser_idByUsername(String username);
 }

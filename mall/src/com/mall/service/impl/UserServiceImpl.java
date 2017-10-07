@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.mall.dao.UserDao;
 import com.mall.pojo.User;
 import com.mall.service.UserService;
-@Service("uservice")
+@Service("userService")
 public class UserServiceImpl implements UserService{
 	@Resource(name="userDao")
 	UserDao userDao;
@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public boolean checkRole(String username) {
 		return userDao.checkRole(username) == 0;
+	}
+
+	@Override
+	public Integer queryUser_idByUsername(String username) {
+		return userDao.queryUser_idByUsername(username);
 	}
 
 }
