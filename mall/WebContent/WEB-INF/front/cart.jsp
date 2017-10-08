@@ -114,10 +114,15 @@
 			<ul class="message-l">
 				<div class="topMessage">
 					<div class="menu-hd">
-						<a href="#" target="_top" class="h">亲，请登录</a>
-						<a href="#" target="_top">免费注册</a>
+						<c:if test="${empty username }">
+						<a target="_blank" href="${ctx }/user/gologin.shtml" target="_top" class="h">亲，请登录</a>
+						<a target="_blank" href="${ctx }/user/goadd.shtml" >免费注册</a>
+						</c:if>
+						<c:if test="${not empty username }">
+						<a href="#" target="_top" class="h">欢迎 : ${username }</a>
+						<a href="javaScript:logOut()" target="_top" class="h" style="color: gray">注销</a>
+						</c:if>
 					</div>
-				</div>
 			</ul>
 			<ul class="message-r">
 				<div class="topMessage home">

@@ -20,13 +20,8 @@ public class UserController {
 	UserService userService;
 	@Resource(name="cartService")
 	CartService cartService;
-	@RequestMapping("gologin")
-	public ModelAndView goLogin(){
-		ModelAndView modelAndView = new ModelAndView("login");
-		return modelAndView;
-	}
-	                            
-	@RequestMapping("adduser")
+	
+	@RequestMapping("add")
 	@ResponseBody
 	public Boolean addUser(User user) {
 		if (user == null || user.getUsername() == null || user.getUsername().trim().equals("")
@@ -40,6 +35,11 @@ public class UserController {
 			user.setRole(1);
 		}
 		return userService.addUser(user);
+	}
+	@RequestMapping("goadd")
+	public ModelAndView goAddUser(){
+		ModelAndView modelAndView = new ModelAndView("register");
+		return modelAndView;
 	}
 	
 	@RequestMapping("modifyuser")
@@ -57,12 +57,27 @@ public class UserController {
 	@RequestMapping("login")
 	@ResponseBody
 	public Boolean checkLogin(User user,HttpServletRequest request) {
+		if (user.getUsername() == null || user.getUsername().trim().equals("") || 
+				user.getPassword() == null || user.getPassword().trim().equals("")) {
+			return false;
+		}
 		Boolean isSuccess = userService.checkLogin(user);
 		if(isSuccess){
 			HttpSession session = request.getSession(true);
 			session.setAttribute("username", user.getUsername());
 		}
 		return isSuccess;
+	}
+	@RequestMapping("gologin")
+	public ModelAndView goLogin(HttpServletRequest request){
+		ModelAndView modelAndView = new ModelAndView();
+		HttpSession session = request.getSession(true);
+		if (session.getAttribute("username") == null) {
+			modelAndView.setViewName("login");
+		}else{
+			modelAndView.setViewName("home");
+		}
+		return modelAndView;
 	}
 	
 	@RequestMapping("logout")

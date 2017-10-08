@@ -5,8 +5,8 @@
 <mapper namespace="com.mall.dao.UserDao">
 
 	<insert id="addUser" parameterType="User">
-		insert into user(username,password,email,phone,question,answer,role,creat_time,update_time) 
-		values('${name}','${password}','${email}','${phone}','${question}','${answer}',${role},now(),now())
+		insert into user(username,password,email,phone,question,answer,role,create_time,update_time) 
+		values('${username}','${password}','${email}','${phone}','${question}','${answer}',${role},now(),now())
 	</insert>
 	
 	<update id="modifyUser" parameterType="User">

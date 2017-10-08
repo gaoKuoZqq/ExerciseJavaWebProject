@@ -1,4 +1,4 @@
-package com.mall.front.controller;
+package com.mall.back.controller;
 
 public class MallConstant {
 	// SERVER_ADDRES = "/pic/"
