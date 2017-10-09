@@ -23,4 +23,8 @@
 	<update id="modifyCartChecked" parameterType="integer">
 		update cart set checked=0 where user_id=#{user_id}
 	</update>
+	
+	<select id="findCartByCartId" parameterType="integer" resultType="Cart">
+		select * from cart where id=#{cart_id}
+	</select>
 </mapper>

@@ -1,9 +1,6 @@
 package com.mall.front.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +16,6 @@ import com.mall.pojo.Product;
 import com.mall.service.CartService;
 import com.mall.service.ProductService;
 import com.mall.service.UserService;
-
-import jdk.nashorn.internal.ir.BlockLexicalContext;
 
 @Controller
 @RequestMapping("/cart")

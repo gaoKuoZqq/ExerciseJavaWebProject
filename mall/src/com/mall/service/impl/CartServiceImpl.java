@@ -1,6 +1,8 @@
 package com.mall.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -37,6 +39,15 @@ public class CartServiceImpl implements CartService{
 	@Override
 	public void modifyCartChecked(Integer user_id) {
 		cartDao.modifyCartChecked(user_id);
+	}
+
+	@Override
+	public List<Cart> findCartByCartIdSet(Set<Integer> cart_idsSet) {
+		List<Cart> cartsList = new ArrayList<Cart>();
+		for (Integer cart_id : cart_idsSet) {
+			cartsList.add(cartDao.findCartByCartId(cart_id));
+		}
+		return cartsList;
 	}
 
 }

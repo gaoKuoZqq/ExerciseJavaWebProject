@@ -1,7 +1,10 @@
 package com.mall.front.controller;
 
+import java.io.IOException;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -69,14 +72,9 @@ public class UserController {
 		return isSuccess;
 	}
 	@RequestMapping("gologin")
-	public ModelAndView goLogin(HttpServletRequest request){
+	public ModelAndView goLogin(){
 		ModelAndView modelAndView = new ModelAndView();
-		HttpSession session = request.getSession(true);
-		if (session.getAttribute("username") == null) {
 			modelAndView.setViewName("login");
-		}else{
-			modelAndView.setViewName("home");
-		}
 		return modelAndView;
 	}
 	

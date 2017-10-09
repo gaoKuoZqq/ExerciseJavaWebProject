@@ -16,4 +16,6 @@ public interface CartDao {
 	
 	//注销时将勾选状态变为未勾选
 	void modifyCartChecked(Integer user_id);
+	
+	Cart findCartByCartId(Integer cart_id);
 }
