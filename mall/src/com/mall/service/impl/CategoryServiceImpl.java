@@ -22,7 +22,12 @@ public class CategoryServiceImpl implements CategoryService{
 		//避免出现页码超范围
 		if (totalPage < pageBean.getPageIndex()) {
 			pageBean.setPageIndex(totalPage);
-			pageBean.setLimitStart((totalPage - 1) * pageBean.getPageSize());
+			if (totalPage > 0) {
+				pageBean.setLimitStart((totalPage - 1) * pageBean.getPageSize());
+			}else {
+				pageBean.setLimitStart(0);
+			}
+			
 		}
 		List<Category> categoriesList = categoryDao.findCategory(pageBean);
 		
