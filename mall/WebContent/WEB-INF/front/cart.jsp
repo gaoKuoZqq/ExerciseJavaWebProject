@@ -61,9 +61,9 @@
 		
 		function changeCheckedAll(){
 			if($('#changeAllCheckbox').is(':checked')){
-				$("[name='checkboxItem']").attr("checked",'true');//全选 
+				$("[name='checkboxItem']").prop("checked",true);//全选 
 			}else{
-				$("[name='checkboxItem']").removeAttr("checked");//取消全选 
+				$("[name='checkboxItem']").prop("checked",false);//取消全选 
 			}
 			var obj=document.getElementsByName('checkboxItem');
 			var sum = 0;
@@ -76,10 +76,15 @@
 		}
 		
 		function settlement(){
-			var str=""; 
-			$("[name='checkboxItem'][checked]").each(function(){ 
-			str+=$(this).val()+" "; 
-			}) 
+			var obj=document.getElementsByName('checkboxItem');
+			var str = ''; 
+			for(var i=0; i<obj.length; i++){ 
+				if(obj[i].checked) {
+					str+=obj[i].value+' ';
+				} 
+			}
+			$("#saveCart_ids").val(str);
+			$("#settlementForm").submit();
 		}
 		
 		function deleteCart(id){
@@ -93,10 +98,13 @@
 		}
 		
 		function deleteCheckedCart(){
-			var str=""; 
-			$("[name='checkboxItem'][checked]").each(function(){ 
-			str+=$(this).val()+" "; 
-			});
+			var obj=document.getElementsByName('checkboxItem');
+			var str = ''; 
+			for(var i=0; i<obj.length; i++){ 
+				if(obj[i].checked) {
+					str+=obj[i].value+' ';
+				} 
+			}
 			$.post(
 					"${ctx}/cart/del.shtml",
 					{"ids" : str},
@@ -108,7 +116,10 @@
 		</script>
 </head>
 	<body>
-
+		<!-- 用于存储当前所选的cart_ids并提交到ordercontroller的表单 -->
+		<form id="settlementForm" action="${ctx}/order/goadd.shtml" method="post">
+			<input type="hidden" id="saveCart_ids" name="cart_ids"/>
+		</form>
 		<!--顶部导航条 -->
 		<div class="am-container header">
 			<ul class="message-l">
@@ -126,7 +137,7 @@
 			</ul>
 			<ul class="message-r">
 				<div class="topMessage home">
-					<div class="menu-hd"><a href="#" target="_top" class="h">商城首页</a></div>
+					<div class="menu-hd"><a href="${ctx}/home/gohome.shtml" target="_top" class="h">商城首页</a></div>
 				</div>
 				<div class="topMessage my-shangcheng">
 					<div class="menu-hd MyShangcheng"><a href="#" target="_top"><i class="am-icon-user am-icon-fw"></i>个人中心</a></div>
@@ -286,7 +297,7 @@
 						</div>
 						<div class="btn-area">
 							<a href="javaScript:settlement()" id="J_Go" class="submit-btn submit-btn-disabled" aria-label="请注意如果没有选择宝贝，将无法结算">
-								<in>结&nbsp;算</span></a>
+								<span>结&nbsp;算</span></a>
 						</div>
 					</div>
 

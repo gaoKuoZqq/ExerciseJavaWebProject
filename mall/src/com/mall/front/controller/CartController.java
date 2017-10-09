@@ -29,7 +29,7 @@ public class CartController {
 	
 	@RequestMapping("gocart")
 	public ModelAndView goCart(String username,HttpServletRequest request) {
-		ModelAndView modelAndView = new ModelAndView("cart");
+		ModelAndView modelAndView = new ModelAndView();
 		HttpSession session = request.getSession(true);
 		if (session.getAttribute("username") == null) {
 			modelAndView.setViewName("login");
@@ -44,6 +44,7 @@ public class CartController {
 			cart.setProduct(product);
 		}
 		modelAndView.addObject("cartsList",cartsList);
+		modelAndView.setViewName("cart");
 		return modelAndView;
 	}
 	

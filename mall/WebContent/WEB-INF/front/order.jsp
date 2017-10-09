@@ -8,103 +8,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Insert title here</title>
-		<link href="${ctx }/resources/cart/css/amazeui.css" rel="stylesheet" type="text/css" />
-		<link href="${ctx }/resources/cart/css/cartstyle.css" rel="stylesheet" type="text/css" />
-		<link href="${ctx }/resources/cart/css/demo.css" rel="stylesheet" type="text/css" />
-		<link href="${ctx }/resources/cart/css/opstyle.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="${ctx }/resources/thirdlib/jquery-3.2.1.min.js"></script>
+		<link href="${ctx }/resources/order/css/amazeui.css" rel="stylesheet" type="text/css" />
+		<link href="${ctx }/resources/order/css/demo.css" rel="stylesheet" type="text/css" />
+		<link href="${ctx }/resources/order/css/cartstyle.css" rel="stylesheet" type="text/css" />
+		<link href="${ctx }/resources/order/css/jsstyle.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="${ctx }/resources/order/js/address.js"></script>
 		<script type="text/javascript">
-		function addNumber(id){
-			var stock = $("#stock"+id).val();
-			var number = parseInt($("#number"+id).val());
-			var price = $("#price"+id).val();
-			if(number < stock){
-				number = number + 1;
-				$("#number"+id).val(number);
-				$("#productTotal"+id)[0].innerHTML=number*price;
-				$.post(
-					"${ctx}/cart/modify.shtml",
-					{
-						"id" : id,
-						"quantity" : number
-					}
-				)
-			}
-		}
-		function cutNumber(id){
-			var number = parseInt($("#number"+id).val());
-			var price = $("#price"+id).val();
-			if(number > 0){
-				number = number - 1;
-				$("#number"+id).val(number);
-				$("#productTotal"+id)[0].innerHTML=number*price;
-				$.post(
-						"${ctx}/cart/modify.shtml",
-						{
-							"id" : id,
-							"quantity" : number
-						}
-					)
-			}
-		}
-		
-		function changeSelectCart(){
-			var obj=document.getElementsByName('checkboxItem');
-			var sum = 0;
-			for(var i=0; i<obj.length; i++){ 
-				if(obj[i].checked){
-					sum = parseFloat($("#productTotal"+obj[i].value)[0].innerHTML) + parseFloat(sum);
-				}
-			}
-			$("#sum")[0].innerHTML=sum;
-		}
-		
-		function changeCheckedAll(){
-			if($('#changeAllCheckbox').is(':checked')){
-				$("[name='checkboxItem']").attr("checked",'true');//全选 
-			}else{
-				$("[name='checkboxItem']").removeAttr("checked");//取消全选 
-			}
-			var obj=document.getElementsByName('checkboxItem');
-			var sum = 0;
-			for(var i=0; i<obj.length; i++){ 
-				if(obj[i].checked){
-					sum = parseFloat($("#productTotal"+obj[i].value)[0].innerHTML) + parseFloat(sum);
-				}
-			}
-			$("#sum")[0].innerHTML=sum;
-		}
-		
-		function settlement(){
-			var str=""; 
-			$("[name='checkboxItem'][checked]").each(function(){ 
-			str+=$(this).val()+" "; 
-			}) 
-		}
-		
-		function deleteCart(id){
-			$.post(
-				"${ctx}/cart/del.shtml",
-				{"ids" : id},
-				function(data){
-					window.location.reload();
-				}
-			)
-		}
-		
-		function deleteCheckedCart(){
-			var str=""; 
-			$("[name='checkboxItem'][checked]").each(function(){ 
-			str+=$(this).val()+" "; 
-			});
-			$.post(
-					"${ctx}/cart/del.shtml",
-					{"ids" : str},
-					function(data){
-						window.location.reload();
-					}
-				)
-		}
 		</script>
 </head>
 	<body>
@@ -121,7 +30,7 @@
 			</ul>
 			<ul class="message-r">
 				<div class="topMessage home">
-					<div class="menu-hd"><a href="#" target="_top" class="h">商城首页</a></div>
+					<div class="menu-hd"><a href="${ctx}/home/gohome.shtml" target="_top" class="h">商城首页</a></div>
 				</div>
 				<div class="topMessage my-shangcheng">
 					<div class="menu-hd MyShangcheng"><a href="#" target="_top"><i class="am-icon-user am-icon-fw"></i>个人中心</a></div>

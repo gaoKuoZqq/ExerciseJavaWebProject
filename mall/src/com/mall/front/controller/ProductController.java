@@ -1,7 +1,5 @@
 package com.mall.front.controller;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mall.dto.PageBean;
-import com.mall.pojo.Category;
 import com.mall.pojo.Product;
 import com.mall.service.ProductService;
 

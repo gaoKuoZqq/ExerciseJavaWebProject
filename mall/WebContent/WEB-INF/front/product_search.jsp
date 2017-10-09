@@ -26,10 +26,8 @@
 		}
 		
 		function goIntroduction(product_id){
-			$.post(
-				"${ctx}/product/introduction.shtml",
-				{"product_id" : product_id}
-			)
+			$("#saveProduct_id").val(product_id);
+			productToIntroduction.submit();
 		}
 		
 		function goCart(){
@@ -43,6 +41,10 @@
 		</script>
 </head>
 	<body>
+	<!-- 用于提交所选id到结算order的表单 -->
+	<form id="productToIntroduction" action="${ctx}/product/introduction.shtml" method="post">
+		<input type="hidden" id="saveProduct_id" name="product_id"/>
+	</form>
 	<!-- 用于翻页传递信息的表单 -->
 	<form id="goPageForm" action="${ctx }/product/find.shtml" method="post">
 		<input type="hidden" name="pageIndex" id="pageIndex"/>
@@ -67,7 +69,7 @@
 			</ul>
 			<ul class="message-r">
 				<div class="topMessage home">
-					<div class="menu-hd"><a href="#" target="_top" class="h">商城首页</a></div>
+					<div class="menu-hd"><a href="${ctx}/home/gohome.shtml" target="_top" class="h">商城首页</a></div>
 				</div>
 				<div class="topMessage my-shangcheng">
 					<div class="menu-hd MyShangcheng"><a href="#" target="_top"><i class="am-icon-user am-icon-fw"></i>个人中心</a></div>
