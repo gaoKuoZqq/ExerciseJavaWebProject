@@ -18,4 +18,7 @@ public interface CartDao {
 	void modifyCartChecked(Integer user_id);
 	
 	Cart findCartByCartId(Integer cart_id);
+	
+	//为了把同样的商品归为一条,先查一下有没有
+	Cart findCartByNewCart(Cart cart);
 }

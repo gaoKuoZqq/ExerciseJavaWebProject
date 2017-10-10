@@ -12,7 +12,7 @@ import com.mall.pojo.Location;
 import com.mall.service.LocationService;
 
 @Controller
-@RequestMapping("location")
+@RequestMapping("/location")
 public class LocationController {
 	@Resource(name="locationService")
 	LocationService locationService;

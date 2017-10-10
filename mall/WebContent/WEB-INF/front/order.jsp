@@ -13,20 +13,178 @@
 		<link href="${ctx }/resources/order/css/cartstyle.css" rel="stylesheet" type="text/css" />
 		<link href="${ctx }/resources/order/css/jsstyle.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="${ctx }/resources/order/js/address.js"></script>
+		<script type="text/javascript" src="${ctx}/resources/thirdlib/layer-v3.1.0/layer/layer.js"></script>
 		<script type="text/javascript">
+		function findCity(){
+			var parent_id = $("#provinceSelect").val();
+			$.post(
+				"${ctx}/location/findcity.shtml",
+				{"parent_id" : parent_id},
+				function(data){
+					$("option#temporaryCity").remove();
+					for(var a in data){
+	            		$("#cityNoSelected").after("<option id='temporaryCity' value='"+data[a].id+"'>"+data[a].name+"</option>")
+	            	 }
+				},
+				"json"
+			)
+		}
+		
+		function findArea(){
+			var parent_id = $("#citySelect").val();
+			$.post(
+				"${ctx}/location/findarea.shtml",
+				{"parent_id" : parent_id},
+				function(data){
+					$("option#temporaryArea").remove();
+					for(var a in data){
+	            		$("#areaNoSelected").after("<option id='temporaryArea' value='"+data[a].id+"'>"+data[a].name+"</option>")
+	            	 }
+				},
+				"json"
+			)
+		}
+		
+		function addShipping(){
+			var receiver_name = $("#receiver_name").val();
+			var receiver_mobile = $("#receiver_mobile").val();
+			var receiver_province = $("#provinceSelect").find("option:selected").text();
+			var receiver_city = $("#citySelect").find("option:selected").text();
+			var receiver_district = $("#areaSelect").find("option:selected").text();
+			var receiver_address = $("#receiver_address").val();
+			$.post(
+				"${ctx}/shipping/add.shtml",
+				{
+					"receiver_name" : receiver_name,
+					"receiver_mobile" : receiver_mobile,
+					"receiver_province" : receiver_province,
+					"receiver_city" : receiver_city,
+					"receiver_district" : receiver_district,
+					"receiver_address" : receiver_address,
+				},
+				function(data){
+					if(data){
+						window.location.reload();
+					}else{
+						alert("保存失败");
+					}
+				},
+				"json"
+			)
+		}
+		
+		function deleteShipping(shipping_id){
+			$.post(
+					"${ctx}/shipping/del.shtml",
+					{
+						"shipping_id" : shipping_id
+					},
+					function(data){
+						if(data){
+							window.location.reload();
+						}else{
+							alert("操作失败");
+						}
+					},
+					"json"
+				)
+		}
+		
+		function checkAddress(shipping_id){
+			$("[name='defaultAddress']").prop("checked",false);//取消全部已选
+			$("#defaultAddress"+shipping_id).prop("checked",true);
+		}
+		
+		function modifyReceiverInfo(shipping_id){
+			layer.open(
+					{
+						title: '修改收货信息',
+					    type: 1,
+					    content: $("#modifyReceiverDiv"+shipping_id) ,//这里content是一个DOM，这个元素要放在body根节点下
+					}
+			);
+		}
+		
+		function modifyShipping(shipping_id){
+			var receiver_name = $("#receiver_nameM").val();
+			var receiver_mobile = $("#receiver_mobileM").val();
+			var receiver_address = $("#receiver_addressM").val();
+			$.post(
+				"${ctx}/shipping/modify.shtml",
+				{
+					"id" : shipping_id,
+					"receiver_name" : receiver_name,
+					"receiver_mobile" : receiver_mobile,
+					"receiver_address" : receiver_address,
+				},
+				function(data){
+					if(data){
+						window.location.reload();
+					}else{
+						alert("保存失败");
+					}
+				},
+				"json"
+			)
+		}
+		
+		function logOut(){
+			$.ajax({
+			    cache: false,
+			    type: "POST",
+			    url:"${ctx}/user/logout.shtml",
+			    data:'${username}',
+			    async: true,
+			    success: function() {
+			    	window.location.reload();
+			    }
+			});
+		}
+		
+		function goCart(){
+			var username = '${username}';
+			if(username == null || username == ""){
+				location.href="${ctx}/user/gologin.shtml";
+			}else{
+				location.href="${ctx}/cart/gocart.shtml?username="+username+"";
+			}
+		}
+		
+		$(document).ready(function(){
+			var shipping_id = $("input:checked").val();
+			var receiverLocation = $("#displayReceiver"+shipping_id).html();
+			var receiverInfo = $("#displayReceiverInfo"+shipping_id).html();
+			$("#finallyLocation").html(receiverLocation);
+			$("#finallyInfo").html(receiverInfo);
+		})
+		
+		function commitOrder(){
+			var shipping_id = $("input[name=defaultAddress]:checked").val();
+			$("#saveAddOrderShipping_id").val(shipping_id);
+			$("#addOrderForm").submit();
+		}
 		</script>
 </head>
 	<body>
-
+		<!-- 用于提交订单的form -->
+		<form id="addOrderForm" action="${ctx}/order/add.shtml" method="post">
+			<input name="shipping_id" type="hidden" id="saveAddOrderShipping_id"/>
+			<input name="cart_ids" type="hidden" id="saveAddOrderCart_ids" value="${cart_ids}"/>
+		</form>
 		<!--顶部导航条 -->
 		<div class="am-container header">
 			<ul class="message-l">
 				<div class="topMessage">
 					<div class="menu-hd">
-						<a href="#" target="_top" class="h">亲，请登录</a>
-						<a href="#" target="_top">免费注册</a>
+						<c:if test="${empty username }">
+						<a target="_blank" href="${ctx }/user/gologin.shtml" target="_top" class="h">亲，请登录</a>
+						<a target="_blank" href="${ctx }/user/goadd.shtml" >免费注册</a>
+						</c:if>
+						<c:if test="${not empty username }">
+						<a href="#" target="_top" class="h">欢迎 : ${username }</a>
+						<a href="javaScript:logOut()" target="_top" class="h" style="color: gray">注销</a>
+						</c:if>
 					</div>
-				</div>
 			</ul>
 			<ul class="message-r">
 				<div class="topMessage home">
@@ -36,7 +194,7 @@
 					<div class="menu-hd MyShangcheng"><a href="#" target="_top"><i class="am-icon-user am-icon-fw"></i>个人中心</a></div>
 				</div>
 				<div class="topMessage mini-cart">
-					<div class="menu-hd"><a id="mc-menu-hd" href="#" target="_top"><i class="am-icon-shopping-cart  am-icon-fw"></i><span>购物车</span><strong id="J_MiniCartNum" class="h">0</strong></a></div>
+					<div class="menu-hd"><a id="mc-menu-hd" href="javaScript:goCart()" target="_top"><i class="am-icon-shopping-cart  am-icon-fw"></i><span>购物车</span><strong id="J_MiniCartNum" class="h">0</strong></a></div>
 				</div>
 				<div class="topMessage favorite">
 					<div class="menu-hd"><a href="#" target="_top"><i class="am-icon-heart am-icon-fw"></i><span>收藏夹</span></a></div>
@@ -53,13 +211,12 @@
 
 				<div class="search-bar pr">
 					<a name="index_none_header_sysc" href="#"></a>
-					<form>
-						<input id="searchInput" name="index_none_header_sysc" type="text" placeholder="搜索" autocomplete="off">
-						<input id="ai-topsearch" class="submit am-btn" value="搜索" index="1" type="submit">
-					</form>
+					<form action="${ctx }/product/find.shtml" method="post"/>
+							<input id="searchInput" type="text" name="product.name" placeholder="搜索" autocomplete="off">
+							<input id="ai-topsearch" class="submit am-btn" value="搜索" index="1" type="submit">
+						</form>
 				</div>
 			</div>
-
 			<div class="clear"></div>
 			<div class="concent">
 				<!--地址 -->
@@ -70,49 +227,160 @@
 							<div class="tc-btn createAddr theme-login am-btn am-btn-danger">使用新地址</div>
 						</div>
 						<div class="clear"></div>
+						<p>最多三条收货信息</p>
 						<ul>
 							<div class="per-border"></div>
-							<li class="user-addresslist defaultAddr">
-
+							<li class="user-addresslist defaultAddr" style="width:1000px;">
+								<c:forEach items="${shippingsList }" var="shipping" varStatus="status">
+								<c:if test="${status.first }">
 								<div class="address-left">
 									<div class="user DefaultAddr">
-
+										<input value="${shipping.id }" id="defaultAddress${shipping.id }" checked="checked" type="checkbox" name="defaultAddress" onchange="checkAddress(${shipping.id })"/> 
 										<span class="buy-address-detail">   
-                   						<span class="buy-user">艾迪 </span>
-										<span class="buy-phone">15871145629</span>
+                   						<span class="buy-user">${shipping.receiver_name } </span>
+										<span class="buy-phone">${shipping.receiver_mobile }</span>
+										</span>
+									</div>
+									<div id="displayReceiverInfo${shipping.id }" style="display: none;">
+										<span class="buy-address-detail">   
+                   						<span class="buy-user">${shipping.receiver_name } </span>
+										<span class="buy-phone">${shipping.receiver_mobile }</span>
+										</span>
+									</div>
+									<div class="default-address DefaultAddr" id="displayReceiver${shipping.id }">
+										<span class="buy-line-title buy-line-title-type">收货地址：</span>
+										<span class="buy--address-detail"/>
+								  		<span class="province">${shipping.receiver_province }</span>
+										<span class="city">${shipping.receiver_city }</span>
+										<span class="dist">${shipping.receiver_district }</span>
+										<span class="street">${shipping.receiver_address }</span>
+									</div>
+									<div class="address-right">
+										<a href="../person/address.html">
+										<span class="am-icon-angle-right am-icon-lg"></span></a>
+									</div>
+									<div class="clear"></div>
+									<div class="new-addr-btn">
+										<span class="new-addr-bar hidden">|</span>
+										<a href="javaScript:modifyReceiverInfo(${shipping.id })">编辑</a>
+										<span class="new-addr-bar">|</span>
+										<a href="javascript:deleteShipping(${shipping.id });">删除</a>
+									</div>
+								</div>
+								<div id="modifyReceiverDiv${shipping.id }" style="display:none;">
+									<form class="am-form am-form-horizontal">
+										<div class="am-form-group">
+											<label for="user-name" class="am-form-label">收货人</label>
+											<div class="am-form-content">
+												<input value="${shipping.receiver_name }" type="text" placeholder="收货人" id="receiver_nameM">
+											</div>
+										</div>
+				
+										<div class="am-form-group">
+											<label for="user-phone" class="am-form-label">手机号码</label>
+											<div class="am-form-content">
+												<input value="${shipping.receiver_mobile }" id="receiver_mobileM" placeholder="手机号必填" type="email">
+											</div>
+										</div>
+				
+										<div class="am-form-group">
+											<label for="user-phone" class="am-form-label">
+												所在地 : 
+											</label>
+											<span style="display: block; margin-top: 8px;">&nbsp;&nbsp;&nbsp;${shipping.receiver_province }&nbsp;${shipping.receiver_city }
+												&nbsp;${shipping.receiver_district }</span>
+										</div>
+				
+										<div class="am-form-group">
+											<label for="user-intro" class="am-form-label">详细地址</label>
+											<div class="am-form-content">
+												<textarea class="" rows="3" id="receiver_addressM" >${shipping.receiver_address }</textarea>
+												<small>50字以内写出你的详细地址...</small>
+											</div>
+										</div>
+				
+										<div class="am-form-group theme-poptit">
+											<div class="am-u-sm-9 am-u-sm-push-3">
+												<div class="am-btn am-btn-danger"><a href="javaScript:modifyShipping(${shipping.id })">保存</a></div>
+											</div>
+										</div>
+									</form>
+								</div>
+								</c:if>
+								
+								<c:if test="${status.count>1 }">
+								<div class="address-left">
+									<div class="user DefaultAddr">
+										<input id="defaultAddress${shipping.id }" type="checkbox" name="defaultAddress" onchange="checkAddress(${shipping.id })"/> 
+										<span class="buy-address-detail">   
+                   						<span class="buy-user">${shipping.receiver_name } </span>
+										<span class="buy-phone">${shipping.receiver_mobile }</span>
 										</span>
 									</div>
 									<div class="default-address DefaultAddr">
 										<span class="buy-line-title buy-line-title-type">收货地址：</span>
-										<span class="buy--address-detail">
-								  		<span class="province">湖北</span>省
-										<span class="city">武汉</span>市
-										<span class="dist">洪山</span>区
-										<span class="street">雄楚大道666号(中南财经政法大学)</span>
-										</span>
-
-										</span>
+										<span class="buy--address-detail"/>
+								  		<span class="province">${shipping.receiver_province }</span>
+										<span class="city">${shipping.receiver_city }</span>
+										<span class="dist">${shipping.receiver_district }</span>
+										<span class="street">${shipping.receiver_address }</span>
 									</div>
-									<ins class="deftip">默认地址</ins>
-								</div>
-								<div class="address-right">
-									<a href="../person/address.html">
+									<div class="address-right">
+										<a href="../person/address.html">
 										<span class="am-icon-angle-right am-icon-lg"></span></a>
+									</div>
+									<div class="clear"></div>
+									<div class="new-addr-btn">
+										<span class="new-addr-bar hidden">|</span>
+										<a href="javaScript:modifyReceiverInfo(${shipping.id })">编辑</a>
+										<span class="new-addr-bar">|</span>
+										<a href="javascript:deleteShipping(${shipping.id });">删除</a>
+									</div>
 								</div>
-								<div class="clear"></div>
-
-								<div class="new-addr-btn">
-									<a href="#" class="hidden">设为默认</a>
-									<span class="new-addr-bar hidden">|</span>
-									<a href="#">编辑</a>
-									<span class="new-addr-bar">|</span>
-									<a href="javascript:void(0);" onclick="delClick(this);">删除</a>
+								<div id="modifyReceiverDiv${shipping.id }" style="display:none;">
+									<form class="am-form am-form-horizontal">
+										<div class="am-form-group">
+											<label for="user-name" class="am-form-label">收货人</label>
+											<div class="am-form-content">
+												<input value="${shipping.receiver_name }" type="text" placeholder="收货人" id="receiver_nameM">
+											</div>
+										</div>
+				
+										<div class="am-form-group">
+											<label for="user-phone" class="am-form-label">手机号码</label>
+											<div class="am-form-content">
+												<input value="${shipping.receiver_mobile }" id="receiver_mobileM" placeholder="手机号必填" type="email">
+											</div>
+										</div>
+				
+										<div class="am-form-group">
+											<label for="user-phone" class="am-form-label">
+												所在地 : 
+											</label>
+											<span style="display: block; margin-top: 8px;">&nbsp;&nbsp;&nbsp;${shipping.receiver_province }&nbsp;${shipping.receiver_city }
+												&nbsp;${shipping.receiver_district }</span>
+										</div>
+				
+										<div class="am-form-group">
+											<label for="user-intro" class="am-form-label">详细地址</label>
+											<div class="am-form-content">
+												<textarea class="" rows="3" id="receiver_addressM" >${shipping.receiver_address }</textarea>
+												<small>50字以内写出你的详细地址...</small>
+											</div>
+										</div>
+				
+										<div class="am-form-group theme-poptit">
+											<div class="am-u-sm-9 am-u-sm-push-3">
+												<div class="am-btn am-btn-danger"><a href="javaScript:modifyShipping(${shipping.id })">保存</a></div>
+											</div>
+										</div>
+									</form>
 								</div>
-
+								</c:if>
+								</c:forEach>
 							</li>
 							<div class="per-border"></div>
 						</ul>
-
 						<div class="clear"></div>
 					</div>
 					<!--物流 -->
@@ -170,129 +438,63 @@
 								<div class="bundle  bundle-last">
 
 									<div class="bundle-main">
-										<ul class="item-content clearfix">
-											<div class="pay-phone">
-												<li class="td td-item">
-													<div class="item-pic">
-														<a href="#" class="J_MakePoint">
-															<img src="../images/kouhong.jpg_80x80.jpg" class="itempic J_ItemImg"></a>
-													</div>
-													<div class="item-info">
-														<div class="item-basic-info">
-															<a href="#" class="item-title J_MakePoint" data-point="tbcart.8.11">美康粉黛醉美唇膏 持久保湿滋润防水不掉色</a>
-														</div>
+										<c:forEach items="${cartsList }" var="cart">
+											<ul class="item-content clearfix">
+												<li class="td td-chk">
+													<div class="cart-checkbox ">
+														<label for="J_CheckBox_170037950254"></label>
 													</div>
 												</li>
-												<li class="td td-info">
-													<div class="item-props">
-														<span class="sku-line">颜色：12#川南玛瑙</span>
-														<span class="sku-line">包装：裸装</span>
+												<li class="td td-item" style="display: block;width:490px;">
+													<div style="float:left;display: block;width:180px">
+														<a href="#" target="_blank">
+															<img src="/pic/${cart.product.main_image }" width=120 height=120></a>
+													</div>
+													<div style="float:left">
+														<div>
+															<a href="#" target="_blank" class="item-title J_MakePoint" data-point="tbcart.8.11">${cart.product.name}</a>
+														</div>
 													</div>
 												</li>
 												<li class="td td-price">
 													<div class="item-price price-promo-promo">
 														<div class="price-content">
-															<em class="J_Price price-now">39.00</em>
+															<div class="price-line"><br/>
+																<em class="J_Price price-now" tabindex="0">${cart.product.price }</em>
+																<input type="hidden" id="price${cart.id }" value="${cart.product.price }"/>
+															</div>
 														</div>
 													</div>
 												</li>
-											</div>
-											<li class="td td-amount">
-												<div class="amount-wrapper ">
-													<div class="item-amount ">
-														<span class="phone-title">购买数量</span>
-														<div class="sl">
-															<input class="min am-btn" name="" type="button" value="-" />
-															<input class="text_box" name="" type="text" value="3" style="width:30px;" />
-															<input class="add am-btn" name="" type="button" value="+" />
+												<li class="td td-amount">
+													<div class="amount-wrapper ">
+														<div class="item-amount ">
+															<div class="sl"><br/>
+																<input class="text_box" id="number${cart.id }" type="button" value="${cart.quantity }" style="width:30px;" />
+															</div>
 														</div>
 													</div>
-												</div>
-											</li>
-											<li class="td td-sum">
-												<div class="td-inner">
-													<em tabindex="0" class="J_ItemSum number">117.00</em>
-												</div>
-											</li>
-											<li class="td td-oplist">
-												<div class="td-inner">
-													<span class="phone-title">配送方式</span>
-													<div class="pay-logis">
-														快递<b class="sys_item_freprice">10</b>元
+												</li>
+												<li class="td td-sum">
+													<div class="td-inner"><br/>
+														<em id="productTotal${cart.id }" tabindex="0" class="J_ItemSum number">${cart.quantity * cart.product.price}</em>
 													</div>
-												</div>
-											</li>
-
-										</ul>
+												</li>
+												<li class="td td-sum" style="float:right;">
+													<div class="td-inner">
+														<a data-point-url="#">
+			                  							 删除&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			                  							</a>
+													</div>
+												</li>
+											</ul>
+											</c:forEach>
 										<div class="clear"></div>
 
 									</div>
 							</tr>
 							<div class="clear"></div>
 							</div>
-
-							<tr id="J_BundleList_s_1911116345_1" class="item-list">
-								<div id="J_Bundle_s_1911116345_1_0" class="bundle  bundle-last">
-									<div class="bundle-main">
-										<ul class="item-content clearfix">
-											<div class="pay-phone">
-												<li class="td td-item">
-													<div class="item-pic">
-														<a href="#" class="J_MakePoint">
-															<img src="../images/kouhong.jpg_80x80.jpg" class="itempic J_ItemImg"></a>
-													</div>
-													<div class="item-info">
-														<div class="item-basic-info">
-															<a href="#" target="_blank" title="美康粉黛醉美唇膏 持久保湿滋润防水不掉色" class="item-title J_MakePoint" data-point="tbcart.8.11">美康粉黛醉美唇膏 持久保湿滋润防水不掉色</a>
-														</div>
-													</div>
-												</li>
-												<li class="td td-info">
-													<div class="item-props">
-														<span class="sku-line">颜色：10#蜜橘色+17#樱花粉</span>
-														<span class="sku-line">包装：两支手袋装（送彩带）</span>
-													</div>
-												</li>
-												<li class="td td-price">
-													<div class="item-price price-promo-promo">
-														<div class="price-content">
-															<em class="J_Price price-now">39.00</em>
-														</div>
-													</div>
-												</li>
-											</div>
-
-											<li class="td td-amount">
-												<div class="amount-wrapper ">
-													<div class="item-amount ">
-														<span class="phone-title">购买数量</span>
-														<div class="sl">
-															<input class="min am-btn" name="" type="button" value="-" />
-															<input class="text_box" name="" type="text" value="3" style="width:30px;" />
-															<input class="add am-btn" name="" type="button" value="+" />
-														</div>
-													</div>
-												</div>
-											</li>
-											<li class="td td-sum">
-												<div class="td-inner">
-													<em tabindex="0" class="J_ItemSum number">117.00</em>
-												</div>
-											</li>
-											<li class="td td-oplist">
-												<div class="td-inner">
-													<span class="phone-title">配送方式</span>
-													<div class="pay-logis">
-														包邮
-													</div>
-												</div>
-											</li>
-
-										</ul>
-										<div class="clear"></div>
-
-									</div>
-							</tr>
 							</div>
 							<div class="clear"></div>
 							<div class="pay-total">
@@ -314,7 +516,7 @@
 							<!--含运费小计 -->
 							<div class="buy-point-discharge ">
 								<p class="price g_price ">
-									合计（含运费） <span>¥</span><em class="pay-sum">244.00</em>
+									合计  <span>¥</span><em class="pay-sum">${payment }</em>
 								</p>
 							</div>
 
@@ -324,13 +526,13 @@
 									<div class="box">
 										<div tabindex="0" id="holyshit267" class="realPay"><em class="t">实付款：</em>
 											<span class="price g_price ">
-                                    <span>¥</span> <em class="style-large-bold-red " id="J_ActualFee">244.00</em>
+                                    <span>¥</span> <em class="style-large-bold-red " id="J_ActualFee">${payment }</em>
 											</span>
 										</div>
 
 										<div id="holyshit268" class="pay-address">
 
-											<p class="buy-footer-address">
+											<p id="finallyLocation" class="buy-footer-address">
 												<span class="buy-line-title buy-line-title-type">寄送至：</span>
 												<span class="buy--address-detail">
 								   <span class="province">湖北</span>省
@@ -340,7 +542,7 @@
 												</span>
 												</span>
 											</p>
-											<p class="buy-footer-address">
+											<p id="finallyInfo" class="buy-footer-address">
 												<span class="buy-line-title">收货人：</span>
 												<span class="buy-address-detail">   
                                          <span class="buy-user">艾迪 </span>
@@ -352,7 +554,7 @@
 
 									<div id="holyshit269" class="submitOrder">
 										<div class="go-btn-wrap">
-											<a id="J_Go" href="success.html" class="btn-go" tabindex="0" title="点击此按钮，提交订单">提交订单</a>
+											<a id="J_Go" href="javaScript:commitOrder()" class="btn-go" tabindex="0" title="点击此按钮，提交订单">提交订单</a>
 										</div>
 									</div>
 									<div class="clear"></div>
@@ -401,31 +603,31 @@
 						<div class="am-form-group">
 							<label for="user-name" class="am-form-label">收货人</label>
 							<div class="am-form-content">
-								<input type="text" id="user-name" placeholder="收货人">
+								<input type="text" placeholder="收货人" id="receiver_name">
 							</div>
 						</div>
 
 						<div class="am-form-group">
 							<label for="user-phone" class="am-form-label">手机号码</label>
 							<div class="am-form-content">
-								<input id="user-phone" placeholder="手机号必填" type="email">
+								<input id="receiver_mobile" placeholder="手机号必填" type="email">
 							</div>
 						</div>
 
 						<div class="am-form-group">
 							<label for="user-phone" class="am-form-label">所在地</label>
 							<div class="am-form-content address">
-								<select data-am-selected>
-									<option value="a">浙江省</option>
-									<option value="b">湖北省</option>
+								<select onchange="findCity()" id="provinceSelect">
+								<option selected="selected" id="provinceNoSelected" value="noSelected">未选择</option>
+								<c:forEach items="${provinceslist }" var="province">
+									<option value="${province.id }">${province.name }</option>
+								</c:forEach>
 								</select>
-								<select data-am-selected>
-									<option value="a">温州市</option>
-									<option value="b">武汉市</option>
+								<select  onchange="findArea()" id="citySelect">
+									<option id="cityNoSelected" value="noSelected">未选择</option>
 								</select>
-								<select data-am-selected>
-									<option value="a">瑞安区</option>
-									<option value="b">洪山区</option>
+								<select id="areaSelect">
+									<option id="areaNoSelected" value="noSelected">未选择</option>
 								</select>
 							</div>
 						</div>
@@ -433,14 +635,14 @@
 						<div class="am-form-group">
 							<label for="user-intro" class="am-form-label">详细地址</label>
 							<div class="am-form-content">
-								<textarea class="" rows="3" id="user-intro" placeholder="输入详细地址"></textarea>
-								<small>100字以内写出你的详细地址...</small>
+								<textarea class="" rows="3" id="receiver_address" placeholder="输入详细地址"></textarea>
+								<small>50字以内写出你的详细地址...</small>
 							</div>
 						</div>
 
 						<div class="am-form-group theme-poptit">
 							<div class="am-u-sm-9 am-u-sm-push-3">
-								<div class="am-btn am-btn-danger">保存</div>
+								<div class="am-btn am-btn-danger"><a href="javaScript:addShipping()">保存</a></div>
 								<div class="am-btn am-btn-danger close">取消</div>
 							</div>
 						</div>

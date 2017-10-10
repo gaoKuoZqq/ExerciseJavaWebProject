@@ -29,6 +29,14 @@
 						"quantity" : number
 					}
 				)
+				var obj=document.getElementsByName('checkboxItem');
+				var sum = 0;
+				for(var i=0; i<obj.length; i++){ 
+					if(obj[i].checked){
+						sum = parseFloat($("#productTotal"+obj[i].value)[0].innerHTML) + parseFloat(sum);
+					}
+				}
+				$("#sum")[0].innerHTML=sum;
 			}
 		}
 		function cutNumber(id){
@@ -45,6 +53,14 @@
 							"quantity" : number
 						}
 					)
+				var obj=document.getElementsByName('checkboxItem');
+				var sum = 0;
+				for(var i=0; i<obj.length; i++){ 
+					if(obj[i].checked){
+						sum = parseFloat($("#productTotal"+obj[i].value)[0].innerHTML) + parseFloat(sum);
+					}
+				}
+				$("#sum")[0].innerHTML=sum;
 			}
 		}
 		
@@ -112,6 +128,19 @@
 						window.location.reload();
 					}
 				)
+		}
+		
+		function logOut(){
+			$.ajax({
+			    cache: false,
+			    type: "POST",
+			    url:"${ctx}/user/logout.shtml",
+			    data:'${username}',
+			    async: true,
+			    success: function() {
+			    	window.location.reload();
+			    }
+			});
 		}
 		</script>
 </head>

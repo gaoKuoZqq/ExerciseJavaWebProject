@@ -38,4 +38,9 @@ public class ShippingServiceImpl implements ShippingService{
 		return shippingDao.findShippingByUser_id(user_id);
 	}
 
+	@Override
+	public Shipping findShippingById(Integer shipping_id) {
+		return shippingDao.findShippingById(shipping_id);
+	}
+
 }

@@ -16,4 +16,6 @@ public interface ShippingDao {
 	
 	//为了限制每个用户添加的地址数量,在这可以查一下
 	Integer totalShippingByUser_id(Integer user_id);
+	
+	Shipping findShippingById(Integer shipping_id);
 }

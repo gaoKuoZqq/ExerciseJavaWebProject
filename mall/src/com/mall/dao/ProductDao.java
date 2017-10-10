@@ -24,4 +24,6 @@ public interface ProductDao {
 	List<Product> findProductByCategoryIdAndName(PageBean pageBean);
 	
 	Integer totalProductByCategoryIdAndName(PageBean pageBean);
+	
+	Integer modifyProductStock(Product product);
 }

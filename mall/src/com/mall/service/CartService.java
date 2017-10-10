@@ -19,4 +19,7 @@ public interface CartService {
 	void modifyCartChecked(Integer user_id);
 	
 	List<Cart> findCartByCartIdSet(Set<Integer> cart_idsSet);
+	
+	//为了把同样的商品归为一条,先查一下有没有
+	Cart findCartByNewCart(Cart cart);
 }

@@ -13,4 +13,6 @@ public interface ShippingService {
 	Boolean modifyShipping(Shipping shipping);
 	
 	List<Shipping> findShippingByUser_id(Integer user_id);
+	
+	Shipping findShippingById(Integer shipping_id);
 }

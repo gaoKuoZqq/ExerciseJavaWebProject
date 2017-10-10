@@ -1,6 +1,7 @@
 package com.mall.dao;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -97,5 +98,10 @@ public class ProductDaoTest {
 		// 从容器中获取bean
 		UserDao userDao = (UserDao) applicationContext.getBean("userDao");
 		System.out.println(userDao.queryUser_idByUsername("admin"));
+	}
+	@Test
+	public void uuidTest() {
+		String u = UUID.randomUUID().toString().replace("-", "");
+		System.out.println(u);
 	}
 }

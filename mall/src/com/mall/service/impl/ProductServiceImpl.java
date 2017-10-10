@@ -75,4 +75,9 @@ public class ProductServiceImpl implements ProductService{
 		pageBean.setTotalPage(totalPage);
 		return pageBean;
 	}
+
+	@Override
+	public Boolean modifyProductStock(Product product) {
+		return productDao.modifyProductStock(product) > 0;
+	}
 }

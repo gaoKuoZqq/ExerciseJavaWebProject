@@ -50,4 +50,10 @@ public class CartServiceImpl implements CartService{
 		return cartsList;
 	}
 
+	@Override
+	public Cart findCartByNewCart(Cart cart) {
+		return cartDao.findCartByNewCart(cart);
+	}
+	
+
 }

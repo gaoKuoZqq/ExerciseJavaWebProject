@@ -54,9 +54,30 @@ public class CartController {
 		Integer user_id = userService.queryUser_idByUsername(username);
 		cart.setUser_id(user_id);
 		cart.setChecked(1);
-		Boolean isSuccess = cartService.addCart(cart);
-		System.out.println(isSuccess);
-		return isSuccess;
+		//判断是否存在重复cart
+		Cart oldCart = cartService.findCartByNewCart(cart);
+		
+		//获得产品库存
+		Product product = productService.findProductById(cart.getProduct_id());
+		Integer product_stock = product.getStock();
+		
+		//如果已存在同产品cart 叠加,否则添加新cart
+		if (oldCart == null) {
+			//如果需求量大于库存,操作失败
+			if (cart.getQuantity() > product_stock) {
+				return false;
+			}else {
+				return cartService.addCart(cart);
+			}
+		}else {
+			//如果需求量大于库存,操作失败
+			if ((oldCart.getQuantity() + cart.getQuantity()) > product_stock) {
+				return false;
+			}else{
+				oldCart.setQuantity(oldCart.getQuantity() + cart.getQuantity());
+				return cartService.modifyCart(oldCart);
+			}
+		}
 	}
 	
 	@RequestMapping("modify")

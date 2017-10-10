@@ -6,7 +6,7 @@ public class Order_item {
 	Integer id;//订单子表id
 	Integer user_id;
 	String order_no;//订单号
-	String product_id;//商品id
+	Integer product_id;//商品id
 	String product_name;
 	String product_image;//商品图片地址
 	double current_unit_price;//生成订单时的商品单价
@@ -18,7 +18,7 @@ public class Order_item {
 	public Order_item() {
 		super();
 	}
-	public Order_item(Integer id, Integer user_id, String order_no, String product_id, String product_name,
+	public Order_item(Integer id, Integer user_id, String order_no, Integer product_id, String product_name,
 			String product_image, double current_unit_price, Integer quantity, double total_price, java.util.Date create_time,
 			java.util.Date update_time) {
 		super();
@@ -52,10 +52,10 @@ public class Order_item {
 	public void setOrder_no(String order_no) {
 		this.order_no = order_no;
 	}
-	public String getProduct_id() {
+	public Integer getProduct_id() {
 		return product_id;
 	}
-	public void setProduct_id(String product_id) {
+	public void setProduct_id(Integer product_id) {
 		this.product_id = product_id;
 	}
 	public String getProduct_name() {

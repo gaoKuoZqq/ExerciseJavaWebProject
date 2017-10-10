@@ -20,4 +20,6 @@ public interface ProductService {
 	public Product findProductById(Integer product_id);
 	
 	public PageBean findProductByCategoryIdAndName(PageBean pageBean);
+	
+	Boolean modifyProductStock(Product product);
 }

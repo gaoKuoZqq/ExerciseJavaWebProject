@@ -187,4 +187,8 @@
 			</if>
 		</where>
 	</select>
+	
+	<update id="modifyProductStock" parameterType="Product">
+		update product set stock=${stock} where id=${id}
+	</update>
 </mapper>
