@@ -3,7 +3,6 @@ package com.mall.dao;
 import java.util.List;
 
 import com.mall.dto.PageBean;
-import com.mall.pojo.Category;
 import com.mall.pojo.Product;;
 
 public interface ProductDao {

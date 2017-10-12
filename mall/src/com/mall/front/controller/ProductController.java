@@ -20,6 +20,8 @@ public class ProductController {
 	public ModelAndView introduction(Integer product_id) {
 		ModelAndView modelAndView = new ModelAndView();
 		Product product = productService.findProductById(product_id);
+		String[] sub_images = product.getSub_images().split(",");
+		modelAndView.addObject("sub_images",sub_images);
 		modelAndView.addObject("product",product);
 		modelAndView.setViewName("introduction");
 		return modelAndView;

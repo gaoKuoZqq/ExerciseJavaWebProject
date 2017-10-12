@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.mall.pojo.Category;
 import com.mall.pojo.Product;
-import com.oracle.jrockit.jfr.Producer;
 
 public class PageBean {
 	Integer pageIndex;

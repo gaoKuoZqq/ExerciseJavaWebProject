@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.mall.dao.ProductDao;
 import com.mall.dto.PageBean;
-import com.mall.pojo.Category;
 import com.mall.pojo.Product;
 import com.mall.service.ProductService;
 @Service("productService")

@@ -19,6 +19,12 @@ public class Cart {
 	public Product getProduct() {
 		return product;
 	}
+	public Cart(Integer id, Integer quantity, Product product) {
+		super();
+		this.id = id;
+		this.quantity = quantity;
+		this.product = product;
+	}
 	public void setProduct(Product product) {
 		this.product = product;
 	}

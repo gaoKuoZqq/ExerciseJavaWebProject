@@ -126,7 +126,7 @@ public class OrderController {
 		Order_item order_item = new Order_item();
 		for (Cart cart : cartsList) {
 			Product product = productService.findProductById(cart.getProduct_id());
-			//设置order_item的内容并添加,这里是否要和后面形成事务要想一下
+			//设置order_item的内容并添加
 			order_item.setOrder_no(order_no);
 			order_item.setUser_id(user_id);
 			order_item.setProduct_id(product.getId());

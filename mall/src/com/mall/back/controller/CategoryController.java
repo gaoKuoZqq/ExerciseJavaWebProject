@@ -13,8 +13,6 @@ import com.mall.dto.PageBean;
 import com.mall.pojo.Category;
 import com.mall.service.CategoryService;
 
-import javafx.beans.property.BooleanProperty;
-
 @Controller
 @RequestMapping("/category")
 public class CategoryController {

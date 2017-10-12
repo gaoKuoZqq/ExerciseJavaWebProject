@@ -14,7 +14,7 @@ public class Product {
 	String main_image;//产品主图,url相对地址
 	String sub_images;//图片地址,json格式,扩展用
 	String detail;//商品详情
-	double price;//价格
+	Double price;//价格
 	Integer stock;//库存
 	Integer status;//商品状态.1-在售 2-下架 3-删除
 	//这里我直接使用了java.sql的Date,构造方法有改动,添加了java.util.Date的set
@@ -97,7 +97,7 @@ public class Product {
 	public void setDetail(String detail) {
 		this.detail = detail;
 	}
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 	public void setPrice(double price) {

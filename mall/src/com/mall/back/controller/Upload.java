@@ -43,14 +43,14 @@ public class Upload {
 			}
 			
 			//封装到map中返回
-			Map result = new HashMap<>();
+			Map<Object, Object> result = new HashMap<>();
 			result.put("error", 0);
 			result.put("url", filePath);
 			//将object转换成json
 			return JsonUtils.objectToJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Map result = new HashMap<>();
+			Map<Object, Object> result = new HashMap<>();
 			result.put("error", 1);
 			result.put("message", "图片上传失败");
 			return JsonUtils.objectToJson(result);

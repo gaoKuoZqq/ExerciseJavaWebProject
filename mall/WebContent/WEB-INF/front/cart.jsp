@@ -2,6 +2,7 @@
     pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"></c:set>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -26,7 +27,8 @@
 					"${ctx}/cart/modify.shtml",
 					{
 						"id" : id,
-						"quantity" : number
+						"quantity" : number,
+						"addOrCut" : "add"
 					}
 				)
 				var obj=document.getElementsByName('checkboxItem');
@@ -42,7 +44,7 @@
 		function cutNumber(id){
 			var number = parseInt($("#number"+id).val());
 			var price = $("#price"+id).val();
-			if(number > 0){
+			if(number > 1){
 				number = number - 1;
 				$("#number"+id).val(number);
 				$("#productTotal"+id)[0].innerHTML=number*price;
@@ -50,7 +52,8 @@
 						"${ctx}/cart/modify.shtml",
 						{
 							"id" : id,
-							"quantity" : number
+							"quantity" : number,
+							"addOrCut" : "cut"
 						}
 					)
 				var obj=document.getElementsByName('checkboxItem');
@@ -245,7 +248,14 @@
 										</div>
 										<div style="float:left">
 											<div>
-												<a href="#" target="_blank" class="item-title J_MakePoint" data-point="tbcart.8.11">${cart.product.name}</a>
+												<a href="#" target="_blank" class="item-title J_MakePoint" data-point="tbcart.8.11">
+													<c:if test="${fn:length(cart.product.name)>12 }">  
+								                         ${fn:substring(cart.product.name, 0, 12)}...  
+								                    </c:if>  
+								                    <c:if test="${fn:length(cart.product.name)<=12 }">  
+								                         ${cart.product.name} 
+								                    </c:if>
+												</a>
 											</div>
 										</div>
 									</li>

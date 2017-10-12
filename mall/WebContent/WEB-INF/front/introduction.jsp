@@ -42,14 +42,11 @@
 			
 			function addCart(){
 				var product_id = ${product.id};
-				var username = $("#username").val();
-				if(username != null && username != ""){
 					var quantity = $("#number").val();
 					$.post(
 						"${ctx}/cart/add.shtml",
 						{
 							"product_id" : product_id,
-							"username" : username,
 							"quantity" : quantity
 						},
 						function(data){
@@ -61,15 +58,6 @@
 						},
 						"json"
 					)
-				}else{
-					layer.open(
-							{
-								title: '登录',
-							    type: 1,
-							    content: $('#loginDiv') ,//这里content是一个DOM，这个元素要放在body根节点下
-							}
-					);
-				}
 			}
 			
 			function buy(){
@@ -140,12 +128,7 @@
 			}
 			
 			function goCart(){
-				var username = '${username}';
-				if(username == null || username == ""){
-					location.href="${ctx}/user/gologin.shtml";
-				}else{
-					location.href="${ctx}/cart/gocart.shtml?username="+username+"";
-				}
+				location.href="${ctx}/cart/gocart.shtml";
 			}
 		</script>
 </head>
@@ -262,10 +245,12 @@
 							</script>
 
 							<div class="tb-booth tb-pic tb-s310">
-								<a href=""><img src="/pic/${product.main_image }" class="jqzoom" /></a>
+								<a href=""><img src="/pic/${product.main_image }" class="jqzoom" height="350px"/></a>
 							</div>
+							<c:forEach items="${sub_images }" var="image">
+							<img alt="" src="/pic/${image }" width="80" height="90" />
+							</c:forEach>
 						</div>
-
 						<div class="clear"></div>
 					</div>
 
@@ -465,7 +450,7 @@
 							<a href="#">
 								<span class="setting"></span>
 							</a>
-							<div class="ibar_login_box status_login">
+							<div class="ibar_login_box status_login" style="margin_top:10px">
 								<div class="avatar_box">
 									<p class="avatar_imgbox"><img src="../images/no-img_mid_.jpg" /></p>
 									<ul class="user_info">
