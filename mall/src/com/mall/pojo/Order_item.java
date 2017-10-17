@@ -34,6 +34,13 @@ public class Order_item {
 		this.create_time = new Date(create_time.getTime());
 		this.update_time = new Date(update_time.getTime());
 	}
+	@Override
+	public String toString() {
+		return "Order_item [id=" + id + ", user_id=" + user_id + ", order_no=" + order_no + ", product_id=" + product_id
+				+ ", product_name=" + product_name + ", product_image=" + product_image + ", current_unit_price="
+				+ current_unit_price + ", quantity=" + quantity + ", total_price=" + total_price + ", create_time="
+				+ create_time + ", update_time=" + update_time + "]";
+	}
 	public Integer getId() {
 		return id;
 	}

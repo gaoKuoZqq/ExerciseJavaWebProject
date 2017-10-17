@@ -28,7 +28,6 @@
 					{
 						"id" : id,
 						"quantity" : number,
-						"addOrCut" : "add"
 					}
 				)
 				var obj=document.getElementsByName('checkboxItem');
@@ -53,7 +52,6 @@
 						{
 							"id" : id,
 							"quantity" : number,
-							"addOrCut" : "cut"
 						}
 					)
 				var obj=document.getElementsByName('checkboxItem');
@@ -96,7 +94,7 @@
 		
 		function settlement(){
 			var obj=document.getElementsByName('checkboxItem');
-			var str = ''; 
+			var str = ' '; 
 			for(var i=0; i<obj.length; i++){ 
 				if(obj[i].checked) {
 					str+=obj[i].value+' ';

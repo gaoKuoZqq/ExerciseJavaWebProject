@@ -1,4 +1,4 @@
-package com.mall.back.controller;
+package com.mall.back.filter;
 
 import java.io.IOException;
 
@@ -28,13 +28,13 @@ public class LoginFilter implements Filter{
 			HttpSession session = req.getSession(false);
 			String uri = req.getRequestURI();
 			String requestPath = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
-			if (requestPath.equals("login") || requestPath.equals("login.jsp") || requestPath.equals("checkImg")) {
-				
+			System.out.println(requestPath);
+			if (requestPath.equals("gologin.action") || requestPath.equals("login.action") || requestPath.equals("checkImg")) {
 				chain.doFilter(request, response);
 				return;
 			}
-			if (session == null || session.getAttribute("userName") == null) {
-				resp.sendRedirect(req.getContextPath() + "/jsp/login.jsp");
+			if (session == null || session.getAttribute("username") == null) {
+				resp.sendRedirect(req.getContextPath() + "/user/gologin.action");
 			}else {
 				chain.doFilter(request, response);
 			}

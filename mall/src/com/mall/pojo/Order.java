@@ -1,6 +1,7 @@
 package com.mall.pojo;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Order {
 	Integer id;
@@ -19,6 +20,20 @@ public class Order {
 	//这里我直接使用了java.sql的Date,构造方法有改动,添加了java.util.Date的set
 	Date create_time;
 	Date update_time;
+	String username;
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	List<Order_item> order_itemsList;
+	public List<Order_item> getOrder_itemsList() {
+		return order_itemsList;
+	}
+	public void setOrder_itemsList(List<Order_item> order_itemsList) {
+		this.order_itemsList = order_itemsList;
+	}
 	public Order() {
 		super();
 	}
@@ -182,7 +197,8 @@ public class Order {
 		return "Order [id=" + id + ", order_no=" + order_no + ", user_id=" + user_id + ", shipping_id=" + shipping_id
 				+ ", payment=" + payment + ", payment_type=" + payment_type + ", postage=" + postage + ", status="
 				+ status + ", payment_time=" + payment_time + ", send_time=" + send_time + ", end_time=" + end_time
-				+ ", close_time=" + close_time + ", create_time=" + create_time + ", update_time=" + update_time + "]";
+				+ ", close_time=" + close_time + ", create_time=" + create_time + ", update_time=" + update_time
+				+ ", username=" + username + ", order_itemsList=" + order_itemsList + "]";
 	}
 	
 }

@@ -15,19 +15,17 @@
 			function login(){
 				var username = $("#username").val();
 				var password = $("#password").val();
-				var cart_ids = '${cart_ids}' + " ";
 				$.post(
-					"${ctx}/user/login.shtml",
+					"${ctx}/user/login.action",
 					{
 						"username" : username,
-						"password" : password,
-						"cart_ids" : cart_ids
+						"password" : password
 					},
 					function(data){
-						if(data){
-							window.location.href="${ctx}/home/gohome.shtml"
+						 if(data.status == 0){
+							window.location.href="${ctx}/category/find.action"
 						}else{
-							alert("瓜娃子?")
+							alert(data.data)
 						}
 					},
 					"json"

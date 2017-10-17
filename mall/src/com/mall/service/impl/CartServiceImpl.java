@@ -54,6 +54,11 @@ public class CartServiceImpl implements CartService{
 	public Cart findCartByNewCart(Cart cart) {
 		return cartDao.findCartByNewCart(cart);
 	}
+
+	@Override
+	public void modifyCartCheckedTrue(Cart cart) {
+		cartDao.modifyCartCheckedTrue(cart);
+	}
 	
 
 }

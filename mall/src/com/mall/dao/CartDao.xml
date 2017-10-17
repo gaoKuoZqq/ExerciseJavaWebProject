@@ -24,6 +24,10 @@
 		update cart set checked=0 where user_id=#{user_id}
 	</update>
 	
+	<update id="modifyCartCheckedTrue" parameterType="Cart">
+		update cart set checked=1 where id=${id} user_id=${user_id}
+	</update>	
+	
 	<select id="findCartByCartId" parameterType="integer" resultType="Cart">
 		select * from cart where id=#{cart_id}
 	</select>

@@ -17,6 +17,8 @@ public interface CartDao {
 	//注销时将勾选状态变为未勾选
 	void modifyCartChecked(Integer user_id);
 	
+	void modifyCartCheckedTrue(Cart cart);
+	
 	Cart findCartByCartId(Integer cart_id);
 	
 	//为了把同样的商品归为一条,先查一下有没有

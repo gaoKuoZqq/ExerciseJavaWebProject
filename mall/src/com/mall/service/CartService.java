@@ -18,6 +18,8 @@ public interface CartService {
 	//注销时将勾选状态变为未勾选
 	void modifyCartChecked(Integer user_id);
 	
+	void modifyCartCheckedTrue(Cart cart);
+	
 	List<Cart> findCartByCartIdSet(Set<Integer> cart_idsSet);
 	
 	//为了把同样的商品归为一条,先查一下有没有

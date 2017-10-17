@@ -1,12 +1,17 @@
 package com.mall.front.controller;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mall.pojo.Cart;
 import com.mall.pojo.Location;
 import com.mall.pojo.Order;
@@ -27,6 +34,8 @@ import com.mall.service.Order_itemService;
 import com.mall.service.ProductService;
 import com.mall.service.ShippingService;
 import com.mall.service.UserService;
+import com.mall.vo.CartVO;
+import com.mall.vo.Cart_itemVO;
 
 @Controller
 @RequestMapping("order")
@@ -56,6 +65,7 @@ public class OrderController {
 		//添加该用户的收货地址
 		HttpSession session = request.getSession(true);
 		if (session.getAttribute("username") == null) {
+			modelAndView.addObject("cart_ids",cart_ids);
 			modelAndView.setViewName("login");
 			return modelAndView;
 		}
@@ -64,7 +74,7 @@ public class OrderController {
 		List<Shipping> shippingsList = shippingService.findShippingByUser_id(user_id);
 		modelAndView.addObject("shippingsList",shippingsList);
 		
-		String[] idsList = cart_ids.split(" ");
+		String[] idsList = cart_ids.trim().split(" ");
 		Set<Integer> cart_idsSet = new HashSet<Integer>();
 		for (String idStr : idsList) {
 			cart_idsSet.add(Integer.parseInt(idStr));
@@ -93,7 +103,7 @@ public class OrderController {
 	
 	@RequestMapping("add")
 	@ResponseBody
-	public ModelAndView addOrder(String cart_ids,Integer shipping_id,HttpServletRequest request){
+	public ModelAndView addOrder(String cart_ids,Integer shipping_id,HttpServletRequest request,HttpServletResponse response){
 		ModelAndView modelAndView = new ModelAndView();
 		HttpSession session = request.getSession();
 		//检验登录状态
@@ -115,7 +125,7 @@ public class OrderController {
 		String order_no = UUID.randomUUID().toString().replace("-", "");
 		
 		//获得所选商品id,得到cart列表,根据数量计算总价
-		String[] idsList = cart_ids.split(" ");
+		String[] idsList = cart_ids.trim().split(" ");
 		Set<Integer> cart_idsSet = new HashSet<Integer>();
 		for (String idStr : idsList) {
 			cart_idsSet.add(Integer.parseInt(idStr));
@@ -124,7 +134,36 @@ public class OrderController {
 		Double payment = 0.0;
 		//生成order_item
 		Order_item order_item = new Order_item();
+		//-------------------------------------找出cart_cookie
+		Cookie[] cookies = request.getCookies();
+		List<Cart_itemVO> cart_itemVOsList = new ArrayList<Cart_itemVO>();
+		CartVO cartVO = new CartVO();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if ("cart_cookie".equals(cookie.getName())) {
+					//springmvc
+					ObjectMapper objectMapper = new ObjectMapper();
+					//只有对象里面不是null的才转换
+					objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+					String value = cookie.getValue();
+					try {
+						cartVO = objectMapper.readValue(value, CartVO.class);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					if (cartVO != null) {
+						cart_itemVOsList = cartVO.getCart_itemVOsList();
+					}
+					break;
+				}
+			}
+		}
+		//-------------------------------------------
 		for (Cart cart : cartsList) {
+			if (cart == null) {
+				modelAndView.setViewName("redirect:/home/gohome.shtml");
+				return modelAndView;
+			}
 			Product product = productService.findProductById(cart.getProduct_id());
 			//设置order_item的内容并添加
 			order_item.setOrder_no(order_no);
@@ -145,7 +184,36 @@ public class OrderController {
 			
 			//删除对应cart
 			cartService.deleteCart(cart.getId());
+			//如果存在对应cookie,删掉cartVO中的数据等待转json-----------------------
+			if (cart_itemVOsList != null) {
+				for (Cart_itemVO cart_itemVO : cart_itemVOsList) {
+					if (cart_itemVO.getProduct().getId() == cart.getProduct_id()) {
+						cart_itemVOsList.remove(cart_itemVO);
+						break;
+					}
+				}
+			}
+			//-------------------------------------------------
+			
 		}
+		//=======================================把删除了不少的cartVO转为json并覆盖原有cart_cookie
+		if (cartVO != null) {
+			//springmvc
+			ObjectMapper objectMapper = new ObjectMapper();
+			//只有对象里面不是null的才转换
+			objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+			StringWriter stringWriter = new StringWriter();
+		    try {
+				objectMapper.writeValue(stringWriter, cartVO);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		    Cookie newCookie = new Cookie("cart_cookie", stringWriter.toString());
+		    newCookie.setMaxAge(60 * 60 * 24);
+		    newCookie.setPath("/");
+		    response.addCookie(newCookie);
+		}
+		//=======================================
 		order.setUser_id(user_id);
 		order.setOrder_no(order_no);
 		order.setShipping_id(shipping_id);
@@ -165,4 +233,5 @@ public class OrderController {
 		}
 		return modelAndView;
 	}
+	
 }

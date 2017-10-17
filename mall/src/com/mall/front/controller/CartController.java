@@ -177,7 +177,7 @@ public class CartController {
 	
 	@RequestMapping("modify")
 	@ResponseBody
-	public Boolean modifyCart(Cart cart,HttpServletRequest request,HttpServletResponse response, String addOrCut){
+	public Boolean modifyCart(Cart cart,HttpServletRequest request,HttpServletResponse response){
 		HttpSession session = request.getSession();
 		if (session.getAttribute("username") == null) {
 			Cookie[] cookies = request.getCookies();
@@ -196,11 +196,7 @@ public class CartController {
 					}
 					for (Cart_itemVO cart_itemVO : cartVO.getCart_itemVOsList()) {
 						if (cart_itemVO.getProduct().getId() == cart.id) {
-							if ("add".equals(addOrCut)) {
-								cart_itemVO.setQuantity(cart_itemVO.getQuantity() + 1);
-							}else if ("cut".equals(addOrCut)) {
-								cart_itemVO.setQuantity(cart_itemVO.getQuantity() - 1);
-							}
+							cart_itemVO.setQuantity(cart.getQuantity());
 							//把购物车对象BuyCartVO以json形式写到cookie里面
 							StringWriter stringWriter = new StringWriter();
 						    try {
@@ -214,7 +210,6 @@ public class CartController {
 						    response.addCookie(cookie);
 							break;
 						}
-						break;
 					}
 				}
 			}
@@ -227,9 +222,11 @@ public class CartController {
 	@RequestMapping("del")
 	@ResponseBody
 	public Boolean deleteCart(String ids){
-		String[] idsList = ids.split(" ");
+		String[] idsList = ids.trim().split(" ");
 		for (String idStr : idsList) {
-			cartService.deleteCart(Integer.parseInt(idStr.trim()));
+			if (!idStr.trim().equals("")) {
+				cartService.deleteCart(Integer.parseInt(idStr.trim()));
+			}
 		}
 		return true;
 	}

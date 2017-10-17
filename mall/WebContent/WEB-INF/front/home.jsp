@@ -38,12 +38,7 @@
 			}
 			
 			function goCart(){
-				var username = '${username}';
-				if(username == null || username == ""){
-					location.href="${ctx}/user/gologin.shtml";
-				}else{
-					location.href="${ctx}/cart/gocart.shtml?username="+username+"";
-				}
+				location.href="${ctx}/cart/gocart.shtml";
 			}
 		</script>
 </head>

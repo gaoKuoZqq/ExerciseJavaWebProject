@@ -3,6 +3,8 @@ package com.mall.dto;
 import java.util.List;
 
 import com.mall.pojo.Category;
+import com.mall.pojo.Order;
+import com.mall.pojo.Order_item;
 import com.mall.pojo.Product;
 
 public class PageBean {
@@ -14,6 +16,33 @@ public class PageBean {
 	List<?> objList;
 	Category category;
 	Product product;
+	Order order;
+	Order_item order_item;
+	public Order_item getOrder_item() {
+		return order_item;
+	}
+	public void setOrder_item(Order_item order_item) {
+		this.order_item = order_item;
+	}
+	public PageBean(Integer pageIndex, Integer limitStart, Integer pageSize, Integer totalObj, Integer totalPage,
+			List<?> objList, Category category, Product product, Order order) {
+		super();
+		this.pageIndex = pageIndex;
+		this.limitStart = limitStart;
+		this.pageSize = pageSize;
+		this.totalObj = totalObj;
+		this.totalPage = totalPage;
+		this.objList = objList;
+		this.category = category;
+		this.product = product;
+		this.order = order;
+	}
+	public Order getOrder() {
+		return order;
+	}
+	public void setOrder(Order order) {
+		this.order = order;
+	}
 	public PageBean(Integer pageIndex, Integer limitStart, Integer pageSize, Integer totalObj, Integer totalPage,
 			List<?> objList, Category category, Product product) {
 		super();
@@ -107,7 +136,7 @@ public class PageBean {
 	public String toString() {
 		return "PageBean [pageIndex=" + pageIndex + ", limitStart=" + limitStart + ", pageSize=" + pageSize
 				+ ", totalObj=" + totalObj + ", totalPage=" + totalPage + ", objList=" + objList + ", category="
-				+ category + ", product=" + product + "]";
+				+ category + ", product=" + product + ", order=" + order + ", order_item=" + order_item + "]";
 	}
 	
 }
