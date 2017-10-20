@@ -1,9 +1,13 @@
-package com.mall.back.responce;
+package com.mall.responce;
 
 import java.io.Serializable;
 
 public class ServerResponse<T> implements Serializable{
-    // 当前状态(程序员判断状态):成功，失败，未登陆，没有权限
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// 当前状态(程序员判断状态):成功，失败，未登陆，没有权限
     private Integer status;
     // 描述信息(主要是给用户看的提示信息)
     private String msg;

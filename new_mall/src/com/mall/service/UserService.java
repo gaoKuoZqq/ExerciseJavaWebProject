@@ -1,10 +1,11 @@
 package com.mall.service;
 
 import com.mall.pojo.User;
+import com.mall.responce.ServerResponse;
 
 public interface UserService {
 	
-	boolean addUser(User user);
+	ServerResponse<?> addUser(User user);
 	
 	boolean modifyUser(User user);
 	
@@ -13,5 +14,6 @@ public interface UserService {
 		
 	//登陆时用于验证用户名和密码
 	boolean checkLogin(User user);
-		
+	
+	Integer findUserIdByUsername(String username);
 }

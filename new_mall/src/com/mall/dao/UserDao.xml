@@ -54,4 +54,8 @@
 	<select id="queryUserByUsername" parameterType="string" resultType="User">
 		select id,username from user where username=#{username}
 	</select>
+	
+	<select id="findUserIdByUsername" parameterType="string" resultType="integer">
+		select id from user where username=#{username}
+	</select>
 </mapper>

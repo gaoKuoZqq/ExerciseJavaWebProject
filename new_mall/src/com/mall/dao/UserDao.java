@@ -14,4 +14,6 @@ public interface UserDao {
 	Integer checkLogin(User user);
 	
 	Integer queryUserByUsername(String username);
+	
+	Integer findUserIdByUsername(String username);
 }

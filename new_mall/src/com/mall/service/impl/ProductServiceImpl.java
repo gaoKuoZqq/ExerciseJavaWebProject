@@ -4,15 +4,16 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mall.dao.ProductDao;
 import com.mall.dto.PageBean;
 import com.mall.pojo.Product;
 import com.mall.service.ProductService;
-@Service("productService")
+@Service
 public class ProductServiceImpl implements ProductService{
-	@Resource(name="productDao")
+	@Autowired
 	ProductDao productDao;
 	
 	public Product findProductByIdUseOfCart(Integer product_id){
@@ -24,7 +25,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 	
 	public Product findProductById(Integer product_id) {
-		return findProductById(product_id);
+		return productDao.findProductById(product_id);
 	}
 
 	@Override

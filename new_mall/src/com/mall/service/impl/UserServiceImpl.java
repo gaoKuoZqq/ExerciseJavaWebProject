@@ -6,14 +6,19 @@ import org.springframework.stereotype.Service;
 
 import com.mall.dao.UserDao;
 import com.mall.pojo.User;
+import com.mall.responce.ServerResponse;
 import com.mall.service.UserService;
 @Service("userService")
 public class UserServiceImpl implements UserService{
 	@Resource(name="userDao")
 	UserDao userDao;
-	@Override
-	public boolean addUser(User user) {
-		return userDao.addUser(user) > 0;
+	
+	public ServerResponse<?> addUser(User user) {
+		if (userDao.checkName(user.getUsername()) > 0) {
+			return ServerResponse.createError("已存在的用户名");
+		}
+		userDao.addUser(user);
+		return ServerResponse.createSuccess();
 	}
 
 	@Override
@@ -31,4 +36,10 @@ public class UserServiceImpl implements UserService{
 		return userDao.checkLogin(user) > 0;
 	}
 
+	@Override
+	public Integer findUserIdByUsername(String username) {
+		return userDao.findUserIdByUsername(username);
+	}
+	
+	
 }

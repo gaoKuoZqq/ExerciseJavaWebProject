@@ -8,9 +8,9 @@
 		values(${user_id},${product_id},${quantity},1,now(),now())
 	</insert>
 	
-	<delete id="deleteCarts" parameterType="array">
+	<delete id="deleteCarts" parameterType="arraylist">
 		delete from cart where id in
-		<foreach collection="array" index="index" item="ids" open="(" separator="," close=")">  
+		<foreach collection="arraylist" index="index" item="ids" open="(" separator="," close=")">  
  			#{id}
 		</foreach>
 	</delete>
@@ -31,20 +31,18 @@
 		update cart set checked=1 where id=${id} user_id=${user_id}
 	</update>	
 	
-	<select id="findCartByCartId" parameterType="integer" resultType="Cart">
-		select * from cart where id=#{cart_id}
-	</select>
-	
 	<select id="findCartByNewCart" parameterType="Cart" resultType="Cart">
 		select id,quantity from cart where product_id=${product_id} and user_id=${user_id}
 	</select>
 	
-	<select id="findCartsByIdsList" parameterType="array" resultType="Cart">
+	<select id="findCartsByIdsList" parameterType="arraylist" resultType="Cart">
 		select c.id,c.name,c.product_id,c.quantity,
 		p.name as 'product.name',p.main_image as "product.image",p.price as'product.price'
 		from cart as c left join product as p where id in
-		<foreach collection="array" index="index" item="ids" open="(" separator="," close=")">  
+		<foreach collection="arraylist" index="index" item="ids" open="(" separator="," close=")">  
  			#{id}
 		</foreach>
 	</select>
+	
+	
 </mapper>

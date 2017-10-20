@@ -58,7 +58,7 @@
 		</where>
 	</select>
 	
-	<select id="findProductByIdUseOfCart" resultMap="Product">
+	<select id="findProductByIdUseOfCart" resultType="Product">
 		select id,name,main_image,price,stock from product where id=#{product_id}
 	</select>
 	
@@ -72,20 +72,23 @@
 		select product.id,product.name,product.main_image,product.price from product where category_id=#{category_id}
 	</select>
 	
-	<select id="findProductByCategoryIdAndName" parameterType="pageBean" resultType="Product">
-		select p.id,p.name,p.main_image,p.price from product as p
+	<select id="findProductByCategoryIdAndName" parameterType="PageBean" resultType="Product">
+		select p.id,p.name,p.main_image,p.price,p.subtitle 
+		from product as p
 		<where>
-			<if test="product.category_id!=null">
-				p.category_id=${product.category_id}
-			</if>
-			<if test="product.name!=null and !&quot;&quot;.equals(product.name.trim())" >
-				p.name like '%${product.name}%'
+			<if test="product!=null">
+				<if test="product.category_id!=null">
+					and p.category_id=${product.category_id}
+				</if>
+				<if test="product.name!=null and !&quot;&quot;.equals(product.name.trim())" >
+					and p.name like '%${product.name}%'
+				</if>
 			</if>
 		</where>
 		limit ${limitStart},${pageSize};
 	</select>
 	
-	<select id="totalProductByCategoryIdAndName" parameterType="pageBean" resultType="integer">
+	<select id="totalProductByCategoryIdAndName" parameterType="PageBean" resultType="integer">
 		select count(*) from product as p
 		<where>
 			<if test="product.category_id!=null">
@@ -107,6 +110,7 @@
 	
 	<select id="findProductById" parameterType="integer" resultType="Product">
 		select id,name,subtitle,main_image,sub_images,detail,price,stock
+		from product 
 		where id=#{product_id}
 	</select>
 	

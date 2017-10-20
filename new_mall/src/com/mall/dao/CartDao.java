@@ -19,8 +19,6 @@ public interface CartDao {
 	//将cart状态改为已勾选
 	void modifyCartCheckedTrue(Cart cart);
 	
-	Cart findProductByIdUseOfCart(Integer cart_id);
-	
 	//为了把同样的商品归为一条,先查一下有没有
 	Cart findCartByNewCart(Cart cart);
 	

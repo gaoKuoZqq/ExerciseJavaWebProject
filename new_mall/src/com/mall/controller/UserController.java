@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mall.pojo.Cart;
 import com.mall.pojo.User;
+import com.mall.responce.ServerResponse;
 import com.mall.service.CartService;
 import com.mall.service.ProductService;
 import com.mall.service.UserService;
@@ -35,29 +36,21 @@ public class UserController {
 	
 	@RequestMapping("add")
 	@ResponseBody
-	public Boolean addUser(User user) {
+	public ServerResponse<?> addUser(User user) {
 		if (user == null || user.getUsername() == null || user.getUsername().trim().equals("")
 				|| user.getPassword() == null || user.getPassword().trim().equals("")
 				|| user.getEmail() == null || user.getEmail().trim().equals("") 
 				|| user.getQuestion() == null || user.getQuestion().trim().equals("") 
 				|| user.getAnswer() == null || user.getAnswer().trim().equals("") ) {
-			return false;
+			return ServerResponse.createError("请完整填写表单");
 		}
-		if (user.getRole() == null || user.getRole() != 0) {
-			user.setRole(1);
-		}
+		user.setRole(1);
 		return userService.addUser(user);
 	}
 	@RequestMapping("goadd")
 	public ModelAndView goAddUser(){
 		ModelAndView modelAndView = new ModelAndView("register");
 		return modelAndView;
-	}
-	
-	@RequestMapping("modifyuser")
-	@ResponseBody
-	public Boolean modifyUser(User user) {
-		return userService.addUser(user);
 	}
 	
 	@RequestMapping("checkname")
@@ -76,7 +69,10 @@ public class UserController {
 		Boolean isSuccess = userService.checkLogin(user);
 		if(isSuccess){
 			HttpSession session = request.getSession(true);
+			user.setPassword(null);
+			user.setId(userService.findUserIdByUsername(user.getUsername()));
 			session.setAttribute("user", user);
+			
 			Cookie[] cookies = request.getCookies();
 			if (cookies != null) {
 				for (Cookie cookie : cookies) {

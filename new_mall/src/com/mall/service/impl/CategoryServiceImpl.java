@@ -2,16 +2,15 @@ package com.mall.service.impl;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mall.dao.CategoryDao;
 import com.mall.pojo.Category;
 import com.mall.service.CategoryService;
-@Service("categoryService")
+@Service
 public class CategoryServiceImpl implements CategoryService{
-	@Resource(name="categoryDao")
+	@Autowired
 	CategoryDao categoryDao;
 	@Override
 	public List<Category> findRootCategory() {

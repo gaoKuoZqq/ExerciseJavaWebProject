@@ -1,4 +1,4 @@
-package com.mall.back.responce;
+package com.mall.responce;
 
 public enum ResponseCode {
     SUCCESS(0, "SUCCESS"),
