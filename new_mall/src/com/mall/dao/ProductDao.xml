@@ -73,15 +73,15 @@
 	</select>
 	
 	<select id="findProductByCategoryIdAndName" parameterType="PageBean" resultType="Product">
-		select p.id,p.name,p.main_image,p.price,p.subtitle 
-		from product as p
+		select id,name,main_image,price,subtitle 
+		from product 
 		<where>
 			<if test="product!=null">
 				<if test="product.category_id!=null">
-					and p.category_id=${product.category_id}
+					and category_id=${product.category_id}
 				</if>
 				<if test="product.name!=null and !&quot;&quot;.equals(product.name.trim())" >
-					and p.name like '%${product.name}%'
+					and name like '%${product.name}%'
 				</if>
 			</if>
 		</where>
@@ -89,13 +89,15 @@
 	</select>
 	
 	<select id="totalProductByCategoryIdAndName" parameterType="PageBean" resultType="integer">
-		select count(*) from product as p
+		select count(*) from product 
 		<where>
-			<if test="product.category_id!=null">
-				p.category_id=${product.category_id}
-			</if>
-			<if test="product.name!=null and !&quot;&quot;.equals(product.name.trim())" >
-				p.name like '${product.name}'
+			<if test="product!=null">
+				<if test="product.category_id!=null">
+					and category_id=${product.category_id}
+				</if>
+				<if test="product.name!=null and !&quot;&quot;.equals(product.name.trim())" >
+					and name like '${product.name}'
+				</if>
 			</if>
 		</where>
 	</select>

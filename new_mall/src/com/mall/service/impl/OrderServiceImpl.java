@@ -4,15 +4,20 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mall.dao.CartDao;
 import com.mall.dao.OrderDao;
 import com.mall.dto.PageBean;
+import com.mall.pojo.Cart;
 import com.mall.pojo.Order;
 @Service("orderService")
 public class OrderServiceImpl implements com.mall.service.OrderService{
-	@Resource(name="orderDao")
+	@Autowired
 	OrderDao orderDao;
+	@Autowired
+	CartDao cartDao;
 	@Override
 	public Boolean addOrder(Order order) {
 		return orderDao.addOrder(order) > 0;
@@ -31,5 +36,15 @@ public class OrderServiceImpl implements com.mall.service.OrderService{
 		pageBean.setTotalObj(totalOrder);
 		pageBean.setTotalPage(totalPage);
 		return pageBean;
+	}
+
+	@Override
+	public double queryPaymentByCart_idsList(String[] cart_ids) {
+		List<Cart> cartsList = cartDao.findCartQuantityAndProductPriceByIdsList(cart_ids);
+		double payment = 0;
+		for (Cart cart : cartsList) {
+			payment = payment + cart.getQuantity() * cart.getProduct().getPrice();
+		}
+		return payment;
 	}
 }

@@ -23,4 +23,6 @@ public interface CartDao {
 	Cart findCartByNewCart(Cart cart);
 	
 	List<Cart> findCartsByIdsList(String[] ids);
+	
+	List<Cart> findCartQuantityAndProductPriceByIdsList(String[] ids);
 }

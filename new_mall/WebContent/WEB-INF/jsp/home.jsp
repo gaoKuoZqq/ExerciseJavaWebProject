@@ -94,7 +94,7 @@
 	$(document).ready(findCategory($("#firstRootCategory").val()));
 	
 	function goProductFind(category_id){
-		window.location.href="${ctx}/product/find.shtml?category.id="+category_id+"";
+		window.location.href="${ctx}/product/find.shtml?product.category_id="+category_id+"";
 	}
 </script>
 </html>

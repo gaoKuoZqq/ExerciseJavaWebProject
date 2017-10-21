@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="com.new_mall.*" %>
+<%@ page import="com.mall.*" %>
 <%@page import="java.util.*"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"></c:set>
@@ -27,7 +27,8 @@
 			</c:if>
 			</ol>
 			<div style="position:absolute;left:50%;margin-left:-200px">
-				<form action="${ctx }/product/find.shtml">
+				<form action="${ctx }/product/find.shtml" method="post">
+					<input type="hidden" name="product.category_id" value="${pageBean.product.category_id }"/>
 					<input type="text" class="form-control" style="width:220px;float:left;"
 						name="product.name" value="${pageBean.product.name }"/>
 					<input class="btn btn-primary" type="submit"

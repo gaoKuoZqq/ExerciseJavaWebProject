@@ -26,6 +26,8 @@ import com.mall.service.ProductService;
 import com.mall.service.UserService;
 import com.mall.vo.CartVO;
 import com.mall.vo.Cart_itemVO;
+
+import sun.security.util.Length;
 @Controller
 @RequestMapping("cart")
 public class CartController {
@@ -162,9 +164,9 @@ public class CartController {
 		
 	}
 	
-	@RequestMapping("modify")
+	@RequestMapping("modifyQuantity")
 	@ResponseBody
-	public Boolean modifyCart(Cart cart,HttpServletRequest request,HttpServletResponse response){
+	public Boolean modifyCartQuantity(Cart cart,HttpServletRequest request,HttpServletResponse response){
 		HttpSession session = request.getSession();
 		if (session.getAttribute("user") == null) {
 			Cookie[] cookies = request.getCookies();
@@ -205,9 +207,50 @@ public class CartController {
 	
 	@RequestMapping("delete")
 	@ResponseBody
-	public Boolean deleteCart(String ids){
+	public Boolean deleteCart(String ids,HttpServletRequest request,HttpServletResponse response){
 		String[] idsList = ids.trim().split(" ");
-		cartService.deleteCartsByIdsList(idsList);
-		return deleteCart(ids);
+		int[] idArray = new int[idsList.length];
+		for (int i = 0,length = idsList.length; i < length; i++) {
+			idArray[i] = Integer.parseInt(idsList[i]);
+		}
+		HttpSession session = request.getSession(true);
+		if (session.getAttribute("user") == null) {
+			Cookie[] cookies = request.getCookies();
+			for (Cookie cookie : cookies) {
+				if ("cart_cookie".equals(cookie.getName())) {
+					ObjectMapper objectMapper = new ObjectMapper();
+					objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+					CartVO cartVO = new CartVO();
+					String value = cookie.getValue();
+					try {
+						cartVO = objectMapper.readValue(value, CartVO.class);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					for (int i = 0,lentgh = cartVO.getCart_itemVOsList().size(); i < lentgh; i++) {
+						for (int id : idArray) {
+							if (cartVO.getCart_itemVOsList().get(i).getProduct().getId() == id) {
+								cartVO.getCart_itemVOsList().remove(i);
+								lentgh = lentgh -1;
+							}
+						}
+					}
+					StringWriter stringWriter = new StringWriter();
+				    try {
+						objectMapper.writeValue(stringWriter, cartVO);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				    cookie.setValue(stringWriter.toString());
+				    cookie.setMaxAge(60 * 60 * 24);
+				    cookie.setPath("/");
+				    response.addCookie(cookie);
+					break;
+				}
+			}
+			return true;
+		}else{
+			return cartService.deleteCartsByIdsList(idsList);
+		}
 	}
 }

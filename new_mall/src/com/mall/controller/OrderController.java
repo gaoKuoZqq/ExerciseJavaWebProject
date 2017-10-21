@@ -57,15 +57,9 @@ public class OrderController {
 	@RequestMapping("goadd")
 	public ModelAndView goAddOrder(String cart_ids,HttpServletRequest request){
 		ModelAndView modelAndView = new ModelAndView();
-		if (cart_ids == null || cart_ids.trim().equals("")) {
-			modelAndView.setViewName("redirect:/home/gohome.shtml");
-			return modelAndView;
-		}
-		//添加该用户的收货地址
 		HttpSession session = request.getSession(true);
-		if (session.getAttribute("user") == null) {
-			modelAndView.addObject("cart_ids",cart_ids);
-			modelAndView.setViewName("login");
+		if (session.getAttribute("user") == null || cart_ids == null || cart_ids.trim().equals("")) {
+			modelAndView.setViewName("redirect:/home/gohome.shtml");
 			return modelAndView;
 		}
 		User user = (User) session.getAttribute("user");
@@ -97,13 +91,7 @@ public class OrderController {
 		ModelAndView modelAndView = new ModelAndView();
 		HttpSession session = request.getSession();
 		//检验登录状态
-		if (session.getAttribute("username") == null) {
-			modelAndView.setViewName("login");
-			return modelAndView;
-		}
-		//这个校验理应放在前台
-		if (cart_ids == null || cart_ids.trim().equals("") || 
-				shipping_id == null) {
+		if (session.getAttribute("user") == null || cart_ids == null || cart_ids.trim().equals("") ) {
 			modelAndView.setViewName("redirect:/home/gohome.shtml");
 			return modelAndView;
 		}
@@ -166,6 +154,7 @@ public class OrderController {
 			payment = payment + cart.getProduct().getPrice() * cart.getQuantity();
 			
 			//生成订单完成后,product.stock减去对应数量,product废物利用
+			product.setId(cart.getProduct().getId());
 			product.setStock(product_stock - cart.getQuantity());
 			productService.modifyProductStock(product);
 			
@@ -209,15 +198,22 @@ public class OrderController {
 		order.setStatus(10);
 		Boolean isSuccess = orderService.addOrder(order);
 		if (isSuccess) {
-			//把总金额和收货地址发送到付款成功界面
+			//把总金额和收货地址发送到付款界面
 			modelAndView.addObject("payment",payment);
-			Shipping shipping = shippingService.findShippingById(shipping_id);
-			modelAndView.addObject("shipping",shipping);
-			modelAndView.setViewName("payment_success");
+			modelAndView.addObject("cart_ids",cart_ids);
+			/*Shipping shipping = shippingService.findShippingById(shipping_id);
+			modelAndView.addObject("shipping",shipping);*/
+			modelAndView.setViewName("pay");
 		}else{
 			modelAndView.setViewName("home");
 		}
 		return modelAndView;
 	}
 	
+	@RequestMapping("paysuccess")
+	public ModelAndView paySuccess(String cart_ids){
+		ModelAndView modelAndView = new ModelAndView("pay_success");
+		
+		return modelAndView;
+	}
 }
