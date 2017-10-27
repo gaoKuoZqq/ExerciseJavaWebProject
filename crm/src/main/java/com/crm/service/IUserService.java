@@ -1,0 +1,17 @@
+package com.crm.service;
+
+import com.crm.easyui.EasyUIDataGrideResult;
+import com.crm.pojo.User;
+import com.crm.responce.ServerResponse;
+
+public interface IUserService {
+
+	EasyUIDataGrideResult find(Integer page, Integer rows, User user);
+
+	ServerResponse<?> delete(String ids);
+
+	ServerResponse<?> add(User user);
+
+	ServerResponse<?> update(User user);
+
+}
