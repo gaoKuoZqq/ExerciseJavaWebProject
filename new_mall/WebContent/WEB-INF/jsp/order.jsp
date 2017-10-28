@@ -19,15 +19,14 @@
 			<hr/>
 			<!-- 收货地址 -->
 			<div style="height:40px; margin-left:80px;">
-				<p>添加新地址,最多存储三条收货信息</p>
+				<p><a href="javaScript:openAddShipping()" >添加新地址</a>,最多存储三条收货信息</p>
 			</div>
 			<div class="row" style="height:150px;width:100%">
-			<div class="col-md-2 col-sm-2" ></div>
+			<div class="col-md-1 col-sm-1" ></div>
 			<c:forEach items="${shippingsList }" var="shipping" varStatus="status">
 			<c:if test="${status.count < 4 }">
-			
 				<div class="col-md-3 col-sm-3" style="height:100%;background-color:#FFFFCC;margin:15px;padding:10px;">
-					<div style="float:right;background-color: black;width:20px;height:20px;">
+					<div style="float:right;background-color:gray;width:20px;height:20px;">
 					<c:if test="${status.first }">
 					<input checked="checked" type="radio" value="${shipping.id }" name="shippingBoxItem" style="display:block;margin:auto;margin-top:4px;"/>
 					</c:if>
@@ -35,6 +34,7 @@
 					<input type="radio" value="${shipping.id }" name="shippingBoxItem" style="display:block;margin:auto;margin-top:4px;"/>
 					</c:if>
 					</div>
+					<a style="float:right;margin-right:20px;" href="javaScript:deleteShipping(${shipping.id })">删除</a>
 					<div style="height:40%;width:80%">
 						<p>${shipping.receiver_name }&nbsp;&nbsp;&nbsp;${shipping.receiver_mobile }</p>
 					</div>
@@ -64,12 +64,12 @@
 					<div class="col-md-3 col-sm-3" style="padding-top: 50px;">
 						<a style="display: block; width: 100%;">${cart.product.name }</a>
 					</div>
-					<div class="col-md-1 col-sm-1"
+					<div class="col-md-2 col-sm-2"
 						style="padding-top: 55px;">
-						<p id="price${cart.id }" style="margin: auto;">${cart.product.price }</p>
+						<p id="price${cart.id }" style="margin: auto;">￥${cart.product.price }/件</p>
 					</div>
-					<div class="col-md-2 col-sm-2" style="padding-top: 55px;">
-						<p>￥${cart.quantity }/件</p>
+					<div class="col-md-1 col-sm-1" style="padding-top: 55px;">
+						<p>${cart.quantity }件</p>
 					</div>
 					<div class="col-md-2 col-sm-2"
 						style="padding-top: 55px;" id="totalPrice${cart.id }">
@@ -112,5 +112,36 @@
 		$("#shipping_id").val(shipping_id);
 		$("#addOrderForm").submit();
 	}
+	
+    function openAddShipping(){
+        layer.open({
+            type:2,//（iframe层）
+            title:'添加收货地址',
+            area: ['350px', '600px'],
+            offset: '20px',//只定义top坐标，水平保持居中
+            content:"${ctx}/shipping/goadd.shtml"
+        });
+    }
+    
+    function deleteShipping(id){
+    	var msg = "您真的确定要删除吗？\n\n请确认！";
+    	  if (confirm(msg) == false){
+    	    return;
+    	  }
+	    var options = {
+		        url : "${ctx}/shipping/delete.shtml",
+		        type : "post",
+		        dataType : "json",
+		        data : {shipping_id : id},
+		        success : function(news) {
+		            if (news) {
+		            	window.location.reload();
+		            } else {
+		                layer.msg("记录不符合要求");
+		            }
+		        }
+		    };
+		    $.ajax(options);
+    }
 </script>
 </html>

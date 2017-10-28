@@ -13,13 +13,14 @@
 	<jsp:include page="common.jsp" />
 	<div class="row">
 		<!-- 左侧留出1个格子 -->
-		<div class="col-md-1 col-sm-1"></div>
+		<div class="col-md-4 col-sm-4"></div>
 		<!-- 展示区域 开始-->
-		<div class="col-md-10 col-sm-10">
+		<div class="col-md-4 col-sm-4" style="margin-top:200px">
+		<h3>付款成功,欢迎<a style="color:red" href="${ctx }/home/gohome.shtml">继续选购</a></h3>
 		</div>
 		<!-- 展示区域 结束-->
 		<!-- 右侧留出1个格子 -->
-		<div class="col-md-1 col-sm-1"></div>
+		<div class="col-md-4 col-sm-4"></div>
 	</div>
 </body>
 <script type="text/javascript">

@@ -1,5 +1,7 @@
 package com.mall.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -7,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.mall.pojo.Location;
 import com.mall.pojo.Shipping;
 import com.mall.pojo.User;
+import com.mall.service.LocationService;
 import com.mall.service.ShippingService;
 import com.mall.service.UserService;
 
@@ -20,7 +25,23 @@ public class ShippingController {
 	ShippingService shippingService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	LocationService locationService;
 	
+	@RequestMapping("goadd")
+	@ResponseBody
+	public ModelAndView goAdd(HttpServletRequest request){
+		ModelAndView modelAndView = new ModelAndView("shipping");
+		HttpSession session = request.getSession(false);
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			modelAndView.setViewName("redirect:/home/gohome.shtml");
+			return modelAndView;
+		}
+		List<Location> provinces = locationService.findProvince();
+		modelAndView.addObject("provinces", provinces);
+		return modelAndView;
+	}
 	@RequestMapping("add")
 	@ResponseBody
 	public Boolean addShipping(Shipping shipping,HttpServletRequest request){
@@ -39,7 +60,7 @@ public class ShippingController {
 		return shippingService.addShipping(shipping);
 	}
 	
-	@RequestMapping("del")
+	@RequestMapping("delete")
 	@ResponseBody
 	public Boolean deleteShipping(Integer shipping_id){
 		return shippingService.deleteShipping(shipping_id);

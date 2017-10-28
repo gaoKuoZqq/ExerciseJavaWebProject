@@ -1,0 +1,4 @@
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://sqld.duapp.com:4050/HRTcIaJdHGYisHnpbpMr?characterEncoding=utf-8
+jdbc.username=873f4dd6da8248d4b8fcd33f48a3035f
+jdbc.password=fee9a9046e4e48ada1666abc64d28619

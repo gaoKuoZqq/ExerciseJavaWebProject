@@ -21,14 +21,11 @@
 	<script src="${ctx }/resource/lib/layer-v3.1.0/layer/layer.js"></script>
 <script type="text/javascript">
 	function no(){
-		var index = parent.layer.getFrameIndex(window.name);//先得到当前iframe层的索引
-        parent.layer.close(index);//再执行关闭 
+		window.location.href="${ctx}/home/gohome.shtml"
 	}
 	
 	function yes(){
-		var index = parent.layer.getFrameIndex(window.name);//先得到当前iframe层的索引
-		parent.layer.close(index);//再执行关闭 
-		parent.window.location.href="${ctx}/order/paysuccess.shtml";
+		window.location.href="${ctx}/order/paysuccess.shtml";
 	}
 </script>
 </html>
