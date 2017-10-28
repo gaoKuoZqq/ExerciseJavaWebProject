@@ -5,6 +5,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	2655555555555555555555555555555555555555555555555555555
+	<#list sub_images as sub_image>
+	<img alt="" src="/pic/${sub_image}">
+	</#list>
 </body>
 </html>

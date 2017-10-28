@@ -98,6 +98,8 @@ public class ProductController {
 		Product product = productService.findProductById(product_id);
 		Map<String, Object> map = new HashMap<>();
 		map.put("product", product);
+		String[] sub_images = product.getSub_images().split(",");
+		map.put("sub_images", sub_images);
 		staticPageService.productIndex(map, product_id);
 		return true;
 	}
