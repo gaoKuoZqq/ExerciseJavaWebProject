@@ -1,0 +1,5 @@
+package com.mall.service.impl;
+
+public class StaticPageImpl {
+
+}

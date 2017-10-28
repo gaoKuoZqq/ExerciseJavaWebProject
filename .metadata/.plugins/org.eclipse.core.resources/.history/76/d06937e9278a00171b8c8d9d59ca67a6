@@ -1,0 +1,28 @@
+package com.cn.servlet;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import StudentManagementSystem.com.cn.student.dao.Student;
+
+public class Servlet1 extends HttpServlet{
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ServletContext servletContext = getServletContext();
+		servletContext.setAttribute("1", 1);
+		
+		List<Student> list = new ArrayList<>();
+		
+		list.add(new Student("2", 2, "2", new Date()));
+		list.add(new Student("3", 3, "3", new Date()));
+		list.add(new Student("4", 4, "4", new Date()));
+	}
+}

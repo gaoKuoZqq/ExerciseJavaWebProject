@@ -1,0 +1,17 @@
+package com.dao;
+
+import java.util.Date;
+import java.util.List;
+
+import com.student.Student;
+
+public interface IStudentDao {
+	
+	 int addStudent(Student student);//增
+	
+	 int deleteStudent(int id);//删
+	 
+	 int modifyStudentInfo(Student student);//修改信息
+	
+	List fuzzyQuery(String info);//模糊查询
+}

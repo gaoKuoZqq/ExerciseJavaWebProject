@@ -1,0 +1,43 @@
+package controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.sun.swing.internal.plaf.metal.resources.metal;
+
+import dto.PageBean;
+import service.StudentService;
+import vo.Vo;
+
+@Controller
+@RequestMapping("student")
+public class StudentController {
+	@Autowired
+	StudentService studentService;
+	@RequestMapping("find")
+	public ModelAndView findStudentsPage(PageBean pageBean) {
+		if (pageBean.getPageIndex() == null || pageBean.getPageIndex() == 0) {
+			pageBean.setPageIndex(1);
+		}
+		if (pageBean.getPageSize() == null || pageBean.getPageSize() == 0) {
+			pageBean.setPageSize(10);
+		}
+		pageBean.setLimitStart((pageBean.getPageIndex() - 1) * pageBean.getPageSize());
+		ModelAndView modelAndView = new ModelAndView("home");
+		pageBean = studentService.findStudentPage(pageBean);
+		modelAndView.addObject("pageBean",pageBean);
+		return modelAndView;
+	}
+	
+	public Vo StidentsList() {
+		Vo vo = new Vo();
+		PageBean pageBean = studentService.findStudentsPage(pageBean);
+		pageBean.setPageIndex(1);
+		pageBean.setPageSize(10);
+		return vo;
+	}
+}

@@ -1,0 +1,6 @@
+package com.student.dao;
+
+public interface IAdministratorDao {
+	
+	int register();
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;LoginFilter.java&apos; to &apos;mall/src/com.mall.back.controller&apos;&#x0D;&#x0A;- Original project: &apos;gaokuo007&apos;&#x0D;&#x0A;- Destination element: &apos;mall/src/com.mall.back.controller&apos;&#x0D;&#x0A;- Original element: &apos;com.studentManagement_filter.LoginFilter.java&apos;" description="Copy compilation unit" destination="=mall/src&lt;com.mall.back.controller" element1="/src&lt;com.studentManagement_filter{LoginFilter.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1507088109223" units="1" version="1.0"/>
+</session>

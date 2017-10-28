@@ -1,9 +1,12 @@
 package com.mall.back.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +16,7 @@ import com.mall.dto.PageBean;
 import com.mall.pojo.Category;
 import com.mall.pojo.Product;
 import com.mall.service.CategoryService;
+import com.mall.service.IStaticPageService;
 import com.mall.service.ProductService;
 
 @Controller
@@ -24,6 +28,8 @@ public class ProductController {
 	//还是要用到
 	@Resource(name="categoryService")
 	CategoryService categoryService;
+	@Autowired
+	IStaticPageService staticPageService;
 	@RequestMapping("/find")
 	public ModelAndView findProduct(PageBean pageBean) {
 		if (pageBean.getPageIndex() == null || pageBean.getPageIndex() == 0) {
@@ -84,5 +90,15 @@ public class ProductController {
 		modelAndView.addObject("rootCategoriesList", rootCategoriesList);
 		modelAndView.setViewName("product_add");
 		return modelAndView;
+	}
+	
+	@RequestMapping("/tostatic")
+	@ResponseBody
+	public Boolean toStatic(Integer product_id) {
+		Product product = productService.findProductById(product_id);
+		Map<String, Object> map = new HashMap<>();
+		map.put("product", product);
+		staticPageService.productIndex(map, product_id);
+		return true;
 	}
 }

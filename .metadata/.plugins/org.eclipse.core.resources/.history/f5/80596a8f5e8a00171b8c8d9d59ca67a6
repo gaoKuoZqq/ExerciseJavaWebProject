@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>gaokuo001</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <servlet>
+  	<servlet-name>LifeServlet</servlet-name>
+  	<servlet-class>com.cn.StudentServlet</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet>
+  	<servlet-name>BuildCount</servlet-name>
+  	<servlet-class>com.cn.servlet.CountVisits</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet>
+  	<servlet-name>Time</servlet-name>
+  	<servlet-class>com.cn.Time</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Time</servlet-name>
+  	<url-pattern>/time</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>FindAll</servlet-name>
+  	<servlet-class>com.cn.FindAll</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>FindAll</servlet-name>
+  	<url-pattern>/findall</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>addStudent</servlet-name>
+  	<servlet-class>com.cn.AddStudent</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>addStudent</servlet-name>
+  	<url-pattern>/add</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>Student</servlet-name>
+  	<servlet-class>com.cn.StudentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Student</servlet-name>
+  	<url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>Servlet1</servlet-name>
+  	<servlet-class>com.cn.servlet.Servlet1</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Servlet1</servlet-name>
+  	<url-pattern>/servlet1</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>Servlet2</servlet-name>
+  	<servlet-class>com.cn.servlet.Servlet2</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Servlet2</servlet-name>
+  	<url-pattern>/servlet2</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>PathTest</servlet-name>
+  	<servlet-class>com.cn.PathTest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>PathTest</servlet-name>
+  	<url-pattern>/pathtest</url-pattern>
+  </servlet-mapping>
+</web-app>

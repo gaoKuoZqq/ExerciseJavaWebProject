@@ -1,0 +1,13 @@
+package service.impl;
+
+import dto.PageBean;
+import service.StudentService;
+
+public class StudentServiceImpl implements StudentService{
+
+	public PageBean findStudentPage(PageBean pageBean) {
+		
+		return pageBean;
+	}
+
+}

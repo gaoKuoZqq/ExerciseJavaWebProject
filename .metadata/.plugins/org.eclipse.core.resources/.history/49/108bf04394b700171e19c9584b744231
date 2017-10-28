@@ -1,0 +1,7 @@
+package com.mall.back.tostatic;
+
+import com.sun.javafx.collections.MappingChange.Map;
+
+public interface ToStatic {
+	public void productIndex(Map<String,Object> root,Integer id);
+}

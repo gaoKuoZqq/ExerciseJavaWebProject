@@ -1,0 +1,10 @@
+package com.administrator.dao;
+
+import com.administrator.Administrator;
+
+public interface IAdministratorDao {
+	
+	int register(Administrator administrator);
+	
+	int modifyPassword(Administrator administrator);
+}

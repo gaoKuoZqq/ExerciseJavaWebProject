@@ -1,0 +1,5 @@
+package com.administrator.dao;
+
+public interface IAdministrator {
+
+}

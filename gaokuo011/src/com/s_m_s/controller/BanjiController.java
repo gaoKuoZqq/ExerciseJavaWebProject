@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,10 +21,10 @@ import com.s_m_s.service.CourseService;
 @Controller
 @RequestMapping(value="/banji")
 public class BanjiController {
-	@Resource(name="banjiService")
+	@Autowired
 	BanjiService banjiService;
 	//添加班级用到的课程列表
-	@Resource(name="courseService")
+	@Autowired
 	CourseService courseService;
 	
 	@RequestMapping(value="/find")

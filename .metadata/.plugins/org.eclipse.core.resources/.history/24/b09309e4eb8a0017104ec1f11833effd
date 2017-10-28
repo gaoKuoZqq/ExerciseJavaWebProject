@@ -1,0 +1,38 @@
+package com.cn.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class CountVisits extends HttpServlet{
+	
+	@Override
+	public void init() throws ServletException {
+		ServletContext servletContext = getServletContext();
+		int count = 0;
+		servletContext.setAttribute("count", count);
+		super.init();
+	}
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter printWriter = resp.getWriter();
+		printWriter = resp.getWriter();
+		if (req.getCookies() == (null)) {
+			Date date = new Date();
+			Cookie cookie = new  Cookie("name", "Mr.gao");
+			cookie.setMaxAge(30);
+			resp.addCookie(cookie);
+			printWriter.println("<h1>欢迎欢迎热烈欢迎</h1>");
+		} else {
+		
+		}
+	}
+}

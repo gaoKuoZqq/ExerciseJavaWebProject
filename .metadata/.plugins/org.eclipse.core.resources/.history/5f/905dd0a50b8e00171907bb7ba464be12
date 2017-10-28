@@ -1,0 +1,103 @@
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"  isELIgnored="false"%>
+<%@ page import="java.util.*" %>
+<%@ page import="StudentManagementSystem.com.cn.student.dao.Student" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>display all students</title>
+	<script src="/gaokuo002/jsp/lib/jquery/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" href="/gaokuo002/jsp/lib/css/bootstrap.css" />
+	<script src="/gaokuo002/jsp/lib/js/bootstrap.js"></script>
+	<link rel="stylesheet" href="/gaokuo002/jsp/lib/FindAllStudents.css">
+</head>
+<body class="body">
+	<div class="nav">
+		<div class="left">Student Management System</div>
+		<div class="right">
+			<a>欢迎</a>
+			<a class="blue">${userName}</a>
+			<a>, </a>
+			<a href='/gaokuo002/logservlet'>注销</a>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<form action='/gaokuo002/fuzzyStudent.do'>
+		<input type='text' name='info' value="input key words"/>
+		<input type='submit' value='query'/>
+	</form>
+	<table style="width: 500px;" class="table table-striped table-hover table-bordered">
+		<tr>
+			<form action="/gaokuo002/addThisStudent.do">
+				<td>id</td>
+				<td>
+					<input 
+					maxlength= "3"
+					onkeyup="this.value=this.value.replace(/[^\u4e00-\u9fa5]/g,'')" 
+					style='width:50px; border:0px;' name="name" type="text"
+					/>
+				</td>
+				<td>
+					<input
+					maxlength= "2"
+					onkeyup="this.value=this.value.replace(/\D/g,'')" 
+					onafterpaste="this.value=this.value.replace(/\D/g,'')" 
+					style='width:50px; border:0px;' name="age" type="text"
+				 	/>
+				 </td>
+				<td>
+					<input
+					maxlength= "1"
+					onkeyup="this.value=this.value.replace(/[^\u4e00-\u9fa5]/g,'')"
+					style='width:50px; border:0px;' name="gender" type="text"
+					/>
+				</td>
+				<td><input style='width:100px; border:0px;' name="birthday" type="text"/></td>
+				<td colspan="2"><input type="submit" value="addition"/></td>
+			</form>
+		</tr>
+		<tr>
+			<td>ID</td>
+			<td>name</td>
+			<td>age</td>
+			<td>gender</td>
+			<td>birthday</td>
+			<td>modify</td>
+			<td>delete</td>
+		</tr>
+		
+		<c:forEach items="${requestScope.allStudentsList}"var="student">
+			<tr>
+				<form  action='/gaokuo002/modifyStudentInfo.do'>
+					<td>${student.id }</td>
+					<input type="hidden" name="id" value="${student.id }" />
+					<td>
+						<input type='text' style='width:50px; border:0px;' name='name' value="${student.name }"/>
+					</td>
+					<td>
+						<input type='text' style='width:50px; border:0px;' name='age' value="${student.age }" />
+					</td>
+					<td>
+						<input type='text' style='width:50px; border:0px;' name='gender' value="${student.gender }" />
+					</td>
+					<td>
+						<input type='text' style='width:100px; border:0px;' name='birthday' value="${student.birthday }"/>
+					</td>
+					<td>
+						<input class="btn-warning" type='submit' value='modify'/>
+					</td>
+				</form>
+				<form action="/gaokuo002/deleteStudent.do">
+					<td>
+						<input  class="btn-danger" type="submit" value="delete"/>
+						<input type="hidden" name="id" value="${student.id }"/>
+					</td>
+				</form>
+			</tr>
+		</c:forEach>
+
+	</table>
+</body>
+</html>

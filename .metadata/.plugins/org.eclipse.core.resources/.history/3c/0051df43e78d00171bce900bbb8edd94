@@ -1,0 +1,52 @@
+package com.servise;
+
+import java.util.List;
+
+import com.administrator.Administrator;
+import com.administrator.dao.AdministratorDaoImpl;
+import com.administrator.dao.IAdministratorDao;
+import com.student.Student;
+import com.student.dao.IStudentDao;
+import com.student.dao.StudentDaoImpl;
+
+public class ServiseImpl implements IServise{
+	IStudentDao iStudentDao = new StudentDaoImpl();
+	IAdministratorDao IAdministratorDao = new AdministratorDaoImpl();
+
+	@Override
+	public boolean addStudent(Student student) {
+		// TODO 自动生成的方法存根
+		return false;
+	}
+
+	@Override
+	public List<Student> quaryStudents() {
+		// TODO 自动生成的方法存根
+		return null;
+	}
+
+	@Override
+	public boolean modifyStudentInfo(Student student) {
+		// TODO 自动生成的方法存根
+		return false;
+	}
+
+	@Override
+	public List<Student> fuzzyQuery(String info) {
+		// TODO 自动生成的方法存根
+		return null;
+	}
+
+	@Override
+	public boolean register(Administrator administrator) {
+		// TODO 自动生成的方法存根
+		return false;
+	}
+
+	@Override
+	public boolean modifyPassword(Administrator administrator) {
+		// TODO 自动生成的方法存根
+		return false;
+	}
+
+}

@@ -1,0 +1,11 @@
+package pojo;
+
+import java.sql.Date;
+
+public class Student {
+	Integer id;
+	String name;
+	Integer age;
+	String gender;
+	Date birthday;
+}

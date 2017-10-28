@@ -1,0 +1,19 @@
+package com.administrator.dao;
+
+import com.administrator.Administrator;
+
+public class AdministratorDaoImpl implements IAdministratorDao{
+
+	@Override
+	public int register(Administrator administrator) {
+		// TODO 自动生成的方法存根
+		return 0;
+	}
+
+	@Override
+	public int modifyPassword(Administrator administrator) {
+		// TODO 自动生成的方法存根
+		return 0;
+	}
+
+}

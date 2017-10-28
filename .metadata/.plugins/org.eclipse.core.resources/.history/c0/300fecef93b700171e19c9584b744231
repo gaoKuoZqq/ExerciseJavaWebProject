@@ -1,0 +1,5 @@
+package com.mall.back.tostatic;
+
+public interface ToStatic {
+
+}

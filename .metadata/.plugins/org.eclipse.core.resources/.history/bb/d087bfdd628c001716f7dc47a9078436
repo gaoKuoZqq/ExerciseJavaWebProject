@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>login please</title>
+		<script src="lib/jquery/jquery-3.2.1.min.js"></script>
+		<link rel="stylesheet" href="lib/css/bootstrap.css" />
+		<script src="lib/js/bootstrap.js"></script>
+		<style>
+			.body {
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 100PX;
+				width: 300px;
+				padding-left: 40px;
+			}
+		</style>
+	</head>
+
+	<body class="body">
+		<from action='/gaokuo002/findAllStudents.do'>
+			<div class="input-group">
+				<!--<span class="input-group-addon" id="basic-addon1">@</span>-->
+				<input name="userName" type="text" class="form-control" placeholder="name" aria-describedby="basic-addon1">
+			</div>
+			<br>
+			<div class="input-group">
+				<!--<span class="input-group-addon" id="basic-addon1">@</span>-->
+				<input name="passWord" type="password" class="form-control" placeholder="password" aria-describedby="basic-addon1">
+			</div>
+			<br>
+			<button type="submit" style="width:180px;" class="btn btn-info">login</button>
+		</from>
+		
+	</body>
+
+</html>

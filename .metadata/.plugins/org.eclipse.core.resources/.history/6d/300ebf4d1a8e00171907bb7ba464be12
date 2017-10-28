@@ -1,0 +1,31 @@
+@CHARSET "UTF-8";
+.body{
+	margin:auto;
+	margin-top:15px;
+	width:500px;
+}
+.right{
+	float:right;
+}
+.left{
+	float:left;
+}
+.clearfix{
+	clear: both;
+}
+.blue{
+	color: blue;
+}
+.table td{
+	text-align: center;
+}
+.table{
+	margin-top:15px;
+}
+.nav{
+	margin-bottom: 15px;
+}
+.in1{
+	border:0px;
+	background:none;
+}

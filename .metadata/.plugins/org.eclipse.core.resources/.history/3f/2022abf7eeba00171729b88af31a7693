@@ -1,0 +1,11 @@
+package com.crm.service;
+
+import javax.servlet.ServletResponse;
+
+import com.crm.pojo.User;
+
+public interface IUserService {
+
+	ServletResponse find(Integer page, Integer rows, String name);
+
+}

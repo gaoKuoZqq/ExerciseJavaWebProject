@@ -247,6 +247,7 @@
 							<td>update_time</td>
 							<td>modify</td>
 							<td>delete</td>
+							<td>other</td>
 						</tr>
 						<c:forEach items="${pageBean.objList}" var="product">
 							<tr>
@@ -285,6 +286,7 @@
 								<td>
 									<a href="javascript:deleteProduct(${product.id })">delete</a>
 								</td>
+								<td><a href="${ctx }/product/tostatic.action?product_id=${product.id}">静态化</a></td>
 							</tr>
 							<!-- 用于弹出更改分类信息的div -->
 							

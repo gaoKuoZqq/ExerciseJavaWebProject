@@ -1,0 +1,267 @@
+package StudentManagementSystem.com.cn.student.dao.impl;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import StudentManagementSystem.com.cn.JdbcUtil;
+import StudentManagementSystem.com.cn.student.dao.IStudentDao;
+import StudentManagementSystem.com.cn.student.dao.Student;
+public class StudentDaoImpl implements IStudentDao{
+	java.sql.PreparedStatement preparedStatement;
+	Connection connection;
+	ResultSet resultSet;
+	
+	@Override
+	public int addStudent(Student student){
+
+		int result = 0;
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "insert into student(name,age,gender,birthday) values(?,?,?,?);";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, student.getName());
+			preparedStatement.setInt(2, student.getAge());
+			preparedStatement.setString(3, student.getGender());
+			preparedStatement.setDate(4, new java.sql.Date(student.getBirthday().getTime()));
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		} finally{
+			JdbcUtil.close(connection, preparedStatement);
+		}
+		return result;
+	}
+
+	@SuppressWarnings("finally")
+	@Override
+	public List queryStudents() {
+		List<Student> studentList = new ArrayList();
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "select * from student;";
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()){
+				int id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				int age = resultSet.getInt("age");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");
+				Student student = new Student(id,name,age,gender,birthday);
+				studentList.add(student);
+		}
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		} finally{
+			JdbcUtil.close(connection, preparedStatement);
+			return studentList;
+		}
+	}
+
+	public int deleteStudent(int id) {
+	
+		int result = 0;
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "delete from student where id = ?;";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			JdbcUtil.close(connection, preparedStatement);
+		}
+		return result;
+	}
+
+	@Override
+	public int modifyStudentName(int id,String modifyStudentName) {
+		int result = 0;
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "update student set name =? where id=?;";
+			preparedStatement =  connection.prepareStatement(sql);
+			preparedStatement.setString(1, modifyStudentName);
+			preparedStatement.setInt(2, id);
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}finally{
+			JdbcUtil.close(connection, preparedStatement);
+		}
+		return result;
+	}
+
+	@Override
+	public int modifyStudentAge(int id,int modifyStudentAge) {
+
+		int result = 0;
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "update student set age =? where id=?;";
+			preparedStatement =  connection.prepareStatement(sql);
+			preparedStatement.setInt(1, modifyStudentAge);
+			preparedStatement.setInt(2, id);
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			JdbcUtil.close(connection, preparedStatement);
+		}
+		return result;
+	
+	}
+
+	public int modifyStudentGender(int id,String modifyStudentGender) {
+
+		int result = 0;
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "update student set gender =? where id=?;";
+			preparedStatement =  connection.prepareStatement(sql);
+			preparedStatement.setString(1, modifyStudentGender);
+			preparedStatement.setInt(2, id);
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			JdbcUtil.close(connection, preparedStatement);
+		}
+		return result;
+	}
+
+	@SuppressWarnings("finally")
+	@Override
+	public List queryStudentByBirthday(Date beginBirthday, Date endBirthday) {
+		List<Student> studentList = new ArrayList();
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "SELECT * FROM student WHERE birthday BETWEEN ? AND ?;";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setDate(1, new java.sql.Date(beginBirthday.getTime()));
+			preparedStatement.setDate(2, new java.sql.Date(endBirthday.getTime()));
+			resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()){
+				int id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				int age = resultSet.getInt("age");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");
+				Student student = new Student(id,name,age,gender,birthday);
+				studentList.add(student);
+		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			JdbcUtil.close(connection, preparedStatement);
+			return studentList;
+		}
+	}
+	
+	public int modifyStudentInfo(Student student){
+
+		int result = 0;
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "update student set name=?,age=?,gender=?,birthday=? where id=?;";
+			preparedStatement =  connection.prepareStatement(sql);
+			preparedStatement.setString(1, student.getName());
+			preparedStatement.setInt(2, student.getAge());
+			preparedStatement.setString(3, student.getGender());
+			preparedStatement.setDate(4, new java.sql.Date(student.getBirthday().getTime()));
+			preparedStatement.setInt(5, student.getId());
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			JdbcUtil.close(connection, preparedStatement);
+		}
+		
+		return result;
+	}
+	
+	public List fuzzyQuery(String info){
+		
+		List<Student> studentList = new ArrayList();
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "SELECT  * FROM student WHERE NAME LIKE ? OR gender=? or age=?;";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, "%" + info + "%");
+			preparedStatement.setString(2, info);
+			preparedStatement.setString(3, info);
+			resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()){
+				int id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				int age = resultSet.getInt("age");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");
+				Student student = new Student(id,name,age,gender,birthday);
+				studentList.add(student);
+		}
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		} finally{
+			JdbcUtil.close(connection, preparedStatement);
+			return studentList;
+		}
+		
+	}
+
+	@Override
+	public List<Student> criteriaQueries(Student student) {
+		List<Student> studentList = new ArrayList();
+		try {
+			connection = JdbcUtil.getConnection();
+			String sql = "SELECT * FROM student WHERE 1=1";
+			
+			List<String> list = new ArrayList<String>();
+			System.out.println(student.getName()+"00000");
+			if (student.getName() != null && !"".equals(student.getName())) {
+				sql = sql + " and name like ?";
+				list.add("%"+student.getName()+"%");
+			}
+			if (String.valueOf(student.getAge()) != null && student.getAge() != 0) {
+				sql = sql + " and age=?";
+				list.add(String.valueOf(student.getAge()));
+			}
+			if (student.getGender() != null && !"".equals(student.getGender())) {
+				sql = sql + " and gender=?";
+				list.add(student.getGender());
+			}
+			preparedStatement = connection.prepareStatement(sql);
+			for (int i = 1; i <= list.size(); i++) {
+				preparedStatement.setString(i, list.get(i-1));
+				
+			}
+			
+			resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()){
+				int id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				int age = resultSet.getInt("age");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");
+				Student stu = new Student(id,name,age,gender,birthday);
+				studentList.add(stu);
+		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			JdbcUtil.close(connection, preparedStatement);
+			return studentList;
+		}
+	}
+
+}

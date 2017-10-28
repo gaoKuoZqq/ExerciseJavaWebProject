@@ -1,0 +1,5 @@
+package com.cn.cookie;
+
+public class CookieServlet {
+	
+}

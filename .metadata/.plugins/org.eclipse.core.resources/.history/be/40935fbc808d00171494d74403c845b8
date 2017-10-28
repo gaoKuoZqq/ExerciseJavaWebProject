@@ -1,0 +1,6 @@
+package com.administrator.dao;
+
+public class 片段 {
+	protected String username;
+}
+

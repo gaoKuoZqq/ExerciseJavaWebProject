@@ -1,0 +1,29 @@
+package StudentManagementSystem.com.cn.student.servise;
+
+import java.util.Date;
+import java.util.List;
+
+import StudentManagementSystem.com.cn.student.dao.Student;
+
+public interface IStudentServise {
+	
+	boolean addStudent(Student student, int password);
+	
+	//boolean chackName(String studentName);
+	
+	List<Student> quaryStudents( int password);
+	
+	boolean modifyStudentName( int id, String newName,int password);
+	
+	boolean modifyStudentAge( int id, int newAge, int password);
+	
+	boolean modifyStudentGender( int id, String newGender, int password);
+	
+	boolean modifyStudentInfo( Student student, int password);
+	
+	boolean deleteStudent(int id, int password);
+		
+	List queryStudentByBirthday(Date beginBirthday,Date endBirthday,int password);
+	
+	List<Student> fuzzyQuery(String info);
+}

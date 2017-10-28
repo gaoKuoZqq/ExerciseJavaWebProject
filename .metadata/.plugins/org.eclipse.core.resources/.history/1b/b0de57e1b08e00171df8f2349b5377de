@@ -1,0 +1,44 @@
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>login please</title>
+		<script src="/gaokuo002/jsp/lib/jquery/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" href="/gaokuo002/jsp/lib/css/bootstrap.css" />
+	<script src="/gaokuo002/jsp/lib/js/bootstrap.js"></script>
+		<style>
+			.body {
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 100PX;
+				width: 300px;
+				padding-left: 40px;
+			}
+		</style>
+	</head>
+
+	<body class="body">
+		<form action="/gaokuo002/student?method=login" method="post">
+			<div class="input-group">
+				<input name="userName" type="text" class="form-control" placeholder="name" aria-describedby="basic-addon1">
+			</div>
+			<br>
+			<div class="input-group">
+				<input name="password" type="password" class="form-control" placeholder="password" aria-describedby="basic-addon1">
+			</div>
+			<br>
+			<c:if test="${login=='true'}">
+				<a style="color:red; font-size: 8px;">用户名或密码错误,请重新输入</a>
+				<br>
+			</c:if>
+			<button type="submit" style="width:180px;" class="btn btn-info">login</button>
+		</form>
+		
+	</body>
+
+</html>

@@ -1,0 +1,12 @@
+package service;
+
+import java.util.List;
+
+import dto.PageBean;
+import pojo.Student;
+
+public interface StudentService {
+	PageBean findStudentPage(PageBean pageBean);
+	
+	List<Student> findStudentsPage(PageBean pageBean);
+}

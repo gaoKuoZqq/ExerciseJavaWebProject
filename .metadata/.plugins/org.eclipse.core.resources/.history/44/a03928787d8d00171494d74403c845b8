@@ -1,0 +1,25 @@
+package com.dao;
+
+import java.util.Date;
+import java.util.List;
+
+public interface IStudentDao {
+	
+	 int addStudent(Student student);//增
+	
+	 int deleteStudent(int id);//删
+	
+	 int modifyStudentName(int id,String modifyStudentName);//修改姓名
+	
+	 int modifyStudentAge(int id,int modifyStudentAge);//修改年龄
+	
+	 int modifyStudentGender(int id,String modifyStudentGender);//修改性别
+	 
+	 int modifyStudentInfo(Student student);//修改信息
+	
+	public List queryStudents();//查
+	
+	public List queryStudentByBirthday(Date beginBirthday,Date endBirthday);//根据生日区间查询
+	
+	List fuzzyQuery(String info);//模糊查询
+}

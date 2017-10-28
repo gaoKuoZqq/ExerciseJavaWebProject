@@ -1,0 +1,81 @@
+package com.dao;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.student.Student;
+
+public class StudentDaoImpl implements IStudentDao{
+	java.sql.PreparedStatement preparedStatement;
+	Connection connection;
+	ResultSet resultSet;
+
+	@Override
+	public int addStudent(Student student){
+
+		int result = 0;
+		
+		try {
+			connection = com.jdbc.JdbcUtil.getConnection();
+			String sql = "insert into student(name,age,gender,birthday) values(?,?,?,?);";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, student.getName());
+			preparedStatement.setInt(2, student.getAge());
+			preparedStatement.setString(3, student.getGender());
+			preparedStatement.setDate(4, new java.sql.Date(student.getBirthday().getTime()));
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			com.jdbc.JdbcUtil.close(connection, preparedStatement);
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int deleteStudent(int id) {
+		return 0;
+	}
+
+	@Override
+	public int modifyStudentInfo(Student student) {
+		return 0;
+	}
+
+	@Override
+	public List fuzzyQuery(String info) {
+		return null;
+	}
+
+	@SuppressWarnings("finally")
+	@Override
+	public List queryStudents() {
+		List<Student> studentList = new ArrayList();
+		try {
+			connection = com.jdbc.JdbcUtil.getConnection();
+			String sql = "select * from student;";
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()){
+				int id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				int age = resultSet.getInt("age");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");
+				Student student = new Student(id,name,age,gender,birthday);
+				studentList.add(student);
+		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			com.jdbc.JdbcUtil.close(connection, preparedStatement);
+			return studentList;
+		}
+	}
+
+}

@@ -1,0 +1,167 @@
+package StudentManagementSystem.com.cn.student.servise;
+
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import com.cn.PageBean;
+
+import StudentManagementSystem.com.cn.student.dao.IStudentDao;
+import StudentManagementSystem.com.cn.student.dao.Student;
+import StudentManagementSystem.com.cn.student.dao.impl.StudentDaoImpl;
+
+public class StudentServiseImpl implements IStudentServise {
+	public IStudentDao studentDao = new StudentDaoImpl();
+
+	public boolean addStudent(Student student,int password){
+		if(password != 123){
+			return false;
+		}
+		//if (!chackName(student.getName())) {
+		//	return false;
+		//}
+		System.out.println(student);
+		int result  = studentDao.addStudent(student);
+		boolean isSuccess;
+		if(result == 0){
+			isSuccess = false;
+		}
+		else{
+			isSuccess = true;
+		}
+		return isSuccess;
+	}
+	
+//	public boolean chackName(String studentName){
+//		Iterator<Student> iterator = studentDao.queryStudents().iterator();
+//	    while (iterator.hasNext()) {
+//	    	Student student = iterator.next();
+//	    	if (student.getName().equals(studentName)) {
+//			
+//	    		return false;
+//	    	}
+//	    }
+//	    
+//	    return true;
+//	}
+	
+	public List<Student> quaryStudents( int password){
+		if(password != 123){
+			
+			return null;
+		}
+		
+		return studentDao.queryStudents();
+	};
+
+	public boolean modifyStudentName( int id,String newName,int password){
+
+		if(password != 123){
+			return false;
+		}
+		int result  = studentDao.modifyStudentName(id,newName);
+		boolean isSuccess;
+		if(result == 0){
+			isSuccess = false;
+		}
+		else{
+			isSuccess = true;
+		}
+		return isSuccess;
+	
+	}
+	
+	public boolean modifyStudentAge( int id,int newAge,int password){
+
+		if(password != 123){
+			return false;
+		}
+		int result  = studentDao.modifyStudentAge(id,newAge);
+		boolean isSuccess;
+		if(result == 0){
+			isSuccess = false;
+		}
+		else{
+			isSuccess = true;
+		}
+		return isSuccess;
+	
+	}
+	
+	public boolean modifyStudentGender( int id,String newGender,int password){
+
+		if(password != 123){
+			return false;
+		}
+		int result  = studentDao.modifyStudentGender(id,newGender);
+		boolean isSuccess;
+		if(result == 0){
+			isSuccess = false;
+		}
+		else{
+			isSuccess = true;
+		}
+		return isSuccess;
+	
+	}
+	
+	public boolean deleteStudent(int id,int password){
+		
+		if(password != 123){
+			return false;
+		}
+		int result  = studentDao.deleteStudent(id);
+		boolean isSuccess;
+		if(result == 0){
+			isSuccess = false;
+		}
+		else{
+			isSuccess = true;
+		}
+		
+		return isSuccess;
+	}
+	
+	public List queryStudentByBirthday(Date beginBirthday,Date endBirthday,int password){
+
+		if(password != 123){
+			return null;
+		}
+		return studentDao.queryStudentByBirthday(beginBirthday, endBirthday);
+	
+	}
+	
+	public boolean modifyStudentInfo(Student student, int password){
+
+		if(password != 123){
+			return false;
+		}
+		int result  = studentDao.modifyStudentInfo(student);
+		boolean isSuccess;
+		if(result == 0){
+			isSuccess = false;
+		}
+		else{
+			isSuccess = true;
+		}
+		
+		return isSuccess;
+	}
+	
+	public List<Student> fuzzyQuery(String info){
+		return studentDao.fuzzyQuery(info);
+	}
+
+	@Override
+	public List<Student> criteriaQueries(Student student, PageBean pageBeanStart) {
+		
+		return studentDao.criteriaQueries(student,pageBeanStart);
+		
+	}
+
+	@Override
+	public List<Student> thePageList(PageBean pageBean) {
+		return studentDao.thePageList(pageBean);
+	}
+	
+}

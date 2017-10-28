@@ -1,0 +1,39 @@
+package com.administrator.dao;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.administrator.Administrator;
+
+public class AdministratorDaoImpl implements IAdministratorDao{
+	java.sql.PreparedStatement preparedStatement;
+	Connection connection;
+
+	@Override
+	public int register(Administrator administrator) {
+
+		int result = 0;
+		
+		try {
+			connection = com.jdbc.JdbcUtil.getConnection();
+			String sql = "insert into administrator(username,password) values(?,?);";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, administrator.getUsername());
+			preparedStatement.setString(2, administrator.getPassword());
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			com.jdbc.JdbcUtil.close(connection, preparedStatement);
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int modifyPassword(Administrator administrator) {
+		// TODO 自动生成的方法存根
+		return 0;
+	}
+
+}

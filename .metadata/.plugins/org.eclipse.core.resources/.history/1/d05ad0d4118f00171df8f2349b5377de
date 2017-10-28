@@ -1,0 +1,258 @@
+package com.cn;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import StudentManagementSystem.com.cn.student.dao.Student;
+import StudentManagementSystem.com.cn.student.servise.IStudentServise;
+import StudentManagementSystem.com.cn.student.servise.StudentServiseImpl;
+
+@SuppressWarnings("serial")
+public class StudentServlet extends BaseServlet{
+	private IStudentServise studentServise = new StudentServiseImpl();
+	int pageIndex = 1;
+	int pageSize = 6;
+	
+	@Override
+	public void init() throws ServletException {
+		
+		super.init();
+		
+	}
+	
+
+	@SuppressWarnings("unused")
+	private void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		ServletContext servletContext = getServletContext();
+		HttpSession session = req.getSession(true);
+		String userName = req.getParameter("userName");
+		String password = req.getParameter("password");
+		
+		if ("gaokuo".equals(userName) && "123".equals(password)) {
+			session.setAttribute("userName", "gaokuo");
+			session.setAttribute("password", "123");
+			resp.sendRedirect(servletContext.getContextPath()+"/student?method=criteriaQueries");
+		}else{
+			req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
+		}
+		
+	}
+
+	@SuppressWarnings("unused")
+	private void modifyStudentInfo(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		HttpSession session = req.getSession(false);
+		
+		if (session.getAttribute("userName") == null) {
+			try {
+				req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			};
+		}
+		
+		ServletContext servletContext = getServletContext();
+		int ID = Integer.parseInt(req.getParameter("id"));
+		String name = req.getParameter("name");
+		String age = req.getParameter("age");
+		String gender = req.getParameter("gender");
+		String birthday = req.getParameter("birthday");
+		Date date = new Date();
+		String  regex = "[0-9]{4}+[-]+[0-9]{2}+[-]+[0-9]{2}";
+		
+		if (birthday.matches(regex)) {
+			SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				date = simpleDateFormat.parse(birthday);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		Student student = new Student(ID, name, Integer.parseInt(age), gender, date);
+		studentServise.modifyStudentInfo(student, 123);
+		resp.sendRedirect(servletContext.getContextPath()+"/student?method=criteriaQueries");
+	}
+
+	@SuppressWarnings("unused")
+	private void addStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		HttpSession session = req.getSession(false);
+		
+		if (session.getAttribute("userName") == null) {
+			try {
+				req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			};
+		}
+		
+		ServletContext servletContext = getServletContext();
+		String name = req.getParameter("name");
+		String age = req.getParameter("age");
+		String gender = req.getParameter("gender");
+		String birthday = req.getParameter("birthday");
+		String  regexAge = "\\d{0,2}";
+
+		if ("".equals(name) || "".equals(age) || "".equals(gender) || 
+				name == null || age == null || gender == null || 
+				!age.matches(regexAge)){
+				resp.sendRedirect(servletContext.getContextPath()+"/student?method=criteriaQueries");
+		}else{
+			Date date = new Date();
+			String  regex = "[0-9]{4}+[-]+[0-9]{2}+[-]+[0-9]{2}";
+			
+			if (birthday.matches(regex)) {
+				SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					date = simpleDateFormat.parse(birthday);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+			Student student = new Student(name, Integer.parseInt(age), gender, date);
+			studentServise.addStudent(student, 123);
+			
+			resp.sendRedirect(servletContext.getContextPath()+"/student?method=criteriaQueries");
+		}
+	
+	}
+	
+	
+	@SuppressWarnings("unused")
+	private void deleteStudent(HttpServletRequest req, HttpServletResponse resp){
+		HttpSession session = req.getSession(false);
+		
+		if (session.getAttribute("userName") == null) {
+			try {
+				req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
+			} catch (ServletException | IOException e) {
+				e.printStackTrace();
+			};
+		}
+		
+		ServletContext servletContext = getServletContext();
+		
+		String id = req.getParameter("id");
+		studentServise.deleteStudent(Integer.parseInt(id), 123);
+		try {
+			resp.sendRedirect(servletContext.getContextPath()+"/student?method=criteriaQueries");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	private void criteriaQueries(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		HttpSession session = req.getSession(false);
+		
+		if (session.getAttribute("userName") == null) {
+			try {
+				req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			}
+			}else{
+				
+				String pageIndexStr = (String) req.getParameter("pageIndex");
+				String pageSizeStr = (String) req.getParameter("pageSize");
+				
+				if (pageIndexStr != null && !"".equals(pageIndexStr)) {
+					pageIndex = Integer.parseInt(pageIndexStr);
+				}
+		
+				if (pageSizeStr != null && !"".equals(pageSizeStr)) {
+					pageSize = Integer.parseInt(pageSizeStr);
+				}
+				
+				int totalStudents = studentServise.quaryStudents(123).size();
+				int totalPage = (int)Math.ceil(1.0*totalStudents/pageSize);
+				PageBean pageBeanStart = new PageBean(pageIndex, pageSize, totalStudents, totalPage);
+				ServletContext servletContext = getServletContext();
+				Student stu = (Student) session.getAttribute("stu");
+				String studentName;
+				Integer studentAge;
+				String studentGender;
+				System.out.println(stu+"???");
+				String ageStr = req.getParameter("age");
+				if ("".equals(ageStr) || null == ageStr){
+					ageStr = "0";
+				}
+				if (stu == null || stu.getName() != req.getParameter("name") ||
+						stu.getAge() != Integer.parseInt(ageStr) ||
+								stu.getGender() != req.getParameter("gender")) {
+					//if(stu)
+					studentName = req.getParameter("name");
+					studentAge = Integer.parseInt(ageStr);
+					studentGender = req.getParameter("gender");
+				}else {
+					studentName = stu.getName();
+					studentAge = stu.getAge();
+					studentGender = stu.getGender();
+				}
+				
+				Student student = new Student(studentName, studentAge, studentGender, new Date());
+				session.setAttribute("stu", student);
+				if (studentServise.criteriaQueries(student, pageBeanStart).size() == 0) {
+					resp.sendRedirect(servletContext.getContextPath()+"/student?method=findAllStudents");
+				}else{
+					try {
+						List<Student> list = studentServise.criteriaQueries(student,pageBeanStart);
+						PageBean pageBean = new PageBean(pageIndex, pageSize, totalStudents, totalPage,list);
+						req.setAttribute("pageBean", pageBean);
+						req.setAttribute("queryStudentsList", list);
+						req.getRequestDispatcher("/jsp/FindStudentsPage.jsp").forward(req, resp);
+					} catch (ServletException e) {
+						e.printStackTrace();
+					}
+				}
+				
+			}
+	}
+	
+	@SuppressWarnings("unused")
+	private void findStudentsPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		HttpSession session = req.getSession(false);
+		
+		if (session.getAttribute("userName") == null) {
+			try {
+				req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			};
+		}
+		
+		String pageIndexStr = (String) req.getParameter("pageIndex");
+		String pageSizeStr = (String) req.getParameter("pageSize");
+		
+		if (pageIndexStr != null && !"".equals(pageIndexStr)) {
+			pageIndex = Integer.parseInt(pageIndexStr);
+		}
+
+		if (pageSizeStr != null && !"".equals(pageSizeStr)) {
+			pageSize = Integer.parseInt(pageSizeStr);
+		}
+		
+		int totalStudents = studentServise.quaryStudents(123).size();
+		int totalPage = (int)Math.ceil(1.0*totalStudents/pageSize);
+		
+		PageBean pageBeanStart = new PageBean(pageIndex, pageSize, totalStudents, totalPage);
+		List<Student> thePageList = studentServise.thePageList(pageBeanStart);
+		PageBean pageBean = new PageBean(pageIndex, pageSize, totalStudents, totalPage,thePageList);
+		req.setAttribute("pageBean", pageBean);
+		try {
+			req.getRequestDispatcher("/jsp/FindStudentsPage.jsp").forward(req, resp);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+}

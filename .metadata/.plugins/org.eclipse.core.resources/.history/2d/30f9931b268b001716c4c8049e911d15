@@ -1,0 +1,262 @@
+package com.cn;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.sun.corba.se.spi.orbutil.fsm.Input;
+
+import StudentManagementSystem.com.cn.student.dao.Student;
+import StudentManagementSystem.com.cn.student.servise.IStudentServise;
+import StudentManagementSystem.com.cn.student.servise.StudentServiseImpl;
+
+public class StudentServlet extends HttpServlet{
+	private IStudentServise studentServise = new StudentServiseImpl();
+	
+	@Override
+	public void init() throws ServletException {
+		
+		super.init();
+		
+	}
+	
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("text/html;charset=utf-8");
+		req.setCharacterEncoding("utf-8");
+		String path = req.getServletPath();
+		
+		ServletContext servletContext = getServletContext();
+		int count = (int) servletContext.getAttribute("count");
+		count++;
+		servletContext.setAttribute("count", count);
+		System.out.println("这是第" + count + "次访问");
+		HttpSession session = req.getSession(true);
+		String name = (String) session.getAttribute("userName");
+		System.out.println(name);
+		if (name != null) {
+			login(req, resp, session);
+		}else if(!"gaokuo".equals(name)) {
+			session.setAttribute("username", "name");
+			PrintWriter printWriter = resp.getWriter();
+			printWriter.println("<form action='/gaokuo001/login.do'>");
+			printWriter.println("账号<input type='text' name='name'/><br>");
+			printWriter.println("密码<input type='password' name='password'/><br>");
+			printWriter.println("<input type='submit' value='登录'/>");
+			printWriter.println("<form/>");
+		}
+		switch (path) {
+		case "/addStudent.do":
+			resp.sendRedirect("/gaokuo001/html/addStudent.html");
+			break;
+		case "/addThisStudent.do":
+			addStudent(req, resp);
+			break;
+		case "/findAllStudents.do":
+			findAllStudents(resp,name);
+			break;
+		case "/deleteStudent.do":
+			String id = req.getParameter("id");
+			String info = req.getParameter("info");
+			studentServise.deleteStudent(Integer.parseInt(id), 123);
+			resp.sendRedirect("/gaokuo001/fuzzyStudent.do?info=" + info + "");		
+			break;
+		case "/modifyStudentInfo.do":
+			String infos = modifyStudentInfo(req, resp);
+			resp.sendRedirect("/gaokuo001/fuzzyStudent.do?info=" + infos + "");
+			break;
+		case "/fuzzyStudent.do":
+			fuzzyQuery(req, resp);
+			break;
+		case "/login.do":
+			login(req, resp, session);
+			break;
+		default:
+			break;
+		}
+		
+	}
+
+	private void login(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws IOException {
+		String userName = req.getParameter("name");
+		String password = req.getParameter("password");
+		if ("gaokuo".equals(userName) && "123".equals(password)) {
+			session.setAttribute("userName", "gaokuo");
+			resp.sendRedirect("/gaokuo001/findAllStudents.do");
+		}else if ((!"gaokuo".equals(userName) && "123".equals(password)) || ("gaokuo".equals(userName) && !"123".equals(password))) {
+			
+			printWriter.println("<br><a>账号或密码不对<a/>");
+		}else {
+			session.setAttribute("userName", null);
+		}
+	}
+
+	private String modifyStudentInfo(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String info = req.getParameter("info");
+		int ID = Integer.parseInt(req.getParameter("id"));
+		String name = req.getParameter("name");
+		int age = Integer.parseInt(req.getParameter("age"));
+		String gender = req.getParameter("gender");
+		String birthday = req.getParameter("birthday");
+		Date date = new Date();
+		String  regex = "[0-9]{4}+[-]+[0-9]{2}+[-]+[0-9]{2}";
+		
+		if (birthday.matches(regex)) {
+			SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				date = simpleDateFormat.parse(birthday);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		Student student = new Student(ID, name, age, gender, date);
+		studentServise.modifyStudentInfo(student, 123);
+		
+		return info;
+	}
+
+	private void addStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		
+		String name = req.getParameter("name");
+		String age = req.getParameter("age");
+		String gender = req.getParameter("gender");
+		Date date = new Date();
+		Student student = new Student(name, Integer.parseInt(age), gender, date);
+		studentServise.addStudent(student, 123);
+		resp.sendRedirect("/gaokuo001/findAllStudents.do");
+		Enumeration<String> keys = req.getHeaderNames();
+		
+	}
+	
+	private void findAllStudents(HttpServletResponse resp, String name) throws IOException {
+		
+		PrintWriter printWriter = resp.getWriter();
+		printWriter.println("<form action='/gaokuo001/html/addStudent.html'>");
+		printWriter.println("<input type='submit' value='添加'/>");
+		printWriter.println("</form>");
+		printWriter.println("<form action='/gaokuo001/fuzzyStudent.do'>");
+		printWriter.println("<input type='text' name='info'/>");
+		printWriter.println("<input type='submit' value='查询'/>");
+		printWriter.println("</form>");
+		printWriter.println("<a>欢迎" + name + "</a>");
+		printWriter.println("<a href='/gaokuo001/logservlet'>注销</a>");
+		//printWriter.println("<a href='/gaokuo001/html/addStudent.html'>添加</a>");
+		printWriter.println("<table>");
+		printWriter.println("<tr>");
+		printWriter.println("<td>" + "ID" + "</td>");
+		printWriter.println("<td>" + "姓名" + "</td>");
+		printWriter.println("<td>" + "年龄" + "</td>");
+		printWriter.println("<td>" + "性别" + "</td>");
+		printWriter.println("<td>" + "生日" + "</td>");
+		printWriter.println("<td>" + "更改" + "</td>");
+		printWriter.println("<td>" + "删除" + "</td>");
+		printWriter.println("</tr>");
+		
+//			Iterator<Student> iterator = 
+//					studentServise.quaryStudents(123).iterator();
+//		    while (iterator.hasNext()) {
+//		       Student student = iterator.next();
+//		       printWriter.println("<tr>");
+//		       printWriter.println("<td>" + student.getName() + "</td>");
+//		       printWriter.println("<td>" + student.getAge() + "</td>");
+//		       printWriter.println("<td>" + student.getGender() + "</td>");
+//		       printWriter.println("<td>" + student.getBirthday() + "</td>");
+//		       printWriter.println("</tr>");
+//		    }
+		
+		for (Student student : studentServise.quaryStudents(123)) {
+			printWriter.println("<tr><form action='/gaokuo001/modifyStudentInfo.do'>");
+			printWriter.println("<td>" + student.getId() + "&nbsp&nbsp&nbsp</td>");
+			printWriter.println("<input type='hidden' name='id' value='" + student.getId() + "'/>");
+			printWriter.println("<td><input type='text' style='width:50px; border:0px;' name='name' value='" + student.getName() + "'/></td>");
+		    printWriter.println("<td><input type='text' style='width:30px; border:0px;' name='age' value='" + student.getAge() + "'/></td>");
+		    printWriter.println("<td><input type='text' style='width:30px; border:0px;' name='gender' value='" + student.getGender() + "'/></td>");
+		    printWriter.println("<td><input type='text' style='width:70px; border:0px;' name='birthday' value='" + student.getBirthday() + "'/></td>");
+		    printWriter.println("<td><input type='submit' value='modify'/></td>");
+		    printWriter.println("</form>");
+		    printWriter.println("<form action='/gaokuo001/deleteStudent.do'>");
+		    printWriter.println("<td><input type='submit' value='delete'/><input type='hidden' name='id' value='"+student.getId()+"'/></td>");
+		    printWriter.println("</form>");
+		    printWriter.println("</tr>");
+		}
+		
+		printWriter.println("</table>");
+		printWriter.close();
+	}
+	
+
+
+private void fuzzyQuery(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	
+	String info = req.getParameter("info");
+	PrintWriter printWriter = resp.getWriter();
+	printWriter.println("<form action='/gaokuo001/html/addStudent.html'>");
+	printWriter.println("<input type='submit' value='添加'/>");
+	printWriter.println("</form>");
+	printWriter.println("<form action='/gaokuo001/fuzzyStudent.do'>");
+	printWriter.println("<input type='text' name='info'/>");
+	printWriter.println("<input type='submit' value='查询'/>");
+	printWriter.println("</form>");
+	printWriter.println("<a href='/gaokuo001/findAllStudents.do'>查询完成</a>");
+	printWriter.println("<table>");
+	printWriter.println("<tr>");
+	printWriter.println("<td>" + "ID" + "</td>");
+	printWriter.println("<td>" + "姓名" + "</td>");
+	printWriter.println("<td>" + "年龄" + "</td>");
+	printWriter.println("<td>" + "性别" + "</td>");
+	printWriter.println("<td>" + "生日" + "</td>");
+	printWriter.println("<td>" + "更改" + "</td>");
+	printWriter.println("<td>" + "删除" + "</td>");
+	printWriter.println("</tr>");
+	
+//		Iterator<Student> iterator = 
+//				studentServise.quaryStudents(123).iterator();
+//	    while (iterator.hasNext()) {
+//	       Student student = iterator.next();
+//	       printWriter.println("<tr>");
+//	       printWriter.println("<td>" + student.getName() + "</td>");
+//	       printWriter.println("<td>" + student.getAge() + "</td>");
+//	       printWriter.println("<td>" + student.getGender() + "</td>");
+//	       printWriter.println("<td>" + student.getBirthday() + "</td>");
+//	       printWriter.println("</tr>");
+//	    }
+	
+	if (studentServise.fuzzyQuery(info).size() == 0) {
+		
+		resp.sendRedirect("/gaokuo001/findAllStudents.do");
+	}
+	
+	for (Student student : studentServise.fuzzyQuery(info)) {
+		printWriter.println("<tr><form action='/gaokuo001/modifyStudentInfo.do'>");
+		printWriter.println("<td>" + student.getId() + "&nbsp&nbsp&nbsp</td>");
+		printWriter.println("<input type='hidden' name='id' value='" + student.getId() + "'/>");
+		printWriter.println("<td><input type='text' style='width:50px; border:0px;' name='name' value='" + student.getName() + "'/></td>");
+	    printWriter.println("<td><input type='text' style='width:30px; border:0px;' name='age' value='" + student.getAge() + "'/></td>");
+	    printWriter.println("<td><input type='text' style='width:30px; border:0px;' name='gender' value='" + student.getGender() + "'/></td>");
+	    printWriter.println("<td><input type='text' style='width:70px; border:0px;' name='birthday' value='" + student.getBirthday() + "'/></td>");
+	    printWriter.println("<input type='hidden' value='"+info+"' name='info'/>");
+	    printWriter.println("<td><input type='submit' value='modify'/></td>");
+	    printWriter.println("</form>");
+	    printWriter.println("<form action='/gaokuo001/deleteStudent.do'>");
+	    printWriter.println("<input type='hidden' value='"+info+"' name='info'/>");
+	    printWriter.println("<td><input type='submit' value='delete'/><input type='hidden' name='id' value='"+student.getId()+"'/></td>");
+	    printWriter.println("</form>");
+	    printWriter.println("</tr>");
+	}
+	
+	printWriter.println("</table>");
+	printWriter.close();
+}
+
+}

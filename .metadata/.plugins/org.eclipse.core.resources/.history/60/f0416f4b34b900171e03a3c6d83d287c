@@ -1,0 +1,38 @@
+package service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.mall.pojo.Product;
+
+import dao.StudentDao;
+import dto.PageBean;
+import pojo.Student;
+import service.StudentService;
+@Service
+public class StudentServiceImpl implements StudentService{
+	@Autowired
+	StudentDao studentDao;
+
+	public PageBean findStudentPage(PageBean pageBean) {
+		Integer totalStudent = studentDao.totalStudents(pageBean);
+		Integer totalPage = (int) Math.ceil(1.0*totalStudent/pageBean.getPageSize());
+		//避免出现页码超范围
+		if (totalPage < pageBean.getPageIndex()) {
+			pageBean.setPageIndex(totalPage);
+			if (totalPage > 20) {
+				totalPage = 20;
+				pageBean.setPageIndex(totalPage);
+			}
+			pageBean.setLimitStart((totalPage - 1) * pageBean.getPageSize() >= 0 ? (totalPage - 1) * pageBean.getPageSize() : 0);
+		}
+		List<Student> studentsList = studentDao.findStudentsPage(pageBean);
+		pageBean.setObjectsList(studentsList);
+		pageBean.setTotalObjects(totalStudent);
+		pageBean.setTotalPage(totalPage);
+		return pageBean;
+	}
+
+}

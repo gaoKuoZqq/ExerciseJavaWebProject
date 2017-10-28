@@ -1,0 +1,46 @@
+package com.servise;
+
+import java.util.List;
+
+import com.administrator.Administrator;
+import com.student.Student;
+
+public class ServiseImpl implements IServise{
+
+	@Override
+	public boolean addStudent(Student student) {
+		// TODO 自动生成的方法存根
+		return false;
+	}
+
+	@Override
+	public List<Student> quaryStudents() {
+		// TODO 自动生成的方法存根
+		return null;
+	}
+
+	@Override
+	public boolean modifyStudentInfo(Student student) {
+		// TODO 自动生成的方法存根
+		return false;
+	}
+
+	@Override
+	public List<Student> fuzzyQuery(String info) {
+		// TODO 自动生成的方法存根
+		return null;
+	}
+
+	@Override
+	public boolean register(Administrator administrator) {
+		// TODO 自动生成的方法存根
+		return false;
+	}
+
+	@Override
+	public boolean modifyPassword(Administrator administrator) {
+		// TODO 自动生成的方法存根
+		return false;
+	}
+
+}

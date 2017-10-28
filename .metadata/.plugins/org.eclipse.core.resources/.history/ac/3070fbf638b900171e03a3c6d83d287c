@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.StudentDao">
+	<select id="findStudentsPage" parameterType="PageBean" resultType="Student">
+		select id,name,gender,age,birthday
+		from student
+		<where>
+			<if test="student!=null">
+				<if test="student.name!=null and !&quot;&quot;.equals(student.name.trim())">
+					and name like '${student.name}'
+				</if>
+				<if test="student.gender!=null and !&quot;&quot;.equals(student.gender.trim())">
+					and gender='${student.gender}'
+				</if>
+			</if>
+		</where>
+		limit ${limitStart},pageSize;
+	</select>
+	
+	<select id="totalStudents" parameterType="PageBean" resultType="integer">
+		select count()
+		from student
+		<where>
+			<if test="student!=null">
+				<if test="student.name!=null and !&quot;&quot;.equals(student.name.trim())">
+					and name like '${student.name}'
+				</if>
+				<if test="student.gender!=null and !&quot;&quot;.equals(student.gender.trim())">
+					and gender='${student.gender}'
+				</if>
+			</if>
+		</where>
+	</select>
+</mapper>

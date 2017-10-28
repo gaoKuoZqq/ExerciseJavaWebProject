@@ -1,0 +1,23 @@
+package com.cn.servlet;
+
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class CountVisits extends HttpServlet{
+	@Override
+	public void init() throws ServletException {
+		ServletContext servletContext = getServletContext();
+		int count = 0;
+		servletContext.setAttribute("count", count);
+		super.init();
+	}
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+	}
+}

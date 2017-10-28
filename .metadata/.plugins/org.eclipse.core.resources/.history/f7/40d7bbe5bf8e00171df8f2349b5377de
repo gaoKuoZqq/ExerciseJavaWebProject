@@ -1,0 +1,16 @@
+package com.cn;
+
+public class PageBean {
+	Integer pageIndex;
+	Integer pageSize;
+	int totalStudents;
+	int totalPage;
+	public PageBean(Integer pageIndex, Integer pageSize, int totalStudents, int totalPage) {
+		super();
+		this.pageIndex = pageIndex;
+		this.pageSize = pageSize;
+		this.totalStudents = totalStudents;
+		this.totalPage = totalPage;
+	}
+	
+}

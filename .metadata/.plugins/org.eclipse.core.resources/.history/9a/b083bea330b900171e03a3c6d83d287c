@@ -1,0 +1,9 @@
+package dao;
+
+import java.util.List;
+
+import pojo.Student;
+
+public interface StudentDao {
+	List<Student> findStudentsPage()
+}

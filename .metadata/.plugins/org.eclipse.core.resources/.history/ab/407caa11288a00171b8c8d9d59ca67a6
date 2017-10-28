@@ -1,0 +1,8 @@
+package com.cn.servlet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+
+public class Servlet2 extends HttpServlet{
+	
+}

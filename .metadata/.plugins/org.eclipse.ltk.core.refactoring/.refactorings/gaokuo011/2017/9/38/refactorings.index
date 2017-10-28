@@ -1,0 +1,15 @@
+1505825419366	Delete element
+1505825574065	Move compilation unit
+1505971708193	Delete element
+1505971867405	Rename resource 'student_findall_test.jsp'
+1505971880465	Rename resource 'student_add_test.jsp'
+1505971920507	Rename resource 'course_findall_test.jsp'
+1505971940256	Rename resource 'course_elective_test.jsp'
+1505971950678	Rename resource 'course_add_test.jsp'
+1505971961597	Rename resource 'banji_findall_test.jsp'
+1505971973178	Rename resource 'banji_add_test.jsp'
+1505973999215	Move 'lib' to 'jsp'
+1505976267970	Copy compilation unit
+1505980222128	Delete element
+1505991832051	Extract method 'changeBanjiCourseListToDisplay'
+1506042637834	Rename resource 'course_elective.jsp'

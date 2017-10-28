@@ -1,0 +1,21 @@
+package com.servise;
+
+import java.util.List;
+
+import com.administrator.Administrator;
+import com.student.Student;
+
+public interface IServise {
+	
+	boolean addStudent(Student student);
+	
+	List<Student> quaryStudents();
+	
+	boolean modifyStudentInfo( Student student);
+	
+	List<Student> fuzzyQuery(String info);
+	
+	boolean register(Administrator administrator);
+	
+	boolean modifyPassword(Administrator administrator);
+}

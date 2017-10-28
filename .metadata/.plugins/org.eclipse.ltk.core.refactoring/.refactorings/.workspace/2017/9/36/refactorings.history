@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Copy 0 packages to &apos;gaokuo004/src&apos;&#x0D;&#x0A;－ 目标元素：“gaokuo004/src”" description="复制包" destination="=gaokuo004/src" flags="589830" fragments="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1504668953806" version="1.0"/>&#x0A;<refactoring comment="Delete resource &apos;TestSession&apos;" deleteContents="true" description="Delete resource &apos;TestSession&apos;" element1="/TestSession" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1504693474346"/>
+</session>

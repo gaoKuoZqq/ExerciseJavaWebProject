@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<a href="/gaokuo001/file/1.txt">1.txt</a>
+	<a href="/gaokuo001/file/2.txt">2.txt</a>
+</body>
+</html>
