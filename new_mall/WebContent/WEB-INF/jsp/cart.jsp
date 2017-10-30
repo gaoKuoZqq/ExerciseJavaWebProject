@@ -36,11 +36,11 @@
 						style="padding-left: 45px; padding-top: 55px;">
 						<input onchange="payment()" type="checkbox" value="${cart.id }" name="checkboxItem"/>
 					</div>
-					<div class="col-md-2 col-sm-2">
+					<div class="col-md-2 col-sm-2" onclick="goIntroduction(${cart.product.id})">
 						<img src="/pic/${cart.product.main_image }"
 							style="height: 150px; width: 100%">
 					</div>
-					<div class="col-md-3 col-sm-3" style="padding-top: 50px;">
+					<div class="col-md-3 col-sm-3" style="padding-top: 50px;" onclick="goIntroduction(${cart.product.id})">
 						<a style="display: block; width: 100%;">${cart.product.name }</a>
 					</div>
 					<div class="col-md-1 col-sm-1"
@@ -266,6 +266,10 @@
 		}
 		$("#cart_ids").val(sum);
 		$("#goAddOrderForm").submit();
+	}
+	
+	function goIntroduction(product_id){
+		window.location.href="${ctx}/product/introduction.shtml?product_id="+product_id+"";
 	}
 </script>
 </html>

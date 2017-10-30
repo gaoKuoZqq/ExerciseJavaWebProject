@@ -6,7 +6,7 @@
 <mapper namespace="com.mall.dao.CarouselDao">
 	
 	<select id="findCarousel" resultType="Carousel">
-		select name from carousel order by sort_order
+		select name,product_id from carousel order by sort_order
 	</select>
 	
 </mapper>

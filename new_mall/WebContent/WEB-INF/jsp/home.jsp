@@ -46,12 +46,12 @@
 					<c:forEach items="${carouselsList }" var="carousel" varStatus="status">
 					<c:if test="${status.first }">
 						<div class="item active">
-							<img src="/pic/${carousel.name }">
+							<img src="/pic/${carousel.name }" onclick="goIntroduction(${carousel.product_id})"/>
 						</div>
 					</c:if>
 					<c:if test="${!status.first }">
 						<div class="item">
-							<img src="/pic/${carousel.name }">
+							<img src="/pic/${carousel.name }" onclick="goIntroduction(${carousel.product_id})"/>
 						</div>
 					</c:if>
 					</c:forEach>
@@ -95,6 +95,10 @@
 	
 	function goProductFind(category_id){
 		window.location.href="${ctx}/product/find.shtml?product.category_id="+category_id+"";
+	}
+	
+	function goIntroduction(product_id){
+		window.location.href="${ctx}/product/introduction.shtml?product_id="+product_id+"";
 	}
 </script>
 </html>
