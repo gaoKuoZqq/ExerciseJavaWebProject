@@ -14,7 +14,7 @@
 			<tr>
 				<th data-options="field:'cd',checkbox:true"/>
 				<th data-options="field:'id'" style="width:200px">编码</th>
-				<th data-options="field:'userName'" style="width:200px">用户名</th>
+				<th data-options="field:'name'" style="width:200px">用户名</th>
 				<th data-options="field:'trueName'" style="width:200px">姓名</th>
 				<th data-options="field:'roleName'" style="width:200px">角色</th>
 				<th data-options="field:'phone'" style="width:200px">电话</th>
@@ -40,7 +40,7 @@
 				<tr>
 					<td style="width:40px;">用户名</td>
 					<td style="width:150px;">
-						<input name="userName" class="easyui-validatebox" required="true" missingMessage="这是一个必填项" /><span style="color: red">*</span>
+						<input name="name" class="easyui-validatebox" required="true" missingMessage="这是一个必填项" /><span style="color: red">*</span>
 					</td>
 					<td style="width:40px; padding-left:20px;">密码</td>
 					<td style="width:150px;">
@@ -83,7 +83,7 @@
 </body>
 <script type="text/javascript">
 	function doSearch(value){
-		$("#datagrid").datagrid("load",{userName:value})
+		$("#datagrid").datagrid("load",{name:value})
 	}
 	
 	function doDelete(){

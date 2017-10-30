@@ -27,8 +27,8 @@ public class UserServiceImpl implements IUserService{
 		UserExample userExample = new UserExample();
 		PageHelper.startPage(page, rows);
 		Criteria criteria = userExample.createCriteria();
-		if (StringUtil.isNotEmpty(user.getUserName())) {
-			criteria.andUserNameLike(Util.LikeFormat(user.getUserName()));
+		if (StringUtil.isNotEmpty(user.getName())) {
+			criteria.andNameLike(Util.LikeFormat(user.getName()));
 		}
 		List<User> users = userMapper.selectByExample(userExample);
 		PageInfo<User> pageInfo = new PageInfo<>(users);
