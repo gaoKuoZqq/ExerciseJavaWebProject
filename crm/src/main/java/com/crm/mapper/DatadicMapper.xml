@@ -253,4 +253,8 @@
       data_dic_value = #{dataDicValue,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectDistinct" resultType="DataDic">
+  	select distinct data_dic_name as dataDicName from data_dic
+  </select>
 </mapper>

@@ -1,6 +1,9 @@
 package com.crm.pojo;
 
+import java.awt.Panel;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class CusDevPlan {
     /**
@@ -123,8 +126,11 @@ public class CusDevPlan {
      *
      * @mbggenerated Mon Oct 30 10:18:17 CST 2017
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     public Date getPlanDate() {
-        return planDate;
+    	
+    	Date beijingdate = new Date(planDate.getTime()+28800000);
+        return beijingdate;
     }
 
     /**

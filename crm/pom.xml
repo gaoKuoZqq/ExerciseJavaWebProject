@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.gaokuo</groupId>
-  <artifactId>crm</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.situ</groupId>
+	<artifactId>Java1707CRM</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+
 	<!-- 集中定义依赖版本号 -->
 	<properties>
 		<!-- JSP相关 -->
@@ -24,6 +25,7 @@
 		<c3p0-version>0.9.1.2</c3p0-version>
 		<!-- Jackson Json处理工具包 -->
 		<jackson.version>2.4.2</jackson.version>
+		<jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
 		<!-- 单元测试 -->
 		<junit.version>4.12</junit.version>
 		<!-- 日志处理 -->
@@ -124,6 +126,16 @@
 			<version>${c3p0-version}</version>
 		</dependency>
 		<!-- Jackson Json处理工具包 -->
+		<!-- <dependency>  
+		    <groupId>com.fasterxml.jackson.core</groupId>  
+		    <artifactId>jackson-core</artifactId>  
+		    <version>${jackson.version}</version>  
+		</dependency>
+		<dependency>  
+    	<groupId>org.codehaus.jackson</groupId>  
+		    <artifactId>jackson-mapper-asl</artifactId>  
+		    <version>${jackson-mapper-asl.version}</version>  
+		</dependency>   -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>

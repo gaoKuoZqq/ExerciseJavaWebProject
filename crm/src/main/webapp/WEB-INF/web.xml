@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="3.0">
 	<display-name>crm</display-name>
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+		<welcome-file>index/index.do</welcome-file>
 	</welcome-file-list>
 
 	<!-- 配置spring -->
@@ -46,4 +46,14 @@
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
+	
+	<!-- 登录过滤 -->
+	<filter>
+   		 <filter-name>LoginFilter</filter-name>
+   	 	<filter-class>com.crm.filter.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+    	<filter-name>LoginFilter</filter-name>
+    	<url-pattern>*.do</url-pattern>
+    </filter-mapping>
 </web-app>

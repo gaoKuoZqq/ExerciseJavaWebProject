@@ -93,4 +93,10 @@ public interface UserMapper {
      * @mbggenerated Mon Oct 30 10:18:17 CST 2017
      */
     int updateByPrimaryKey(User record);
+
+	List<User> DistinctTrueNameByRoleName(String role_name);
+
+	int checkLogin(User user);
+
+	int updatePasswordByName(User user);
 }

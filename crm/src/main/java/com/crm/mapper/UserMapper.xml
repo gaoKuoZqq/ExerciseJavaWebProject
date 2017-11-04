@@ -315,4 +315,16 @@
       role_name = #{roleName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="DistinctTrueNameByRoleName" parameterType="string" resultType="User">
+  	select distinct true_name as trueName from user where role_name=#{role_name}
+  </select>
+  
+  <select id="checkLogin" parameterType="User" resultType="int">
+  	select count(*) from user where name='${name}' and password='${password}'
+  </select>
+  
+  <update id="updatePasswordByName" parameterType="User"> 
+  	update user set password='${password}' where name='${name}'
+  </update>
 </mapper>

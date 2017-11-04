@@ -93,4 +93,6 @@ public interface DataDicMapper {
      * @mbggenerated Mon Oct 30 10:18:17 CST 2017
      */
     int updateByPrimaryKey(DataDic record);
+
+	List<DataDic> selectDistinct();
 }
