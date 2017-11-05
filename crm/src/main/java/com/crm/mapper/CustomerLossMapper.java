@@ -93,4 +93,8 @@ public interface CustomerLossMapper {
      * @mbggenerated Mon Oct 30 10:18:17 CST 2017
      */
     int updateByPrimaryKey(CustomerLoss record);
+
+	List<CustomerLoss> findCustomerAutoLossList();
+
+	Integer addAutoLossCustomer(CustomerLoss customerLoss);
 }

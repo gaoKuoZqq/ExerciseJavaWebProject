@@ -1,6 +1,10 @@
 package com.crm.service.impl;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,6 +94,27 @@ public class CustomerLossServiceImpl implements ICustomerLossService{
 			return ServerResponse.createSuccess("操作成功");
 		}else {
 			return ServerResponse.createError("下机");
+		}
+	}
+
+	@Override
+	public void customerAutoLoss() {
+		List<CustomerLoss> customerLosses = customerLossMapper.findCustomerAutoLossList();
+		Set<String> set = new HashSet<>();
+		for (int i = 0,j = 0;i < (customerLosses.size() - j);i++) {
+			if (!set.contains(customerLosses.get(i).getCustomerNo())) {
+				set.add(customerLosses.get(i).getCustomerNo());
+			}else{
+				customerLosses.remove(i);
+				j = j + 1;
+			}
+		}
+		for (CustomerLoss customerLoss : customerLosses) {
+			customerLoss.setStatus(0);
+			customerLoss.setLossReason("半年未下单");
+			if (customerLossMapper.addAutoLossCustomer(customerLoss) > 0) {
+				System.out.println(customerLoss.getCustomerName() + "已暂缓流失");
+			}
 		}
 	}
 

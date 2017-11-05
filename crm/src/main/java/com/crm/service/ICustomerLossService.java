@@ -19,5 +19,7 @@ public interface ICustomerLossService {
 	CustomerLoss findById(Integer id);
 
 	ServerResponse<?> updateConfirmLoss(Integer id);
+	
+	void customerAutoLoss();
 
 }

@@ -331,4 +331,19 @@
       loss_reason = #{lossReason,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="findCustomerAutoLossList" resultType="CustomerLoss">
+	SELECT c.num AS customerNo,c.name AS customerName,c.manager_name AS customerManager,
+	co.order_date AS lastOrderTime
+	FROM customer AS c LEFT JOIN customer_order AS co
+	ON c.id=co.customer_id
+	WHERE co.order_date IS NOT NULL
+	AND co.order_date &lt; DATE_SUB(NOW(),INTERVAL 6 MONTH)
+	ORDER BY co.order_date desc
+  </select>
+  
+  <insert id="addAutoLossCustomer" parameterType="CustomerLoss">
+  	insert into customer_loss(customer_no,customer_name,customer_manager,last_order_time,confirm_loss_time,status,loss_reason)
+  	value('${customerNo}','${customerName}','${customerManager}',${lastOrderTime},now(),${status},'${lossReason}')
+  </insert>
 </mapper>
