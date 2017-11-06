@@ -84,4 +84,9 @@ public class DataDicServiceImpl implements IDataDicService{
 		return dataDicMapper.selectByExample(dataDicExample);
 	}
 
+	@Override
+	public List<String> findValueByName(String name) {
+		return dataDicMapper.findValueByName(name);
+	}
+
 }

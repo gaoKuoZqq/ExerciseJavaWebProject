@@ -1,6 +1,7 @@
 package com.crm.service;
 
 import java.util.Date;
+import java.util.List;
 
 import com.crm.easyui.EasyUIDataGrideResult;
 import com.crm.pojo.CustomerService;
@@ -17,6 +18,8 @@ public interface ICustomerServiceService {
 	ServerResponse<?> update(CustomerService customerService);
 
 	ServerResponse<?> assign(String ids,String assigner, String assignTime);
+
+	List<Integer> findCountByTypes(List<String> serveTypes);
 
 
 }

@@ -443,4 +443,8 @@
       satisfy = #{satisfy,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="findCountByType" parameterType="string" resultType="integer">
+  	select count(*) from customer_service where service_type=#{_parameter}
+  </select>
 </mapper>

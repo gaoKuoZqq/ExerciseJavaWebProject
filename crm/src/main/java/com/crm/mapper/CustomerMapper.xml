@@ -552,4 +552,30 @@
       status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="findCutomerConsumption" parameterType="String" resultType="com.crm.vo.CutomerConsumption">
+  	<if test="_parameter.equals('%%')">
+	  	SELECT c.name as customerName,oi.sum as consumption
+		FROM customer AS c LEFT JOIN customer_order AS co
+		ON c.id=co.customer_id
+		LEFT JOIN order_item AS oi
+		ON co.id=oi.order_id
+	</if>
+	<if test="!_parameter.equals('%%')">
+	  	SELECT c.name as customerName,oi.sum as consumption
+		FROM customer AS c LEFT JOIN customer_order AS co
+		ON c.id=co.customer_id
+		LEFT JOIN order_item AS oi
+		ON co.id=oi.order_id
+		where c.name like #{_parameter}
+	</if>
+  </select>
+  
+  <select id="findCustomerLevel" resultType="string">
+  		SELECT DISTINCT LEVEL FROM customer
+  </select>
+  
+  <select id="findCountByLevel" parameterType="string" resultType="integer">
+  	select count(*) from customer where level=#{_parameter}
+  </select>
 </mapper>

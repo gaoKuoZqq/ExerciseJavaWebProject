@@ -20,4 +20,6 @@ public interface IDataDicService {
 
 	List<DataDic> getDataDicValueList(DataDic dataDic);
 
+	List<String> findValueByName(String string);
+
 }

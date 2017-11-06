@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="${ctx }/resources/easyui/jquery-easyui/jquery.min.js"></script>
 	<script type="text/javascript" src="${ctx }/resources/easyui/jquery-easyui/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="${ctx }/resources/easyui/jquery.edatagrid.js"></script>
+	<script type="text/javascript" src="${ctx }/resources/echarts.js"></script>
 </head>
 <body>
 <script type="text/javascript">

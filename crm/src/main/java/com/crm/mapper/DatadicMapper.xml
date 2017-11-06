@@ -257,4 +257,8 @@
   <select id="selectDistinct" resultType="DataDic">
   	select distinct data_dic_name as dataDicName from data_dic
   </select>
+  
+  <select id="findValueByName" parameterType="string" resultType="string">
+  	select data_dic_value from data_dic where data_dic_name=#{_parameter}
+  </select>
 </mapper>

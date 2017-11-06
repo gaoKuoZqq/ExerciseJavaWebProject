@@ -94,22 +94,22 @@
 			</div>
 			<div title="统计报表" data-options="iconCls:'icon-tjbb'"
 				style="padding: 10px">
-				<a href="javascript:openTab('客户贡献分析','khgxfx.jsp','icon-khgxfx')"
+				<a href="javascript:openTab('客户贡献分析','${ctx }/customerConsumption/customerContribution.do','icon-khgxfx')"
 					class="easyui-linkbutton"
 					data-options="plain:true,iconCls:'icon-khgxfx'"
 					style="width: 150px;">客户贡献分析</a> <a
-					href="javascript:openTab('客户构成分析','khgcfx.jsp','icon-khgcfx')"
+					href="javascript:openTab('客户构成分析','${ctx }/customerConsumption/customerConstitute.do','icon-khgcfx')"
 					class="easyui-linkbutton"
 					data-options="plain:true,iconCls:'icon-khgcfx'"
 					style="width: 150px;">客户构成分析</a> <a
-					href="javascript:openTab('客户服务分析','khfwfx.jsp','icon-khfwfx')"
+					href="javascript:openTab('客户服务分析','${ctx }/customerConsumption/customerServe.do','icon-khfwfx')"
 					class="easyui-linkbutton"
 					data-options="plain:true,iconCls:'icon-khfwfx'"
-					style="width: 150px;">客户服务分析</a> <a
+					style="width: 150px;">客户服务分析</a> <!-- <a
 					href="javascript:openTab('客户流失分析','khlsfx.jsp','icon-khlsfx')"
 					class="easyui-linkbutton"
 					data-options="plain:true,iconCls:'icon-khlsfx'"
-					style="width: 150px;">客户流失分析</a>
+					style="width: 150px;">客户流失分析</a> -->
 			</div>
 			<div title="基础数据管理" data-options="iconCls:'icon-jcsjgl'"
 				style="padding: 10px">

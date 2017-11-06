@@ -2,6 +2,8 @@ package com.crm.mapper;
 
 import com.crm.pojo.Customer;
 import com.crm.pojo.CustomerExample;
+import com.crm.vo.CutomerConsumption;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -93,4 +95,10 @@ public interface CustomerMapper {
      * @mbggenerated Mon Oct 30 10:18:17 CST 2017
      */
     int updateByPrimaryKey(Customer record);
+
+	List<CutomerConsumption> findCutomerConsumption(String name);
+
+	List<String> findCustomerLevel();
+
+	Integer findCountByLevel(String level);
 }

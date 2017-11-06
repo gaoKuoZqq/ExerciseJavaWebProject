@@ -2,6 +2,7 @@ package com.crm.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -109,6 +110,15 @@ public class CustomerServiceServiceImpl implements ICustomerServiceService{
 			customerServiceMapper.updateByPrimaryKeySelective(customerService);
 		}
 		return ServerResponse.createSuccess("分配成功");
+	}
+
+	@Override
+	public List<Integer> findCountByTypes(List<String> serveTypes) {
+		List<Integer> serveTypesCount = new ArrayList<Integer>();
+		for (String serveType : serveTypes) {
+			serveTypesCount.add(customerServiceMapper.findCountByType(serveType));
+		}
+		return serveTypesCount;
 	}
 
 }
